@@ -1,0 +1,118 @@
+html {
+        font-family: sans-serif;
+}
+
+/* Popup QR from https://www.w3schools.com/css/css_tooltip.asp */
+
+.url_with_qr_container {
+        position: relative;
+        display: inline-block;
+        border-bottom: 1px dotted black;
+}
+
+/* Tooltip text */
+.url_with_qr_container .qr {
+        visibility: hidden;
+        border: 1px solid #888;
+        background-color: white;
+        text-align: center;
+        left: 50%;
+        padding: 1em;
+        border-radius: 6px;
+
+        position: absolute;
+        z-index: 1;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.url_with_qr_container:hover .qr {
+        visibility: visible;
+}
+
+/* Ordinary table */
+.table_horizontal {
+        border-collapse: collapse;
+}
+
+.table_horizontal td, .table_horizontal th{
+        border: 1px solid #888;
+        padding: 0.1em 1em;
+}
+
+/* Ordinary table */
+.table_borderless {
+        border-collapse: collapse;
+}
+
+.table_borderless td {
+        border: 0;
+        padding: 0.1em 1em;
+}
+
+/* Horizontal menu, thanks to https://www.w3schools.com/html/tryit.asp?filename=tryhtml_lists_menu */
+.horizontal_menu {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #DDD;
+}
+
+.horizontal_menu li {
+        float: left;
+}
+
+.horizontal_menu li a{
+        display: block;
+        color: black;
+        text-align: center;
+        padding: 1em;
+        text-decoration: none;
+}
+
+.horizontal_menu li a:hover {
+        background-color: #AAF;
+}
+
+/* Message */
+.message {
+        border: 1px solid #888;
+        background-color: #FF8;
+        display: block;
+}
+
+.message_global {
+        border: 1px solid #888;
+        background-color: #FF8;
+        display: block;
+}
+
+/* Enabled and disabled colors */
+.enabled {
+        color: green;
+        font-weight: bold;
+}
+
+.disabled {
+        color: red;
+        font-weight: bold;
+}
+
+/* Won and lost colors */
+.won {
+        color: green;
+        font-weight: bold;
+}
+
+.lost {
+        color: red;
+        font-weight: bold;
+}
+
+.dice_ext {
+        display: inline-block;
+}
+
+.dice_int {
+        padding: 0.1em 1em;
+}
