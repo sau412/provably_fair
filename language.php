@@ -117,7 +117,7 @@ $json_language=<<<_END
         "fr":"Nouvelle adresse nécessaire"
         },
 "footer_about":{
-        "en":"Opensource provably fair Gridcoin game (<a href='https://github.com/sau412/provably_fair'>github link</a>) by sau412",
+        "en":"Opensource provably fair Gridcoin game (<a href='https://github.com/sau412/provably_fair'>github link</a>) by sau412"
         },
 "login_login":{
         "en":"Login:",
