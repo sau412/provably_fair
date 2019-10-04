@@ -411,6 +411,7 @@ function free_roll_cooldown_active($user_uid) {
         $user_ip=$_SERVER['REMOTE_ADDR'];
         $user_ip_escaped=db_escape($user_ip);
 
+	$user_uid_escaped=db_escape($user_uid);
         $interval_user=db_query_to_variable("SELECT UNIX_TIMESTAMP(NOW())-COALESCE(UNIX_TIMESTAMP(`last_roll_time`),0) FROM `users` WHERE `uid`='$user_uid_escaped'");
         $interval_ip=db_query_to_variable("SELECT UNIX_TIMESTAMP(NOW())-COALESCE(UNIX_TIMESTAMP(`timestamp`),0) FROM `ip_rolls` WHERE `ip`='$user_ip_escaped'");
         if($interval_user==="") $interval_user=$free_roll_cooldown_interval;
