@@ -247,7 +247,8 @@ function html_address_url($address) {
         $send_to_link=lang_parser(html_send_to_link($address,"%link_send_to%"));
         $address_book_link=lang_parser(html_address_book_link($address,"%link_address_book%"));
         //$result="<div class='url_with_qr_container'>$address_begin......$address_end<div class='qr'>$address<br><a href='$address_url$address'>explorer</a>, <a href='#'>copy</a>, $send_to_link, $address_book_link<br><img src='qr.php?str=$address'></div></div>";
-        $result=lang_parser("<div class='url_with_qr_container'>$address<div class='qr'>$address<br><a href='$address_url$address'>%link_block_explorer%</a>, $send_to_link, $address_book_link<br><img src='qr.php?str=$address'></div></div>");
+        //$result=lang_parser("<div class='url_with_qr_container'>$address<div class='qr'>$address<br><a href='$address_url$address'>%link_block_explorer%</a>, $send_to_link, $address_book_link<br><img src='qr.php?str=$address'></div></div>");
+        $result=lang_parser("<div class='url_with_qr_container'>$address<div class='qr'>$address<br><a href='$address_url$address'>%link_block_explorer%</a>, $send_to_link, $address_book_link</div></div>");
         return $result;
 }
 
@@ -256,7 +257,8 @@ function html_tx_url($tx) {
         if($tx=='') return '';
         $tx_begin=substr($tx,0,10);
         $tx_end=substr($tx,-10,10);
-        $result=lang_parser("<div class='url_with_qr_container'>$tx_begin......$tx_end<div class='qr'>$tx<br><a href='$tx_url$tx'>%link_block_explorer%</a><br><img src='qr.php?str=$tx'></div></div>");
+        //$result=lang_parser("<div class='url_with_qr_container'>$tx_begin......$tx_end<div class='qr'>$tx<br><a href='$tx_url$tx'>%link_block_explorer%</a><br><img src='qr.php?str=$tx'></div></div>");
+        $result=lang_parser("<div class='url_with_qr_container'>$tx_begin......$tx_end<div class='qr'>$tx<br><a href='$tx_url$tx'>%link_block_explorer%</a></div></div>");
         return $result;
 }
 
@@ -265,7 +267,8 @@ function html_block_hash($hash) {
         if($hash=='') return '';
         $hash_begin=substr($hash,0,10);
         $hash_end=substr($hash,-10,10);
-        $result=lang_parser("<span class='url_with_qr_container'>$hash_begin......$hash_end<span class='qr'>$hash<br><a href='$block_url$hash'>%link_block_explorer%</a><br><img src='qr.php?str=$hash'></span></span>");
+        //$result=lang_parser("<span class='url_with_qr_container'>$hash_begin......$hash_end<span class='qr'>$hash<br><a href='$block_url$hash'>%link_block_explorer%</a><br><img src='qr.php?str=$hash'></span></span>");
+        $result=lang_parser("<span class='url_with_qr_container'>$hash_begin......$hash_end<span class='qr'>$hash<br><a href='$block_url$hash'>%link_block_explorer%</a></span></span>");
         return $result;
 }
 
@@ -488,7 +491,6 @@ function html_send_receive($user_uid,$token) {
         $result.=<<<_END
 <h2>Deposit</h2>
 <p>Your deposit address is <strong>$deposit_address</strong></p>
-<p><img src='qr.php?str=$deposit_address'</p>
 <p>
 <form name=withdraw method=post>
 <h2>Withdraw</h2>
