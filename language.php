@@ -117,9 +117,7 @@ $json_language=<<<_END
         "fr":"Nouvelle adresse nécessaire"
         },
 "footer_about":{
-        "en":"Opensource gridcoin online wallet (<a href='https://github.com/sau412/gridcoin_online_wallet'>github link</a>) by Vladimir Tsarev, my nickname is sau412 on telegram, twitter, facebook, gmail, github, vk.",
-        "ru":"Он-лайн кошелёк Gridcoin с открытым исходным кодом (<a href='https://github.com/sau412/gridcoin_online_wallet'>github</a>). Автор - Царев Владимир, мой ник sau412 в контакте, телеграме, твиттере, фейсбуке, gmail, github.",
-        "fr":"Portefeuille Gridcoin opensource en ligne (<a href='https://github.com/sau412/gridcoin_online_wallet'>github link</a>) par Vladimir Tsarev, mon pseudo est sau42 sur telegram, twitter, facebook, gmail, github, vk."
+        "en":"Opensource provably fair Gridcoin game (<a href='https://github.com/sau412/provably_fair'>github link</a>) by sau412",
         },
 "login_login":{
         "en":"Login:",
