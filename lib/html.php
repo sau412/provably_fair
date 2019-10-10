@@ -468,7 +468,10 @@ function html_last_rolls($user_uid,$token) {
 
                 if($type=="low") $type_text="Bet LO";
                 else if($type=="high") $type_text="Bet HI";
+		else if($type=="pay") $type_text="Pay";
                 else $type_text="Free";
+
+		if($type=="pay") $seed_text="Compound interest on user funds";
 
                 $result.="<tr><td>$type_text</td><td>$seed_text</td><td>$roll_result</td><td>$bet</td><td>$profit</td><td>$timestamp</td></tr>\n";
         }
