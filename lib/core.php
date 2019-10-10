@@ -532,6 +532,25 @@ VALUES ('$user_uid_escaped','$roll_type_escaped','$server_seed_escaped','$user_s
         return $result;
 }
 
+// Payroll
+function do_payroll($user_uid,$reward) {
+        $user_uid_escaped=db_escape($user_uid);
+        $user_seed_escaped="";
+        $server_seed_escaped="";
+        $bet_escaped=db_escape("0");
+        $roll_result_escaped="";
+        $roll_type_escaped=db_escape('pay');
+
+        $reward_escaped=db_escape($reward);
+
+        db_query("INSERT INTO `rolls` (`user_uid`,`roll_type`,`server_seed`,`user_seed`,`roll_result`,`bet`,`profit`)
+VALUES ('$user_uid_escaped','$roll_type_escaped','$server_seed_escaped','$user_seed_escaped','$roll_result_escaped','$bet_escaped','$reward_escaped')");
+
+        change_user_balance($user_uid,$reward);
+
+        $balance=get_user_balance($user_uid);
+}
+
 // For php 5 only variant for random_bytes is openssl_random_pseudo_bytes from openssl lib
 if(!function_exists("random_bytes")) {
         function random_bytes($n) {
