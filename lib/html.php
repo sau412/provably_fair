@@ -19,7 +19,6 @@ function html_page_begin($title,$token) {
 </head>
 <body>
 <center>
-$lang_select_form
 <h1>$wallet_name</h1>
 
 _END;
