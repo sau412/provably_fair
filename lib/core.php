@@ -435,6 +435,7 @@ function do_free_roll($user_uid) {
                 return array("result"=>"fail","reason"=>"Only one roll in $free_roll_cooldown_interval seconds allowed. Wait $wait_interval seconds more.");
         }
 
+	$user_uid_escaped=db_escape($user_uid);
         db_query("UPDATE `users` SET `last_roll_time`=NOW() WHERE `uid`='$user_uid_escaped'");
         $user_ip=$_SERVER['REMOTE_ADDR'];
         $user_ip_escaped=db_escape($user_ip);
