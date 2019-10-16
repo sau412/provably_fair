@@ -21,9 +21,10 @@ require_once("../lib/gridcoin_web_wallet.php");
 db_connect();
 
 // Get addresses for new users
-$new_array=db_query_to_array("SELECT `uid` FROM `users` WHERE `wallet_uid` IS NULL");
+$new_array=db_query_to_array("SELECT `uid` FROM `users` WHERE `wallet_uid` IS NULL OR `wallet_uid`=0");
 foreach($new_array as $user_info) {
         $uid=$user_info['uid'];
+	echo "1 grc_web_get_new_receiving_address()\n";
         $result=grc_web_get_new_receiving_address();
         $wallet_uid=$result->uid;
         $uid_escaped=db_escape($uid);
@@ -37,6 +38,7 @@ foreach($pending_array as $user_info) {
         $uid=$user_info['uid'];
         $address_uid=$user_info['wallet_uid'];
         $prev_received=$user_info['deposited'];
+	echo "2 grc_web_get_new_receiving_address()\n";
         $result=grc_web_get_receiving_address($address_uid);
         $address=$result->address;
         $received=$result->received;

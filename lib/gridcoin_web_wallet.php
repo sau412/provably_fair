@@ -14,10 +14,12 @@ function grc_web_send_query($query) {
         curl_setopt($ch,CURLOPT_POST,TRUE);
 //curl_setopt($ch,CURLOPT_SSL_VERIFYHOST,0);
 //curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,0);
+//var_dump("grc_web_send_query",$query);
         curl_setopt($ch, CURLOPT_POSTFIELDS,"api_key=$grc_api_key&".$query);
         $result=curl_exec($ch);
-
-//var_dump("curl error",curl_error($ch));
+//var_dump($result);
+	$error=curl_error($ch);
+	if($error) var_dump("curl error",$error);
         curl_close($ch);
 
         return $result;
