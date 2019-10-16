@@ -493,9 +493,15 @@ function html_send_receive($user_uid,$token) {
         $balance=get_user_balance($user_uid);
         $withdraw_min=get_variable("withdraw_min");
 
+	if($deposit_address == "") {
+		$deposit_address_string="<p>Your deposit address is not generated yet, should be ready in 5 minutes</p>";
+	} else {
+		$deposit_address_string="<p>Your deposit address is <strong>$deposit_address</strong></p>";
+	}
+
         $result.=<<<_END
 <h2>Deposit</h2>
-<p>Your deposit address is <strong>$deposit_address</strong></p>
+$deposit_address_string
 <p>
 <form name=withdraw method=post>
 <h2>Withdraw</h2>
