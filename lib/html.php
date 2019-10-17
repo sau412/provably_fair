@@ -450,6 +450,8 @@ function html_last_rolls($user_uid,$token) {
 		if($type=="pay") {
 			$seed_text="Compound interest on user funds";
 			$profit=sprintf("%0.4f",$profit);
+		} else {
+			$seed_text = "<div class='block_with_container'>view <div class='block_with_container_inside'>$seed_text</div></div>";
 		}
 
                 $result.="<tr><td>$type_text</td><td>$seed_text</td><td>$roll_result</td><td>$bet</td><td>$profit</td><td>$timestamp</td></tr>\n";
