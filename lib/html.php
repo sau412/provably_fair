@@ -440,7 +440,7 @@ function html_last_rolls($user_uid,$token) {
                 $user_seed_html=html_escape($user_seed);
                 $server_seed_html=html_escape($server_seed);
 
-                $seed_text="Server: $server_seed_html<br>User: $user_seed_html";
+                $seed_text="Server:<br>$server_seed_html<br><br>User seed:<br>$user_seed_html";
 
                 if($type=="low") $type_text="Bet LO";
                 else if($type=="high") $type_text="Bet HI";
@@ -448,8 +448,8 @@ function html_last_rolls($user_uid,$token) {
                 else $type_text="Free";
 
 		if($type=="pay") {
-			$seed_text="Compound interest on user funds";
-			$profit=sprintf("%0.4f",$profit);
+			$seed_text = "Compound interest on user funds";
+			$profit = sprintf("%0.4f",$profit);
 		} else {
 			$seed_text = "<div class='block_with_container'>view <div class='block_with_container_inside'>$seed_text</div></div>";
 		}
