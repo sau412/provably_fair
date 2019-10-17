@@ -2,33 +2,6 @@ html {
         font-family: sans-serif;
 }
 
-/* Popup QR from https://www.w3schools.com/css/css_tooltip.asp */
-
-.url_with_qr_container {
-        position: relative;
-        display: inline-block;
-        border-bottom: 1px dotted black;
-}
-
-/* Tooltip text */
-.url_with_qr_container .qr {
-        visibility: hidden;
-        border: 1px solid #888;
-        background-color: white;
-        text-align: center;
-        left: 50%;
-        padding: 1em;
-        border-radius: 6px;
-
-        position: absolute;
-        z-index: 1;
-}
-
-/* Show the tooltip text when you mouse over the tooltip container */
-.url_with_qr_container:hover .qr {
-        visibility: visible;
-}
-
 /* Ordinary table */
 .table_horizontal {
         border-collapse: collapse;
@@ -116,3 +89,24 @@ html {
 .dice_int {
         padding: 0.1em 1em;
 }
+
+/* Popup */
+.block_with_container {
+	position: relative;
+	display: inline-block;
+	border-bottom: 1px dotted gray;
+}
+
+.block_with_container .block_with_container_inside {
+	visibility: hidden;
+	position: absolute;
+	padding: 0.5em;
+	background-color: white;
+	border: solid 1px gray;
+	z-index: 1;
+}
+
+.block_with_container:hover .block_with_container_inside {
+	visibility: visible;
+}
+

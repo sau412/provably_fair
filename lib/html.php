@@ -243,11 +243,7 @@ function html_address_url($address) {
         global $address_url;
         $address_begin=substr($address,0,10);
         $address_end=substr($address,-10,10);
-        $send_to_link=lang_parser(html_send_to_link($address,"%link_send_to%"));
-        $address_book_link=lang_parser(html_address_book_link($address,"%link_address_book%"));
-        //$result="<div class='url_with_qr_container'>$address_begin......$address_end<div class='qr'>$address<br><a href='$address_url$address'>explorer</a>, <a href='#'>copy</a>, $send_to_link, $address_book_link<br><img src='qr.php?str=$address'></div></div>";
-        //$result=lang_parser("<div class='url_with_qr_container'>$address<div class='qr'>$address<br><a href='$address_url$address'>%link_block_explorer%</a>, $send_to_link, $address_book_link<br><img src='qr.php?str=$address'></div></div>");
-        $result=lang_parser("<div class='url_with_qr_container'>$address<div class='qr'>$address<br><a href='$address_url$address'>%link_block_explorer%</a>, $send_to_link, $address_book_link</div></div>");
+        $result="<div class='block_with_container'>$address_begin...$address_end <div class='block_with_container_inside'>$address<br><a href='$address_url$address'>Block explorer</a></div></div>";
         return $result;
 }
 
@@ -256,27 +252,8 @@ function html_tx_url($tx) {
         if($tx=='') return '';
         $tx_begin=substr($tx,0,10);
         $tx_end=substr($tx,-10,10);
-        //$result=lang_parser("<div class='url_with_qr_container'>$tx_begin......$tx_end<div class='qr'>$tx<br><a href='$tx_url$tx'>%link_block_explorer%</a><br><img src='qr.php?str=$tx'></div></div>");
-        $result=lang_parser("<div class='url_with_qr_container'>$tx_begin......$tx_end<div class='qr'>$tx<br><a href='$tx_url$tx'>%link_block_explorer%</a></div></div>");
+        $result="<div class='block_with_container'>$tx_begin......$tx_end<div class='block_with_container_inside'>$tx<br><a href='$tx_url$tx'>Block explorer</a></div></div>";
         return $result;
-}
-
-function html_block_hash($hash) {
-        global $block_url;
-        if($hash=='') return '';
-        $hash_begin=substr($hash,0,10);
-        $hash_end=substr($hash,-10,10);
-        //$result=lang_parser("<span class='url_with_qr_container'>$hash_begin......$hash_end<span class='qr'>$hash<br><a href='$block_url$hash'>%link_block_explorer%</a><br><img src='qr.php?str=$hash'></span></span>");
-        $result=lang_parser("<span class='url_with_qr_container'>$hash_begin......$hash_end<span class='qr'>$hash<br><a href='$block_url$hash'>%link_block_explorer%</a></span></span>");
-        return $result;
-}
-
-function html_send_to_link($address,$text) {
-        return "<a href='#' onClick=\"document.getElementById('send_address').value='$address'; return false;\">$text</a>";
-}
-
-function html_address_book_link($address,$text) {
-        return "<a href='#' onClick=\"document.getElementById('alias_address').value='$address'; return false;\">$text</a>";
 }
 
 // Loadable block for ajax
@@ -543,7 +520,8 @@ function html_transactions($user_uid,$token) {
                 $confirmations=$tx_data['confirmations'];
                 $timestamp=$tx_data['timestamp'];
 
-                $address_html=html_escape($address);
+                $address_html=html_address_url($address);
+                $tx_id_html=html_tx_url($tx_id);
 
                 if($status=='pending') {
                         $status_text="$status ($confirmations/$wallet_receive_confirmations)";
@@ -551,7 +529,7 @@ function html_transactions($user_uid,$token) {
                         $status_text=$status;
                 }
 
-                $result.="<tr><td>$address_html</td><td>$amount</td><td>$status_text</td><td>$tx_id</td><td>$timestamp</td></tr>\n";
+                $result.="<tr><td>$address_html</td><td>$amount</td><td>$status_text</td><td>$tx_id_html</td><td>$timestamp</td></tr>\n";
         }
         $result.="</table>\n";
         $result.="</p>\n";
