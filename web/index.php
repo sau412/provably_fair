@@ -59,9 +59,14 @@ if(isset($action)) {
                 $message="logout_successfull";
         } else if($action=='free_roll') {
                 $user_seed=stripslashes($_POST['user_seed']);
-                update_user_seed($user_uid,$user_seed);
-                $result=do_free_roll($user_uid);
-                echo json_encode($result);
+		$recaptcha_response=stripslashes($_POST['g-recaptcha-response']);
+		if(recaptcha_check($response)) {
+	                update_user_seed($user_uid,$user_seed);
+	                $result=do_free_roll($user_uid);
+	                echo json_encode($result);
+		} else {
+			echo json_encode(array("result"=>"fail","reason"=>"Recaptcha error"));
+		}
                 die();
         } else if($action=='dice_roll') {
                 $user_seed=stripslashes($_POST['user_seed']);
