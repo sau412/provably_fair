@@ -16,6 +16,7 @@ function html_page_begin($title,$token) {
 <script src='jquery-3.3.1.min.js'></script>
 <link rel="stylesheet" type="text/css" href="style.css">
 <script src='script.js'></script>
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
 <center>
@@ -277,6 +278,12 @@ _END;
         return $result;
 }
 
+// Show recaptcha
+function html_recaptcha() {
+	global $recaptcha_public_key;
+	return "<div class='g-recaptcha' data-sitekey='$recaptcha_public_key'></div>\n";
+}
+
 // Free coins
 function html_free_roll($user_uid,$token) {
         global $currency_short;
@@ -302,6 +309,7 @@ function html_free_roll($user_uid,$token) {
         $result.="</p>\n";
         $result.="<p>\n";
         $cooldown_time=free_roll_cooldown_active($user_uid);
+	$recaptcha=html_recaptcha();
         $result.=<<<_END
 <form id=free_roll_form name=free_roll method=post>
 <input type=hidden id=action name=action value='free_roll'>
@@ -309,6 +317,7 @@ function html_free_roll($user_uid,$token) {
 <input type=hidden is=server_seed_hash name=server_seed_hash value='$server_seed_hash'>
 <p>User seed <input type=text id=user_seed name=user_seed value='$user_seed_html'></p>
 <p id=roll_wait_text></p>
+$recaptcha
 <p id=roll_button><input type=button id=roll_button value='Roll' onClick='do_free_roll()'></p>
 <h2 id=roll_result></h2>
 <p id=roll_comment></p>
