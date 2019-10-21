@@ -16,7 +16,6 @@ function html_page_begin($title,$token) {
 <script src='jquery-3.3.1.min.js'></script>
 <link rel="stylesheet" type="text/css" href="style.css">
 <script src='script.js'></script>
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
 <center>
@@ -281,7 +280,10 @@ _END;
 // Show recaptcha
 function html_recaptcha() {
 	global $recaptcha_public_key;
-	return "<div class='g-recaptcha' data-sitekey='$recaptcha_public_key'></div>\n";
+	return <<<_END
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<div class='g-recaptcha' data-sitekey='$recaptcha_public_key'></div>
+_END;
 }
 
 // Free coins
