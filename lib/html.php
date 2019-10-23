@@ -112,6 +112,7 @@ function html_tabs($user_uid) {
                 $result.=html_menu_element("send_receive","Send and receive");
                 $result.=html_menu_element("settings","%tab_settings%");
                 if(is_admin($user_uid)) {
+                $result.=html_menu_element("lotto","Lotto");
                         $result.=html_menu_element("control","%tab_control%");
                         $result.=html_menu_element("log","%tab_log%");
                 }
@@ -628,6 +629,8 @@ _END;
 }
 
 function html_lotto($user_uid,$token) {
+	global $lotto_ticket_price;
+
 	$result="";
 
 	$result.="<h2>Lotto</h2>";
@@ -644,15 +647,49 @@ function html_lotto($user_uid,$token) {
 		$probability=0;
 	}
 
-	echo <<<_END
+	$result.=<<_END
+<h3>Current round</h3>
 <table class='table_horizontal'>
-<tr><th>Round</th><td>$round_uid</td></tr>
+<tr><th>Round #</th><td>$round_uid</td></tr>
+<tr><th>Round begin</th><td>$round_begin</td></tr>
+<tr><th>Round end</th><td>$round_end</td></tr>
 <tr><th>Prize fund</th><td>$prize_fund</td></tr>
 <tr><th>Total tickets</th><td>$total_tickets</td></tr>
 <tr><th>Your tickets</th><td>$user_tickets</td></tr>
 <tr><th>Probability</th><td>$probability %</td></tr>
 </table>
 
+_END;
+
+	$result.=<<<_END
+<form name=lotto_buy>
+<input type=hidden name=action value='lotto_buy'>
+<input type=hidden name=token value='$token'>
+<p>Ticket price: $lotto_ticket_price</p>
+<p>Tickets to buy: <input type=text value='0'> <input type=submit value='Buy'></p>
+</form>
+
+_END;
+
+	$round_uid=lotto_get_finished_round();
+	$total_tickets=lotto_get_current_round_tickets($round_uid);
+	$prize_fund=lotto_get_current_round_prize_fund($round_uid);
+
+	$result.=<<<_END
+<h3>Previous round</h3>
+<table class='table_horizontal'>
+<tr><th>Round #</th><td>$round_uid</td></tr>
+<tr><th>Round begin</th><td>$round_begin</td></tr>
+<tr><th>Round end</th><td>$round_end</td></tr>
+<tr><th>Prize fund</th><td>$prize_fund</td></tr>
+<tr><th>Total tickets</th><td>$total_tickets</td></tr>
+</table>
+
+<p>Winners</p>
+
+<table class='table_horizontal'>
+<tr><th>Place</th><th>User</th><th>Prize</th><th>Check</th></tr>
+</table>
 _END;
 
 	return $result;
