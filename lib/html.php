@@ -629,6 +629,7 @@ _END;
 }
 
 function html_lotto($user_uid,$token) {
+        global $currency_short;
 	global $lotto_ticket_price;
 
 	$result="";
@@ -665,7 +666,7 @@ _END;
 <form name=lotto_buy>
 <input type=hidden name=action value='lotto_buy'>
 <input type=hidden name=token value='$token'>
-<p>Ticket price: $lotto_ticket_price</p>
+<p>Ticket price: $lotto_ticket_price $currency_short</p>
 <p>Tickets to buy: <input type=text value='0'> <input type=submit value='Buy'></p>
 </form>
 
