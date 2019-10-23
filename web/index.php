@@ -149,6 +149,11 @@ if(isset($_GET['ajax']) && isset($_GET['block'])) {
                         case 'info':
                                 echo html_info();
                                 break;
+                        case 'lotto':
+                                if(is_admin($user_uid)) {
+	                                echo html_lotto();
+				}
+                                break;
                         case 'log':
                                 if(is_admin($user_uid)) {
                                         echo html_log_section_admin();
