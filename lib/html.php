@@ -654,7 +654,7 @@ function html_lotto($user_uid,$token) {
 <tr><th>Round #</th><td>$round_uid</td></tr>
 <tr><th>Round begin</th><td>$round_begin</td></tr>
 <tr><th>Round end</th><td>$round_end</td></tr>
-<tr><th>Prize fund</th><td>$prize_fund</td></tr>
+<tr><th>Prize fund</th><td>$prize_fund $currency_short</td></tr>
 <tr><th>Total tickets</th><td>$total_tickets</td></tr>
 <tr><th>Your tickets</th><td>$user_tickets</td></tr>
 <tr><th>Probability</th><td>$probability %</td></tr>
@@ -682,7 +682,7 @@ _END;
 <tr><th>Round #</th><td>$round_uid</td></tr>
 <tr><th>Round begin</th><td>$round_begin</td></tr>
 <tr><th>Round end</th><td>$round_end</td></tr>
-<tr><th>Prize fund</th><td>$prize_fund</td></tr>
+<tr><th>Prize fund</th><td>$prize_fund $currency_short</td></tr>
 <tr><th>Total tickets</th><td>$total_tickets</td></tr>
 </table>
 
