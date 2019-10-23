@@ -647,7 +647,7 @@ function html_lotto($user_uid,$token) {
 		$probability=0;
 	}
 
-	$result.=<<_END
+	$result.=<<<_END
 <h3>Current round</h3>
 <table class='table_horizontal'>
 <tr><th>Round #</th><td>$round_uid</td></tr>
