@@ -626,4 +626,12 @@ update_field("$user_field","continue");
 _END;
         return $result;
 }
+
+function html_lotto() {
+	$result="";
+
+	$result.="Lotto";
+
+	return $result;
+}
 ?>
