@@ -627,10 +627,33 @@ _END;
         return $result;
 }
 
-function html_lotto() {
+function html_lotto($user_uid,$token) {
 	$result="";
 
-	$result.="Lotto";
+	$result.="<h2>Lotto</h2>";
+
+	$round_uid=lotto_get_actual_round();
+	$total_tickets=lotto_get_current_round_tickets($round_uid);
+	$user_tickets=lotto_get_current_round_user_tickets($round_uid,$user_uid);
+	$prize_fund=lotto_get_current_round_prize_fund($round_uid);
+
+	if($user_tickets>0) {
+		$probability=$user_tickets/$total_tickets;
+		$probability=sprintf("%0.8f",$probability);
+	} else {
+		$probability=0;
+	}
+
+	echo <<<_END
+<table class='table_horizontal'>
+<tr><th>Round</th><td>$round_uid</td></tr>
+<tr><th>Prize fund</th><td>$prize_fund</td></tr>
+<tr><th>Total tickets</th><td>$total_tickets</td></tr>
+<tr><th>Your tickets</th><td>$user_tickets</td></tr>
+<tr><th>Probability</th><td>$probability %</td></tr>
+</table>
+
+_END;
 
 	return $result;
 }

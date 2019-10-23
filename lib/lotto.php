@@ -13,31 +13,28 @@ function lotto_get_finished_round() {
 	return $finished_round;
 }
 
-// Close round and send rewards
-function lotto_get_close_round() {
-	$actual_round=db_query_to_variable("SELECT `uid` FROM `lotto_rounds` WHERE `stop` IS NULL");
-	return $actual_round;
-}
-
 // Get current round tickets
 function lotto_get_current_round_tickets($round_uid) {
 	$round_uid_escaped=db_escape($round_uid);
 	$tickets=db_query_to_variable("SELECT SUM(`tickets`) FROM `lotto_tickets` WHERE `round_uid`='$round_uid'");
+	if(!$tickets) $tickets=0;
 	return $tickets;
 }
 
 // Get current round user tickets
-function lotto_get_current_round_tickets($round_uid,$user_uid) {
+function lotto_get_current_round_user_tickets($round_uid,$user_uid) {
 	$round_uid_escaped=db_escape($round_uid);
 	$user_uid_escaped=db_escape($user_uid);
 	$tickets=db_query_to_variable("SELECT `tickets` FROM `lotto_tickets` WHERE `round_uid`='$round_uid' AND `user_uid`='$user_uid_escaped'");
+	if(!$tickets) $tickets=0;
 	return $tickets;
 }
 
 // Get current round prize fund
-function lotto_get_current_round_tickets($round_uid) {
+function lotto_get_current_round_prize_fund($round_uid) {
 	$round_uid_escaped=db_escape($round_uid);
 	$spent=db_query_to_variable("SELECT SUM(`spent`) FROM `lotto_tickets` WHERE `round_uid`='$round_uid'");
+	if(!$spent) $spent=0;
 	return $spent;
 }
 
