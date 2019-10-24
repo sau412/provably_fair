@@ -704,12 +704,28 @@ _END;
 <tr><th>Total tickets</th><td>$total_tickets</td></tr>
 </table>
 
-<p>Previous round winners</p>
+<h3>Previous round winners</h3>
 
 <table class='table_horizontal'>
-<tr><th>Place</th><th>User</th><th>Prize</th><th>Check</th></tr>
-</table>
+<tr><th>Place</th><th>User ID</th><th>Tickets</th><th>Prize</th></tr>
 _END;
+
+	$round_uid_escaped=db_escape($round_uid);
+	$winners_data=db_query_to_array("SELECT `user_uid`,`tickets`,`reward`
+		FROM `lottery_tickets`
+		WHERE `round_uid`='$round_uid_escaped' AND `reward`>0");
+
+	$place=1;
+	foreach($winners_data as $winner_row) {
+		$user_uid=$winner_row['user_uid'];
+		$tickets=$winner_row['tickets'];
+		$reward=$winner_row['reward'];
+
+		$result.="<tr><td>$place</td><td>$user_uid</td><td>$tickets</td><td>$reward</td></tr>\n";
+		$place++;
+	}
+
+	$result.="</table>";
 	}
 
 	return $result;

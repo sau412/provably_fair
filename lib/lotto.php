@@ -149,7 +149,7 @@ function lotto_set_winners($round_uid) {
 	$winners_data=db_query_to_array("SELECT `uid`,`user_uid` FROM `lotto_tickets`
 		WHERE `round_uid`='$round_uid_escaped' ORDER BY `best_hash` ASC");
 
-	$place=1;
+	$place=0;
 	foreach($winners_data as $winner) {
 		$ticket_uid=$winner['uid'];
 		$user_uid=$winner['user_uid'];
