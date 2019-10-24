@@ -64,6 +64,13 @@ if(isset($action)) {
 		if(recaptcha_check($recaptcha_response)) {
 	                update_user_seed($user_uid,$user_seed);
 	                $result=do_free_roll($user_uid);
+			// Free lotto tickets for each free roll
+			if(isset($result['result']) && $result['result']=="ok") {
+				$round_uid=lotto_get_actual_round();
+				if($round_uid) {
+					lotto_free_tickets($round_uid,$user_uid,1);
+				}
+			}
 	                echo json_encode($result);
 		} else {
 			echo json_encode(array("result"=>"fail","reason"=>"Recaptcha error"));

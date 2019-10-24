@@ -13,16 +13,16 @@ function lotto_get_finished_round() {
 	return $finished_round;
 }
 
-// Get current round tickets
-function lotto_get_current_round_tickets($round_uid) {
+// Get round tickets
+function lotto_get_round_tickets($round_uid) {
 	$round_uid_escaped=db_escape($round_uid);
 	$tickets=db_query_to_variable("SELECT SUM(`tickets`) FROM `lotto_tickets` WHERE `round_uid`='$round_uid'");
 	if(!$tickets) $tickets=0;
 	return $tickets;
 }
 
-// Get current round user tickets
-function lotto_get_current_round_user_tickets($round_uid,$user_uid) {
+// Get round user tickets
+function lotto_get_round_user_tickets($round_uid,$user_uid) {
 	$round_uid_escaped=db_escape($round_uid);
 	$user_uid_escaped=db_escape($user_uid);
 	$tickets=db_query_to_variable("SELECT `tickets` FROM `lotto_tickets` WHERE `round_uid`='$round_uid' AND `user_uid`='$user_uid_escaped'");
@@ -30,16 +30,26 @@ function lotto_get_current_round_user_tickets($round_uid,$user_uid) {
 	return $tickets;
 }
 
-// Get current round prize fund
-function lotto_get_current_round_prize_fund($round_uid) {
+// Get round prize fund
+function lotto_get_round_prize_fund($round_uid) {
 	$round_uid_escaped=db_escape($round_uid);
 	$spent=db_query_to_variable("SELECT SUM(`spent`) FROM `lotto_tickets` WHERE `round_uid`='$round_uid'");
 	if(!$spent) $spent=0;
 	return $spent;
 }
 
+// Free tickets
+function lotto_free_tickets($round_uid,$user_uid,$amount) {
+	$round_uid_escaped=db_escape($round_uid);
+	$user_uid_escaped=db_escape($user_uid);
+	$amount_escaped=db_escape($amount);
+	db_query("INSERT INTO `lotto_tickets` (`round_uid`,`user_uid`,`spent`,`tickets`)
+			VALUES ('$round_uid_escaped','$user_uid_escaped','0','$amount_escaped')
+			ON DUPLICATE KEY UPDATE `tickets`=`tickets`+VALUES(`tickets`)");
+}
+
 // Buy tickets
-function lotto_buy_tickets($user_uid,$amount) {
+function lotto_buy_tickets($round_uid,$user_uid,$amount) {
 	
 }
 
@@ -58,13 +68,51 @@ function lotto_close_round() {
 		lotto_calc_all_users_best_hashes($round_uid);
 
 		// Send rewards to winners
-
+		lotto_set_winners($round_uid);
 	}
 
 	// Start new round
 	$seed=bin2hex(random_bytes(32));
 	$seed_escaped=db_escape($seed);
 	db_query("INSERT INTO `lotto_rounds` (`seed`,`start`) VALUES ('$seed_escaped',NOW())");
+}
+
+// Set winners
+function lotto_set_winners($round_uid) {
+	$round_uid_escaped=db_escape($round_uid);
+
+	// Check if hashes not set
+	$hashes_not_exists=db_query_to_variable("SELECT 1 FROM `lotto_tickets` WHERE `best_hash` IS NULL");
+	if($hashes_not_exists) return;
+
+	// Check if round already have winners
+	$winners_already_set=db_query_to_variable("SELECT 1 FROM `lotto_tickets` WHERE `reward` IS NOT NULL");
+	if($winners_already_set) return;
+
+	// Get prize fund
+	$prize_fund=lotto_get_round_prize_fund($round_uid);
+
+	// Set winners
+	$places_data=db_query_to_array("SELECT `place`,`percentage` FROM `lotto_rewards` ORDER BY `place` DESC");
+	$winners_data=db_query_to_array("SELECT `uid` FROM `lotto_tickets`
+		WHERE `round_uid`='$round_uid_escaped' ORDER BY `best_hash` DESC");
+
+	$place=1;
+	foreach($winners_data as $winner) {
+		$ticket_uid=$winner['uid'];
+		if(isset($places_data[$place])) {
+			$percentage=$places_data[$place]['percentage'];
+			$reward=$prize_fund*$percentage;
+		} else {
+			$reward=0;
+		}
+
+		$ticket_uid_escaped=db_escape($ticket_uid);
+		$reward_escaped=db_escape($reward);
+		db_query("UPDATE `lotto_tickets` SET `reward`='$reward_escaped' WHERE `uid`='$ticket_uid_escaped'");
+
+		$place++;
+	}
 }
 
 // Lotto calculate all users best hashes
@@ -79,7 +127,7 @@ function lotto_calc_all_users_best_hashes($round_uid) {
 
 // Lotto get user best hash
 function lotto_calc_user_best_hash($round_uid,$user_uid) {
-	$user_tickets=lotto_get_current_round_tickets($round_uid,$user_uid);
+	$user_tickets=lotto_get_round_tickets($round_uid,$user_uid);
 	$user_seed=get_user_seed($user_uid);
 	for($i=0;$i!=$user_tickets;$i++) {
 		$hash=hash("sha256","$i.$server_seed.$user_seed");
