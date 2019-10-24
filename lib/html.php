@@ -714,7 +714,7 @@ _END;
 	$winners_data=db_query_to_array("SELECT `user_uid`,`tickets`,`reward`
 		FROM `lotto_tickets`
 		WHERE `round_uid`='$round_uid_escaped' AND `reward`>0
-		ORDER BY `besh_hash` ASC");
+		ORDER BY `best_hash` ASC");
 
 	$place=1;
 	foreach($winners_data as $winner_row) {
