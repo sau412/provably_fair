@@ -634,7 +634,7 @@ function html_lotto($user_uid,$token) {
 
 	$result="";
 
-	$result.="<h2>Lotto</h2>";
+	$result.="<h2>Lottery</h2>";
 
 	$round_uid=lotto_get_actual_round();
 	$total_tickets=lotto_get_round_tickets($round_uid);
