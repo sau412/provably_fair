@@ -681,8 +681,9 @@ _END;
 	foreach($places_data as $place_row) {
 		$place=$place_row['place'];
 		$percentage=$place_row['percentage'];
-		echo "<tr><th>$place</th><td>$percentage</td></tr>\n";
+		$result.="<tr><th>$place</th><td>$percentage</td></tr>\n";
 	}
+	$result.="</table>\n";
 
 	$round_uid=lotto_get_finished_round();
 	if($round_uid) {
@@ -692,8 +693,6 @@ _END;
 		$round_stop=lotto_get_round_stop($round_uid);
 
 		$result.=<<<_END
-</table>
-
 <h3>Previous round</h3>
 <table class='table_horizontal'>
 <tr><th>Round #</th><td>$round_uid</td></tr>
