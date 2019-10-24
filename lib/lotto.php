@@ -114,7 +114,7 @@ function lotto_close_round() {
 		$round_uid_escaped=db_escape($round_uid);
 
 		// Mark round as closed
-		db_query_to_variable("UPDATE `lotto_rounds` SET `stop`=NOW() WHERE `uid`='$round_uid'");
+		db_query("UPDATE `lotto_rounds` SET `stop`=NOW() WHERE `uid`='$round_uid'");
 
 		// Calculate user's best hashes
 		lotto_calc_all_users_best_hashes($round_uid);
@@ -145,7 +145,7 @@ function lotto_set_winners($round_uid) {
 	$prize_fund=lotto_get_round_prize_fund($round_uid);
 
 	// Set winners
-	$places_data=db_query_to_array("SELECT `place`,`percentage` FROM `lotto_rewards` ORDER BY `place` DESC");
+	$places_data=db_query_to_array("SELECT `place`,`percentage` FROM `lotto_rewards` ORDER BY `place` ASC");
 	$winners_data=db_query_to_array("SELECT `uid`,`user_uid` FROM `lotto_tickets`
 		WHERE `round_uid`='$round_uid_escaped' ORDER BY `best_hash` ASC");
 
