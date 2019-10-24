@@ -13,6 +13,24 @@ function lotto_get_finished_round() {
 	return $finished_round;
 }
 
+// Get round start
+function lotto_get_round_start($round_uid) {
+	$round_uid_escaped=db_escape($round_uid);
+	$start=db_query_to_variable("SELECT `start` FROM `lotto_rounds` WHERE `uid`='$round_uid'");
+	return $start;
+}
+
+// Get round stop
+function lotto_get_round_stop($round_uid) {
+	$round_uid_escaped=db_escape($round_uid);
+	$stop=db_query_to_variable("SELECT `stop` FROM `lotto_rounds` WHERE `uid`='$round_uid'");
+	if(!$stop) {
+		$stop=db_query_to_variable("SELECT DATE_ADD(`start`,INTERVAL $lotto_round_length SECOND)
+			FROM `lotto_rounds` WHERE `uid`='$round_uid'");
+	}
+	return $stop;
+}
+
 // Get round tickets
 function lotto_get_round_tickets($round_uid) {
 	$round_uid_escaped=db_escape($round_uid);

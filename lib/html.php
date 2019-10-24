@@ -640,10 +640,12 @@ function html_lotto($user_uid,$token) {
 	$total_tickets=lotto_get_round_tickets($round_uid);
 	$user_tickets=lotto_get_round_user_tickets($round_uid,$user_uid);
 	$prize_fund=lotto_get_round_prize_fund($round_uid);
+	$round_start=lotto_get_round_start($round_uid);
+	$round_stop=lotto_get_round_stop($round_uid);
 
 	if($user_tickets>0) {
 		$probability=$user_tickets/$total_tickets;
-		$probability=sprintf("%0.8f",$probability);
+		$probability=sprintf("%0.6f",$probability*100);
 	} else {
 		$probability=0;
 	}
@@ -652,8 +654,8 @@ function html_lotto($user_uid,$token) {
 <h3>Current round</h3>
 <table class='table_horizontal'>
 <tr><th>Round #</th><td>$round_uid</td></tr>
-<tr><th>Round begin</th><td>$round_begin</td></tr>
-<tr><th>Round end</th><td>$round_end</td></tr>
+<tr><th>Round begin</th><td>$round_start</td></tr>
+<tr><th>Round end</th><td>$round_stop</td></tr>
 <tr><th>Prize fund</th><td>$prize_fund $currency_short</td></tr>
 <tr><th>Total tickets</th><td>$total_tickets</td></tr>
 <tr><th>Your tickets</th><td>$user_tickets</td></tr>
@@ -675,13 +677,15 @@ _END;
 	$round_uid=lotto_get_finished_round();
 	$total_tickets=lotto_get_round_tickets($round_uid);
 	$prize_fund=lotto_get_round_prize_fund($round_uid);
+	$round_start=lotto_get_round_start($round_uid);
+	$round_stop=lotto_get_round_stop($round_uid);
 
 	$result.=<<<_END
 <h3>Previous round</h3>
 <table class='table_horizontal'>
 <tr><th>Round #</th><td>$round_uid</td></tr>
-<tr><th>Round begin</th><td>$round_begin</td></tr>
-<tr><th>Round end</th><td>$round_end</td></tr>
+<tr><th>Round begin</th><td>$round_start</td></tr>
+<tr><th>Round end</th><td>$round_stop</td></tr>
 <tr><th>Prize fund</th><td>$prize_fund $currency_short</td></tr>
 <tr><th>Total tickets</th><td>$total_tickets</td></tr>
 </table>
