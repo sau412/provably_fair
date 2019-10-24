@@ -121,7 +121,7 @@ function lotto_set_winners($round_uid) {
 		$ticket_uid=$winner['uid'];
 		if(isset($places_data[$place])) {
 			$percentage=$places_data[$place]['percentage'];
-			$reward=$prize_fund*$percentage;
+			$reward=$prize_fund*$percentage/100;
 		} else {
 			$reward=0;
 		}

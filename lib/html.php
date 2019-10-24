@@ -675,13 +675,14 @@ _END;
 
 <h3>Prize fund distribution</h3>
 <table class='table_horizontal'>
+<tr><th>Place</th><th>% of funds</th></tr>
 _END;
 
 	$places_data=db_query_to_array("SELECT `place`,`percentage` FROM `lotto_rewards` ORDER BY `place`");
 	foreach($places_data as $place_row) {
 		$place=$place_row['place'];
 		$percentage=$place_row['percentage'];
-		$result.="<tr><th>$place</th><td>$percentage</td></tr>\n";
+		$result.="<tr><td>$place</td><td>$percentage</td></tr>\n";
 	}
 	$result.="</table>\n";
 
