@@ -665,6 +665,7 @@ function html_lotto($user_uid,$token) {
 _END;
 
 	$result.=<<<_END
+<h3>Buy tickets</h3>
 <form name=lotto_buy>
 <input type=hidden name=action value='lotto_buy'>
 <input type=hidden name=token value='$token'>
@@ -672,15 +673,27 @@ _END;
 <p>Tickets to buy: <input type=text value='0'> <input type=submit value='Buy'></p>
 </form>
 
+<h3>Prize fund distribution</h3>
+<table class='table_horizontal'>
 _END;
 
-	$round_uid=lotto_get_finished_round();
-	$total_tickets=lotto_get_round_tickets($round_uid);
-	$prize_fund=lotto_get_round_prize_fund($round_uid);
-	$round_start=lotto_get_round_start($round_uid);
-	$round_stop=lotto_get_round_stop($round_uid);
+	$places_data=db_query_to_array("SELECT `place`,`percentage` FROM `lotto_rewards` ORDER BY `place`");
+	foreach($places_data as $place_row) {
+		$place=$place_row['place'];
+		$percentage=$place_row['percentage'];
+		echo "<tr><th>$place</th><td>$percentage</td></tr>\n";
+	}
 
-	$result.=<<<_END
+	$round_uid=lotto_get_finished_round();
+	if($round_uid) {
+		$total_tickets=lotto_get_round_tickets($round_uid);
+		$prize_fund=lotto_get_round_prize_fund($round_uid);
+		$round_start=lotto_get_round_start($round_uid);
+		$round_stop=lotto_get_round_stop($round_uid);
+
+		$result.=<<<_END
+</table>
+
 <h3>Previous round</h3>
 <table class='table_horizontal'>
 <tr><th>Round #</th><td>$round_uid</td></tr>
@@ -690,12 +703,13 @@ _END;
 <tr><th>Total tickets</th><td>$total_tickets</td></tr>
 </table>
 
-<p>Winners</p>
+<p>Previous round winners</p>
 
 <table class='table_horizontal'>
 <tr><th>Place</th><th>User</th><th>Prize</th><th>Check</th></tr>
 </table>
 _END;
+	}
 
 	return $result;
 }
