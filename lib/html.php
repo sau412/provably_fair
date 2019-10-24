@@ -712,7 +712,7 @@ _END;
 
 	$round_uid_escaped=db_escape($round_uid);
 	$winners_data=db_query_to_array("SELECT `user_uid`,`tickets`,`reward`
-		FROM `lottery_tickets`
+		FROM `lotto_tickets`
 		WHERE `round_uid`='$round_uid_escaped' AND `reward`>0");
 
 	$place=1;
