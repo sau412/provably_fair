@@ -121,11 +121,11 @@ function lotto_set_winners($round_uid) {
 
 	// Check if hashes not set
 	$hashes_not_exists=db_query_to_variable("SELECT 1 FROM `lotto_tickets` WHERE `best_hash` IS NULL");
-	if($hashes_not_exists) return;
+//	if($hashes_not_exists) return;
 
 	// Check if round already have winners
 	$winners_already_set=db_query_to_variable("SELECT 1 FROM `lotto_tickets` WHERE `reward` IS NOT NULL");
-	if($winners_already_set) return;
+//	if($winners_already_set) return;
 
 	// Get prize fund
 	$prize_fund=lotto_get_round_prize_fund($round_uid);
@@ -133,7 +133,7 @@ function lotto_set_winners($round_uid) {
 	// Set winners
 	$places_data=db_query_to_array("SELECT `place`,`percentage` FROM `lotto_rewards` ORDER BY `place` DESC");
 	$winners_data=db_query_to_array("SELECT `uid`,`user_uid` FROM `lotto_tickets`
-		WHERE `round_uid`='$round_uid_escaped' ORDER BY `best_hash` DESC");
+		WHERE `round_uid`='$round_uid_escaped' ORDER BY `best_hash` ASC");
 
 	$place=1;
 	foreach($winners_data as $winner) {
