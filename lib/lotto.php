@@ -132,12 +132,13 @@ function lotto_set_winners($round_uid) {
 
 	// Set winners
 	$places_data=db_query_to_array("SELECT `place`,`percentage` FROM `lotto_rewards` ORDER BY `place` DESC");
-	$winners_data=db_query_to_array("SELECT `uid` FROM `lotto_tickets`
+	$winners_data=db_query_to_array("SELECT `uid`,`user_uid` FROM `lotto_tickets`
 		WHERE `round_uid`='$round_uid_escaped' ORDER BY `best_hash` DESC");
 
 	$place=1;
 	foreach($winners_data as $winner) {
 		$ticket_uid=$winner['uid'];
+		$user_uid=$winner['user_uid'];
 		if(isset($places_data[$place])) {
 			$percentage=$places_data[$place]['percentage'];
 			$reward=$prize_fund*$percentage/100;
@@ -145,9 +146,13 @@ function lotto_set_winners($round_uid) {
 			$reward=0;
 		}
 
+		// Write rewards
 		$ticket_uid_escaped=db_escape($ticket_uid);
 		$reward_escaped=db_escape($reward);
 		db_query("UPDATE `lotto_tickets` SET `reward`='$reward_escaped' WHERE `uid`='$ticket_uid_escaped'");
+
+		// Change user balance
+		change_user_balance($user_uid,$reward);
 
 		$place++;
 	}
