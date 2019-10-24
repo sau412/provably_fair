@@ -76,6 +76,10 @@ function lotto_buy_tickets($round_uid,$user_uid,$amount) {
 	$spent=$amount*$lotto_ticket_price;
 	$spent_escaped=db_escape($spent);
 
+	// Check user's balance
+	$user_balance=get_user_balance($user_uid);
+	if ($user_balance < $spent) return;
+
 	// Add user's tickets
 	db_query("INSERT INTO `lotto_tickets` (`round_uid`,`user_uid`,`spent`,`tickets`)
 			VALUES ('$round_uid_escaped','$user_uid_escaped','$spent_escaped','$amount_escaped')
@@ -84,7 +88,7 @@ function lotto_buy_tickets($round_uid,$user_uid,$amount) {
 				`spent`=`spent`+VALUES(`spent`)");
 
 	// Change user balance
-	change_user_balance($user_uid,$spent);
+	change_user_balance($user_uid,-$spent);
 }
 
 // Lotto close round
