@@ -90,6 +90,10 @@ function lotto_buy_tickets($round_uid,$user_uid,$amount) {
 	$spent=$amount*$lotto_ticket_price;
 	$spent_escaped=db_escape($spent);
 
+	// Check number
+	if(floor($amount) != $amount) return;
+	if($amount<1) return;
+
 	// Check user's balance
 	$user_balance=get_user_balance($user_uid);
 	if ($user_balance < $spent) return;

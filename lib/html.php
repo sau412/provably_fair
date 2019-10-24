@@ -109,10 +109,10 @@ function html_tabs($user_uid) {
                 //$result.=html_menu_element("minesweeper","Minesweeper");
                 $result.=html_menu_element("dice_roll","Multiply $currency_short");
                 $result.=html_menu_element("last_rolls","Last rolls");
+                $result.=html_menu_element("lotto","Lotto<sup style='color:red;'>&beta;</sup>");
                 $result.=html_menu_element("send_receive","Send and receive");
                 $result.=html_menu_element("settings","%tab_settings%");
                 if(is_admin($user_uid)) {
-                $result.=html_menu_element("lotto","Lotto");
                         $result.=html_menu_element("control","%tab_control%");
                         $result.=html_menu_element("log","%tab_log%");
                 }
