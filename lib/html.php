@@ -666,7 +666,7 @@ _END;
 
 	$result.=<<<_END
 <h3>Buy tickets</h3>
-<form name=lotto_buy>
+<form name=lotto_buy method=post>
 <input type=hidden name=action value='lotto_buy'>
 <input type=hidden name=token value='$token'>
 <p>Ticket price: $lotto_ticket_price $currency_short</p>
