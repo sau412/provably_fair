@@ -81,7 +81,7 @@ function lotto_buy_tickets($round_uid,$user_uid,$amount) {
 			VALUES ('$round_uid_escaped','$user_uid_escaped','$spent_escaped','$amount_escaped')
 			ON DUPLICATE KEY UPDATE
 				`tickets`=`tickets`+VALUES(`tickets`),
-				`spent`=`spent`+VALUES('$spent_escaped')");
+				`spent`=`spent`+VALUES(`spent`)");
 
 	// Change user balance
 	change_user_balance($user_uid,$spent);
