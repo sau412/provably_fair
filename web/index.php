@@ -84,6 +84,10 @@ if(isset($action)) {
                 $result=do_dice_roll($user_uid,$bet,$type);
                 echo json_encode($result);
                 die();
+        } else if($action=='lotto_buy') {
+                $amount=stripslashes($_POST['amount']);
+		$round_uid=lotto_get_actual_round();
+		lotto_buy_tickets($round_uid,$user_uid,$amount);
         } else if($action=='minesweeper') {
                 $x=stripslashes($_POST['x']);
                 $y=stripslashes($_POST['y']);

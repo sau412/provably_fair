@@ -670,7 +670,7 @@ _END;
 <input type=hidden name=action value='lotto_buy'>
 <input type=hidden name=token value='$token'>
 <p>Ticket price: $lotto_ticket_price $currency_short</p>
-<p>Tickets to buy: <input type=text value='0'> <input type=submit value='Buy'></p>
+<p>Tickets to buy: <input type=text name=amount value='0'> <input type=submit value='Buy'></p>
 </form>
 
 <h3>Prize fund distribution</h3>

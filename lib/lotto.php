@@ -69,7 +69,17 @@ function lotto_free_tickets($round_uid,$user_uid,$amount) {
 
 // Buy tickets
 function lotto_buy_tickets($round_uid,$user_uid,$amount) {
-	
+	global $lotto_ticket_price;
+	$round_uid_escaped=db_escape($round_uid);
+	$user_uid_escaped=db_escape($user_uid);
+	$amount_escaped=db_escape($amount);
+	$spent=$amount*$lotto_ticket_price;
+	$spent_escaped=db_escape($spent);
+	db_query("INSERT INTO `lotto_tickets` (`round_uid`,`user_uid`,`spent`,`tickets`)
+			VALUES ('$round_uid_escaped','$user_uid_escaped','$spent_escaped','$amount_escaped')
+			ON DUPLICATE KEY UPDATE
+				`tickets`=`tickets`+VALUES(`tickets`),
+				`spent`=`spent`+VALUES('$spent_escaped')");
 }
 
 // Lotto close round

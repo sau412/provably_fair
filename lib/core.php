@@ -264,12 +264,35 @@ function get_user_balance($user_uid) {
 // Update balance
 function update_user_balance($user_uid) {
         $user_uid_escaped=db_escape($user_uid);
+
+	$balance=0;
+
+	// Send and receive coins data
         $amount_received=db_query_to_variable("SELECT SUM(`amount`) FROM `transactions` WHERE `user_uid`='$user_uid_escaped' AND `status` IN ('received')");
         $amount_sent=db_query_to_variable("SELECT SUM(`amount`) FROM `transactions` WHERE `user_uid`='$user_uid_escaped' AND `status` IN ('processing','sent')");
+
+	$balance+=$amount_received;
+	$balance-=$amount_sent;
+
+	// Bets and free rolls data
         $amount_bets=db_query_to_variable("SELECT SUM(`bet`) FROM `rolls` WHERE `user_uid`='$user_uid_escaped'");
         $amount_profits=db_query_to_variable("SELECT SUM(`profit`) FROM `rolls` WHERE `user_uid`='$user_uid_escaped'");
+
+	$balance-=$amount_bets;
+	$balance+=$amount_profits;
+
+	// Minesweeper data
         $amount_profits_m=db_query_to_variable("SELECT SUM(`profit`) FROM `minesweeper` WHERE `user_uid`='$user_uid_escaped'");
-        $balance=$amount_received-$amount_sent-$amount_bets+$amount_profits+$amount_profits_m;
+
+	$balance+=$amount_profits_m;
+
+	// Lotto data
+	$amount_spent_l=db_query_to_variable("SELECT SUM(`spent`) FROM `lotto_tickets` WHERE `user_uid`='$user_uid_escaped'");
+	$amount_profits_l=db_query_to_variable("SELECT SUM(`reward`) FROM `lotto_tickets` WHERE `user_uid`='$user_uid_escaped' AND `reward` IS NOT NULL");
+
+	$balance-=$amount_spent_l;
+	$balance+=$amount_profits_l;
+
         db_query("UPDATE `users` SET `balance`='$balance' WHERE `uid`='$user_uid_escaped'");
 }
 
