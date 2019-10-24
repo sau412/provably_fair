@@ -22,6 +22,7 @@ function lotto_get_round_start($round_uid) {
 
 // Get round stop
 function lotto_get_round_stop($round_uid) {
+	global $lotto_round_length;
 	$round_uid_escaped=db_escape($round_uid);
 	$stop=db_query_to_variable("SELECT `stop` FROM `lotto_rounds` WHERE `uid`='$round_uid'");
 	if(!$stop) {
