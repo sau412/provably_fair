@@ -637,9 +637,9 @@ function html_lotto($user_uid,$token) {
 	$result.="<h2>Lotto</h2>";
 
 	$round_uid=lotto_get_actual_round();
-	$total_tickets=lotto_get_current_round_tickets($round_uid);
-	$user_tickets=lotto_get_current_round_user_tickets($round_uid,$user_uid);
-	$prize_fund=lotto_get_current_round_prize_fund($round_uid);
+	$total_tickets=lotto_get_round_tickets($round_uid);
+	$user_tickets=lotto_get_round_user_tickets($round_uid,$user_uid);
+	$prize_fund=lotto_get_round_prize_fund($round_uid);
 
 	if($user_tickets>0) {
 		$probability=$user_tickets/$total_tickets;
@@ -673,8 +673,8 @@ _END;
 _END;
 
 	$round_uid=lotto_get_finished_round();
-	$total_tickets=lotto_get_current_round_tickets($round_uid);
-	$prize_fund=lotto_get_current_round_prize_fund($round_uid);
+	$total_tickets=lotto_get_round_tickets($round_uid);
+	$prize_fund=lotto_get_round_prize_fund($round_uid);
 
 	$result.=<<<_END
 <h3>Previous round</h3>
