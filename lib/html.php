@@ -109,7 +109,7 @@ function html_tabs($user_uid) {
                 //$result.=html_menu_element("minesweeper","Minesweeper");
                 $result.=html_menu_element("dice_roll","Multiply $currency_short");
                 $result.=html_menu_element("last_rolls","Last rolls");
-                $result.=html_menu_element("lotto","Lotto<sup style='color:red;'>&beta;</sup>");
+                $result.=html_menu_element("lotto","Lottery<sup style='color:red;'>&beta;</sup>");
                 $result.=html_menu_element("send_receive","Send and receive");
                 $result.=html_menu_element("settings","%tab_settings%");
                 if(is_admin($user_uid)) {
@@ -644,7 +644,7 @@ function html_lotto($user_uid,$token) {
 	$round_stop=lotto_get_round_stop($round_uid);
 	$server_seed_hash=lotto_get_server_seed_hash($round_uid);
 
-	if($user_tickets>0) {
+	if($user_tickets>0 && $total_tickets>0) {
 		$probability=$user_tickets/$total_tickets;
 		$probability=sprintf("%0.6f",$probability*100);
 	} else {
