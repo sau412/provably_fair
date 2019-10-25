@@ -657,7 +657,7 @@ function html_earn($user_uid,$token) {
 	$result="";
 	$result.=<<<_END
 <h2>Earn $currency_short</h2>
-<p>We add $daily_percentage % to user balance daily.</p>
+<p>We add $daily_percentage % to user balance daily as compound percent.</p>
 
 <table class='table_horizontal'>
 <tr>
@@ -697,6 +697,25 @@ function recalc_earnings() {
 }
 </script>
 _END;
+
+	$result.=<<<_END
+<h2>Your earnings</h2>
+<table class='table_horizontal'>
+<tr><th>Date</th><th>Earnings</th></tr>
+_END;
+
+	$user_uid_escaped=db_escape($user_uid);
+	$earnings_data=db_query_to_array("SELECT `timestamp`,`profit` FROM `rolls`
+		WHERE `type`='pay' ORDER BY `timestamp` DESC LIMIT 20");
+
+	foreach($earnings_data as $earnings_row) {
+		$timestamp=$earnings_row['timestamp'];
+		$profit=$earnings_row['profit'];
+		$result.="<tr><td>$timestamp</td><td>$profit</td></tr>\n";
+	}
+
+	$result.="<table>\n";
+
 	return $result;
 }
 
