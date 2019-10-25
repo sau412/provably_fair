@@ -51,7 +51,7 @@ function lotto_get_round_stop_interval($round_uid) {
 	global $lotto_round_length;
 	$round_length_escaped=db_escape($lotto_round_length);
 	$round_uid_escaped=db_escape($round_uid);
-	$interval=db_query_to_variable("SELECT '$round_length_escaped'+(UNUX_TIMESTAMP(`start`)-UNIX_TIMESTAMP(NOW()))
+	$interval=db_query_to_variable("SELECT '$round_length_escaped'+(UNIX_TIMESTAMP(`start`)-UNIX_TIMESTAMP(NOW()))
 		FROM `lotto_rounds` WHERE `uid`='$round_uid'");
 	return $interval;
 }
