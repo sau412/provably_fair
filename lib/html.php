@@ -629,8 +629,8 @@ _END;
         return $result;
 }
 
-// Earn GRC tab
-function html_earn_grc($user_uid,$token) {
+// Earn currency tab
+function html_earn($user_uid,$token) {
         global $currency_short;
 	global $daily_percentage;
 
