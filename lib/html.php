@@ -418,7 +418,7 @@ function get_current_bet() {
 }
 
 function set_current_bet(amount) {
-	document.getElementById('bet').value=amount.toFixed(3);
+	document.getElementById('bet').value=(Math.floor(amount*1000)/1000).toFixed(3);
 }
 
 function bet_double() {
