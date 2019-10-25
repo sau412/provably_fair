@@ -640,7 +640,7 @@ function html_earn($user_uid,$token) {
 	$monthly_percentage=pow(1+$daily_percentage/100,30)-1;
 	$yearly_percentage=pow(1+$daily_percentage/100,365)-1;
 
-	$daily_earnings=$user_balance*$daily_percentage;
+	$daily_earnings=$user_balance*$daily_percentage/100;
 	$weekly_earnings=$user_balance*$weekly_percentage;
 	$monthly_earnings=$user_balance*$monthly_percentage;
 	$yearly_earnings=$user_balance*$yearly_percentage;
@@ -656,17 +656,27 @@ function html_earn($user_uid,$token) {
 
 	$result="";
 	$result.=<<<_END
-<h2>Earn GRC</h2>
-We add $daily_percentage % to user balance daily.
+<h2>Earn $currency_short</h2>
+<p>We add $daily_percentage % to user balance daily.</p>
 
 <table class='table_horizontal'>
-<tr><th>Interval</th><th>Percentage</th><th>Earnings</th></tr>
-<tr><td>One day</td><td>$daily_percentage %</td><td>$daily_earnings</td></tr>
-<tr><td>One week</td><td>$weekly_percentage %</td><td>$weekly_earnings</td></tr>
-<tr><td>30 days (month)</td><td>$monthly_percentage %</td><td>$monthly_earnings</td></tr>
-<tr><td>365 days (year)</td><td>$yearly_percentage %</td><td>$yearly_earnings</td></tr>
+<tr><th>Your balance</th><td></td><td><input type=text id=user_balance value='$user_balance' onChange='recalc_earnings();'> $currency_short<td></tr>
+<tr><th>One day</th><td>$daily_percentage %</td><td id=daily_earnings>$daily_earnings</td></tr>
+<tr><th>One week</th><td>$weekly_percentage %</td><td id=weekly_earnings>$weekly_earnings</td></tr>
+<tr><th>30 days (month)</th><td>$monthly_percentage %</td><td id=montly_earnings>$monthly_earnings</td></tr>
+<tr><th>365 days (year)</th><td>$yearly_percentage %</td><td yearly_earnings>$yearly_earnings</td></tr>
 
 </table>
+
+<script>
+function recalc_earnings() {
+	let user_balance = document.getElementById('balance').value.parseFloat();
+	document.getElementById('daily_earnings').innerHTML = (user_balance * $daily_percentage/100).toFixed(2);
+	document.getElementById('weekly_earnings').innerHTML = (user_balance * $weekly_percentage/100).toFixed(2);
+	document.getElementById('monthly_earnings').innerHTML = (user_balance * $monthly_percentage/100).toFixed(2);
+	document.getElementById('yearly_earnings').innerHTML = (user_balance * $yearly_percentage/100).toFixed(2);
+}
+</script>
 _END;
 	return $result;
 }
