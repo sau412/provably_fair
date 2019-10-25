@@ -313,7 +313,8 @@ function html_free_roll($user_uid,$token) {
         $result.="</p>\n";
         $result.="<p>\n";
         $cooldown_time=free_roll_cooldown_active($user_uid);
-	$recaptcha=html_recaptcha();
+//	$recaptcha=html_recaptcha();
+	$recaptcha='';
         $result.=<<<_END
 <form id=free_roll_form name=free_roll method=post>
 <input type=hidden id=action name=action value='free_roll'>
@@ -387,6 +388,8 @@ function html_dice_game($user_uid,$token) {
         $bet_min=get_variable("bet_min");
         $bet_max=get_variable("bet_max");
 
+	$user_balance=get_user_balance($user_uid);
+
         $result="";
         $result.=<<<_END
 <div class=dice_ext>
@@ -396,7 +399,10 @@ function html_dice_game($user_uid,$token) {
 <input type=hidden name=token value='$token'>
 <input type=hidden id=type name=type value='low'>
 <p>Server seed hash: <strong id=server_seed_hash>$server_seed_hash</strong></p>
-<p>Bet <input type=text name=bet value='$bet_min'> $currency_short</p>
+<p>Bet <input type=text id=bet name=bet value='$bet_min'> $currency_short
+	<input type=button value='x2' onClick='bet_double();'>
+	<input type=button value='/2' onClick='bet_half();'>
+</p>
 <p>Min bet $bet_min $currency_short, max bet $bet_max $currency_short</p>
 <p>User seed <input type=text id=user_seed name=user_seed value='$user_seed_html'></p>
 <p><input type=button value='Bet LO' onClick='do_dice_roll("low")'> <input type=button value='Bet HI' onClick='do_dice_roll("high")'></p>
@@ -407,6 +413,22 @@ Bet LO - below or equals $bet_lo_limit, bet HI - above or equals $bet_hi_limit
 </div>
 </div>
 <script>
+function get_current_bet() {
+	return parseFloat(document.getElementById('bet').value);
+}
+
+function set_current_bet(amount) {
+	document.getElementById('bet').value=amount.toFixed(3);
+}
+
+function bet_double() {
+	set_current_bet(Math.min($user_balance,get_current_bet()*2));
+}
+
+function bet_half() {
+	set_current_bet(Math.max($bet_lo_limit,get_current_bet()/2));
+}
+
 function do_dice_roll(type) {
         document.getElementById("type").value=type;
         $.post("./",$("#dice_game").serialize(),function(result) {
