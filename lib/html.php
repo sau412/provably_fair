@@ -660,17 +660,36 @@ function html_earn($user_uid,$token) {
 <p>We add $daily_percentage % to user balance daily.</p>
 
 <table class='table_horizontal'>
-<tr><th>Your balance</th><td></td><td><input type=text id=user_balance value='$user_balance' onChange='recalc_earnings();'> $currency_short<td></tr>
-<tr><th>One day</th><td>$daily_percentage %</td><td id=daily_earnings>$daily_earnings</td></tr>
-<tr><th>One week</th><td>$weekly_percentage %</td><td id=weekly_earnings>$weekly_earnings</td></tr>
-<tr><th>30 days (month)</th><td>$monthly_percentage %</td><td id=montly_earnings>$monthly_earnings</td></tr>
-<tr><th>365 days (year)</th><td>$yearly_percentage %</td><td yearly_earnings>$yearly_earnings</td></tr>
-
+<tr>
+	<th>Your balance</th>
+	<td></td>
+	<td><input type=text id=user_balance value='$user_balance' onChange='recalc_earnings();'> $currency_short</td>
+</tr>
+<tr>
+	<th>One day</th>
+	<td>$daily_percentage %</td>
+	<td><span id=daily_earnings>$daily_earnings</span> $currency_short</td>
+</tr>
+<tr>
+	<th>One week</th>
+	<td>$weekly_percentage %</td>
+	<td><span id=weekly_earnings>$weekly_earnings</span> $currency_short</td>
+</tr>
+<tr>
+	<th>30 days (month)</th>
+	<td>$monthly_percentage %</td>
+	<td><span id=montly_earnings>$monthly_earnings</span> $currency_short</td>
+</tr>
+<tr>
+	<th>365 days (year)</th>
+	<td>$yearly_percentage %</td>
+	<td><span yearly_earnings>$yearly_earnings</span> $currency_short</td>
+</tr>
 </table>
 
 <script>
 function recalc_earnings() {
-	let user_balance = document.getElementById('balance').value.parseFloat();
+	let user_balance = document.getElementById('user_balance').value.parseFloat();
 	document.getElementById('daily_earnings').innerHTML = (user_balance * $daily_percentage/100).toFixed(2);
 	document.getElementById('weekly_earnings').innerHTML = (user_balance * $weekly_percentage/100).toFixed(2);
 	document.getElementById('monthly_earnings').innerHTML = (user_balance * $monthly_percentage/100).toFixed(2);
