@@ -649,10 +649,10 @@ function html_earn($user_uid,$token) {
 	$monthly_percentage=sprintf("%0.4f",$monthly_percentage*100);
 	$yearly_percentage=sprintf("%0.4f",$yearly_percentage*100);
 
-	$daily_earnings=sprintf("%0.4f",$daily_earnings);
-	$weekly_earnings=sprintf("%0.4f",$weekly_earnings);
-	$monthly_earnings=sprintf("%0.4f",$monthly_earnings);
-	$yearly_earnings=sprintf("%0.4f",$yearly_earnings);
+	$daily_earnings=sprintf("%0.8f",$daily_earnings);
+	$weekly_earnings=sprintf("%0.8f",$weekly_earnings);
+	$monthly_earnings=sprintf("%0.8f",$monthly_earnings);
+	$yearly_earnings=sprintf("%0.8f",$yearly_earnings);
 
 	$result="";
 	$result.=<<<_END
@@ -690,10 +690,10 @@ function html_earn($user_uid,$token) {
 <script>
 function recalc_earnings() {
 	let user_balance = parseFloat(document.getElementById('user_balance').value);
-	document.getElementById('daily_earnings').innerHTML = (user_balance * $daily_percentage/100).toFixed(4);
-	document.getElementById('weekly_earnings').innerHTML = (user_balance * $weekly_percentage/100).toFixed(4);
-	document.getElementById('monthly_earnings').innerHTML = (user_balance * $monthly_percentage/100).toFixed(4);
-	document.getElementById('yearly_earnings').innerHTML = (user_balance * $yearly_percentage/100).toFixed(4);
+	document.getElementById('daily_earnings').innerHTML = (user_balance * $daily_percentage/100).toFixed(8);
+	document.getElementById('weekly_earnings').innerHTML = (user_balance * $weekly_percentage/100).toFixed(8);
+	document.getElementById('monthly_earnings').innerHTML = (user_balance * $monthly_percentage/100).toFixed(8);
+	document.getElementById('yearly_earnings').innerHTML = (user_balance * $yearly_percentage/100).toFixed(8);
 }
 </script>
 _END;
