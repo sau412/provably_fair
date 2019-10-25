@@ -6,7 +6,7 @@ require_once("../lib/core.php");
 require_once("../lib/html.php");
 require_once("../lib/captcha.php");
 require_once("../lib/minesweeper.php");
-require_once("../lib/lotto.php");
+require_once("../lib/lottery.php");
 
 db_connect();
 
@@ -64,11 +64,11 @@ if(isset($action)) {
 		if(TRUE || recaptcha_check($recaptcha_response)) {
 	                update_user_seed($user_uid,$user_seed);
 	                $result=do_free_roll($user_uid);
-			// Free lotto tickets for each free roll
+			// Free lottery tickets for each free roll
 			if(isset($result['result']) && $result['result']=="ok") {
-				$round_uid=lotto_get_actual_round();
+				$round_uid=lottery_get_actual_round();
 				if($round_uid) {
-					lotto_free_tickets($round_uid,$user_uid,1);
+					lottery_free_tickets($round_uid,$user_uid,1);
 				}
 			}
 	                echo json_encode($result);
@@ -84,10 +84,10 @@ if(isset($action)) {
                 $result=do_dice_roll($user_uid,$bet,$type);
                 echo json_encode($result);
                 die();
-        } else if($action=='lotto_buy') {
+        } else if($action=='lottery_buy') {
                 $amount=stripslashes($_POST['amount']);
-		$round_uid=lotto_get_actual_round();
-		lotto_buy_tickets($round_uid,$user_uid,$amount);
+		$round_uid=lottery_get_actual_round();
+		lottery_buy_tickets($round_uid,$user_uid,$amount);
         } else if($action=='minesweeper') {
                 $x=stripslashes($_POST['x']);
                 $y=stripslashes($_POST['y']);

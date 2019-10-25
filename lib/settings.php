@@ -30,9 +30,9 @@ $recaptcha_public_key="";
 // Daily percentage
 $daily_percentage=0;
 
-// Lotto
-$lotto_ticket_price=0.001;
-$lotto_round_length=86400;
+// Lottery
+$lottery_ticket_price=0.001;
+$lottery_round_length=86400;
 
 // Site settings
 $settings_api_enabled=TRUE;

@@ -745,20 +745,20 @@ _END;
 // Lottery tab
 function html_lottery($user_uid,$token) {
         global $currency_short;
-	global $lotto_ticket_price;
+	global $lottery_ticket_price;
 
 	$result="";
 
 	$result.="<h2>Lottery</h2>";
 
-	$round_uid=lotto_get_actual_round();
-	$total_tickets=lotto_get_round_tickets($round_uid);
-	$user_tickets=lotto_get_round_user_tickets($round_uid,$user_uid);
-	$prize_fund=lotto_get_round_prize_fund($round_uid);
-	$round_start=lotto_get_round_start($round_uid);
-	$round_stop=lotto_get_round_stop($round_uid);
-	$round_stop_interval=lotto_get_round_stop_interval($round_uid);
-	$server_seed_hash=lotto_get_server_seed_hash($round_uid);
+	$round_uid=lottery_get_actual_round();
+	$total_tickets=lottery_get_round_tickets($round_uid);
+	$user_tickets=lottery_get_round_user_tickets($round_uid,$user_uid);
+	$prize_fund=lottery_get_round_prize_fund($round_uid);
+	$round_start=lottery_get_round_start($round_uid);
+	$round_stop=lottery_get_round_stop($round_uid);
+	$round_stop_interval=lottery_get_round_stop_interval($round_uid);
+	$server_seed_hash=lottery_get_server_seed_hash($round_uid);
 
 	$round_stop_hours=floor($round_stop_interval/3600);
 	$round_stop_minutes=floor(($round_stop_interval%3600)/60);
@@ -771,7 +771,7 @@ function html_lottery($user_uid,$token) {
 		$probability=0;
 	}
 
-	$prize_fund=sprintf("%0.4f",$prize_fund);
+	$prize_fund=sprintf("%0.8f",$prize_fund);
 
 	$result.=<<<_END
 <h3>Current round</h3>
@@ -784,17 +784,17 @@ function html_lottery($user_uid,$token) {
 <tr><th>Prize fund</th><td>$prize_fund $currency_short</td></tr>
 <tr><th>Total tickets</th><td>$total_tickets</td></tr>
 <tr><th>Your tickets</th><td>$user_tickets</td></tr>
-<tr><th>Chance to be 1st</th><td>$probability %</td></tr>
+<tr><th>Chance to be the 1st</th><td>$probability %</td></tr>
 </table>
 
 _END;
 
 	$result.=<<<_END
 <h3>Buy tickets</h3>
-<form name=lotto_buy method=post>
-<input type=hidden name=action value='lotto_buy'>
+<form name=lottery_buy method=post>
+<input type=hidden name=action value='lottery_buy'>
 <input type=hidden name=token value='$token'>
-<p>Ticket price: $lotto_ticket_price $currency_short</p>
+<p>Ticket price: $lottery_ticket_price $currency_short</p>
 <p>Tickets to buy: <input type=text name=amount value='0'> <input type=submit value='Buy'></p>
 </form>
 
@@ -803,7 +803,7 @@ _END;
 <tr><th>Place</th><th>% of funds</th><th>Reward</th></tr>
 _END;
 
-	$places_data=db_query_to_array("SELECT `place`,`percentage` FROM `lotto_rewards` ORDER BY `place`");
+	$places_data=db_query_to_array("SELECT `place`,`percentage` FROM `lottery_rewards` ORDER BY `place`");
 	foreach($places_data as $place_row) {
 		$place=$place_row['place'];
 		$percentage=$place_row['percentage'];
@@ -812,15 +812,21 @@ _END;
 	}
 	$result.="</table>\n";
 
-	$round_uid=lotto_get_finished_round();
+	$round_uid=lottery_get_finished_round();
 	if($round_uid) {
-		$total_tickets=lotto_get_round_tickets($round_uid);
-		$prize_fund=lotto_get_round_prize_fund($round_uid);
-		$round_start=lotto_get_round_start($round_uid);
-		$round_stop=lotto_get_round_stop($round_uid);
+		$total_tickets=lottery_get_round_tickets($round_uid);
+		$prize_fund=lottery_get_round_prize_fund($round_uid);
+		$round_start=lottery_get_round_start($round_uid);
+		$round_stop=lottery_get_round_stop($round_uid);
+		$server_seed=lottery_get_server_seed($round_uid);
+		$server_seed_hash=lottery_get_server_seed_hash($round_uid);
+
+		$prize_fund=sprintf("%0.8f",$prize_fund);
 
 		$result.=<<<_END
 <h3>Previous round</h3>
+<p>Server seed hash: <strong>$server_seed_hash</strong></p>
+<p>Server seed: <strong>$server_seed</strong></p>
 <table class='table_horizontal'>
 <tr><th>Round #</th><td>$round_uid</td></tr>
 <tr><th>Round begin</th><td>$round_start</td></tr>
@@ -837,7 +843,7 @@ _END;
 
 	$round_uid_escaped=db_escape($round_uid);
 	$winners_data=db_query_to_array("SELECT `user_uid`,`tickets`,`reward`
-		FROM `lotto_tickets`
+		FROM `lottery_tickets`
 		WHERE `round_uid`='$round_uid_escaped' AND `reward`>0
 		ORDER BY `best_hash` ASC");
 
@@ -862,7 +868,7 @@ _END;
 _END;
 
 	$user_uid_escaped=db_escape($user_uid);
-	$all_round_data=db_query_to_array("SELECT `round_uid`,`best_hash`,`reward` FROM `lotto_tickets`
+	$all_round_data=db_query_to_array("SELECT `round_uid`,`best_hash`,`reward` FROM `lottery_tickets`
 		WHERE `user_uid`='$user_uid_escaped' AND `reward` IS NOT NULL ORDER BY `round_uid` DESC LIMIT 10");
 
 	foreach($all_round_data as $round_row) {
@@ -871,7 +877,7 @@ _END;
 		$best_hash=$round_row['best_hash'];
 		$round_uid_escaped=db_escape($round_uid);
 		$best_hash_escaped=db_escape($best_hash);
-		$place=db_query_to_variable("SELECT count(*) FROM `lotto_tickets`
+		$place=db_query_to_variable("SELECT count(*) FROM `lottery_tickets`
 			WHERE `round_uid`='$round_uid' AND `best_hash`<='$best_hash_escaped'");
 		$result.="<tr><td>$round_uid</td><td>$place</td><td>$reward $currency_short</td></tr>\n";
 	}
