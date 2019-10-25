@@ -706,7 +706,7 @@ _END;
 
 	$user_uid_escaped=db_escape($user_uid);
 	$earnings_data=db_query_to_array("SELECT `timestamp`,`profit` FROM `rolls`
-		WHERE `roll_type`='pay' ORDER BY `timestamp` DESC LIMIT 20");
+		WHERE `user_uid`='$user_uid_escaped',`roll_type`='pay' ORDER BY `timestamp` DESC LIMIT 20");
 
 	foreach($earnings_data as $earnings_row) {
 		$timestamp=$earnings_row['timestamp'];
