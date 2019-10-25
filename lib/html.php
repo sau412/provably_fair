@@ -636,18 +636,18 @@ function html_earn($user_uid,$token) {
 
 	$user_balance=get_user_balance($user_uid);
 
-	$weekly_percentage=pow(1+$daily_percentage,7)-1;
-	$monthly_percentage=pow(1+$daily_percentage,30)-1;
-	$yearly_percentage=pow(1+$daily_percentage,365)-1;
+	$weekly_percentage=pow(1+$daily_percentage/100,7)-1;
+	$monthly_percentage=pow(1+$daily_percentage/100,30)-1;
+	$yearly_percentage=pow(1+$daily_percentage/100,365)-1;
 
 	$daily_earnings=$user_balance*$daily_percentage;
 	$weekly_earnings=$user_balance*$weekly_percentage;
 	$monthly_earnings=$user_balance*$monthly_percentage;
 	$yearly_earnings=$user_balance*$yearly_percentage;
 
-	$weekly_percentage=sprintf("%0.4f",$weekly_percentage);
-	$monthly_percentage=sprintf("%0.4f",$monthly_percentage);
-	$yearly_percentage=sprintf("%0.4f",$yearly_percentage);
+	$weekly_percentage=sprintf("%0.4f",$weekly_percentage*100);
+	$monthly_percentage=sprintf("%0.4f",$monthly_percentage*100);
+	$yearly_percentage=sprintf("%0.4f",$yearly_percentage*100);
 
 	$daily_earnings=sprintf("%0.4f",$daily_earnings);
 	$weekly_earnings=sprintf("%0.4f",$weekly_earnings);
