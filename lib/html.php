@@ -636,9 +636,9 @@ function html_earn($user_uid,$token) {
 
 	$user_balance=get_user_balance($user_uid);
 
-	$weekly_percentage=pow($daily_percentage,7);
-	$monthly_percentage=pow($daily_percentage,30);
-	$yearly_percentage=pow($yearly_percentage,365);
+	$weekly_percentage=pow(1+$daily_percentage,7);
+	$monthly_percentage=pow(1+$daily_percentage,30);
+	$yearly_percentage=pow(1+$yearly_percentage,365);
 
 	$daily_earnings=$user_balance*$daily_percentage;
 	$weekly_earnings=$user_balance*$weekly_percentage;
