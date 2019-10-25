@@ -161,8 +161,11 @@ if(isset($_GET['ajax']) && isset($_GET['block'])) {
                         case 'info':
                                 echo html_info();
                                 break;
-                        case 'lotto':
-                                echo html_lotto($user_uid,$token);
+                        case 'lottery':
+                                echo html_lottery($user_uid,$token);
+                                break;
+                        case 'earn':
+                                echo html_earn($user_uid,$token);
                                 break;
                         case 'log':
                                 if(is_admin($user_uid)) {

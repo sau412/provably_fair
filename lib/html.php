@@ -109,7 +109,8 @@ function html_tabs($user_uid) {
                 //$result.=html_menu_element("minesweeper","Minesweeper");
                 $result.=html_menu_element("dice_roll","Multiply $currency_short");
                 $result.=html_menu_element("last_rolls","Last rolls");
-                $result.=html_menu_element("lotto","Lottery<sup style='color:red;'>&beta;</sup>");
+                $result.=html_menu_element("lottery","Lottery<sup style='color:red;'>&beta;</sup>");
+                $result.=html_menu_element("earn","Earn $currency_short");
                 $result.=html_menu_element("send_receive","Send and receive");
                 $result.=html_menu_element("settings","%tab_settings%");
                 if(is_admin($user_uid)) {
@@ -628,7 +629,50 @@ _END;
         return $result;
 }
 
-function html_lotto($user_uid,$token) {
+// Earn GRC tab
+function html_earn_grc($user_uid,$token) {
+        global $currency_short;
+	global $daily_percentage;
+
+	$user_balance=get_user_balance($user_uid);
+
+	$weekly_percentage=pow($daily_percentage,7;
+	$monthly_percentage=pow($daily_percentage,30);
+	$yearly_percentage=pow($yearly_percentage,365);
+
+	$daily_earnings=$user_balance*$daily_percentage;
+	$weekly_earnings=$user_balance*$weekly_percentage;
+	$monthly_earnings=$user_balance*$monthly_percentage;
+	$yearly_earnings=$user_balance*$yearly_percentage;
+
+	$weekly_percentage=sprintf("%0.4f",$weekly_percentage);
+	$monthly_percentage=sprintf("%0.4f",$monthly_percentage);
+	$yearly_percentage=sprintf("%0.4f",$yearly_percentage);
+
+	$daily_earnings=sprintf("%0.4f",$daily_earnings);
+	$weekly_earnings=sprintf("%0.4f",$weekly_earnings);
+	$monthly_earnings=sprintf("%0.4f",$monthly_earnings);
+	$yearly_earnings=sprintf("%0.4f",$yearly_earnings);
+
+	$result="";
+	$result.=<<<_END
+<h2>Earn GRC</h2>
+We add $daily_percentage % to user balance daily.
+
+<table class='table_horizontal'>
+<tr><th>Interval</th><th>Percentage</th><th>Earnings</th></tr>
+<tr><td>One day</td><td>$daily_percentage %</td><td>$daily_earnings</td></tr>
+<tr><td>One week</td><td>$weekly_percentage %</td><td>$weekly_earnings</td></tr>
+<tr><td>30 days (month)</td><td>$daily_percentage %</td><td>$monthly_earnings</td></tr>
+<tr><td>365 days (year)</td><td>$daily_percentage %</td><td>$yearly_earnings</td></tr>
+
+</table>
+_END;
+	return $result;
+}
+
+// Lottery tab
+function html_lottery($user_uid,$token) {
         global $currency_short;
 	global $lotto_ticket_price;
 
@@ -650,6 +694,8 @@ function html_lotto($user_uid,$token) {
 	} else {
 		$probability=0;
 	}
+
+	$prize_fund=sprintf("%0.4f",$prize_fund);
 
 	$result.=<<<_END
 <h3>Current round</h3>
