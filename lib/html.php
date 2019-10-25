@@ -757,7 +757,12 @@ function html_lottery($user_uid,$token) {
 	$prize_fund=lotto_get_round_prize_fund($round_uid);
 	$round_start=lotto_get_round_start($round_uid);
 	$round_stop=lotto_get_round_stop($round_uid);
+	$round_stop_interval=lotto_get_round_stop_interval($round_uid);
 	$server_seed_hash=lotto_get_server_seed_hash($round_uid);
+
+	$round_stop_hours=floor($round_stop_interval/3600);
+	$round_stop_minutes=floor(($round_stop_interval%3600)/60);
+	$round_stop_seconds=floor($round_stop_interval%60);
 
 	if($user_tickets>0 && $total_tickets>0) {
 		$probability=$user_tickets/$total_tickets;
@@ -775,7 +780,7 @@ function html_lottery($user_uid,$token) {
 <table class='table_horizontal'>
 <tr><th>Round #</th><td>$round_uid</td></tr>
 <tr><th>Round begin</th><td>$round_start</td></tr>
-<tr><th>Round end</th><td>$round_stop</td></tr>
+<tr><th>Round end</th><td>in $round_stop_hours hours $round_stop_minutes minutes</td></tr>
 <tr><th>Prize fund</th><td>$prize_fund $currency_short</td></tr>
 <tr><th>Total tickets</th><td>$total_tickets</td></tr>
 <tr><th>Your tickets</th><td>$user_tickets</td></tr>
