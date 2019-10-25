@@ -663,7 +663,7 @@ function html_earn($user_uid,$token) {
 <tr>
 	<th>Your balance</th>
 	<td></td>
-	<td><input type=text id=user_balance value='$user_balance' onChange='recalc_earnings();'> $currency_short</td>
+	<td><input type=text id=user_balance value='$user_balance' onChange='recalc_earnings();' onKeyUp='recalc_earnings();'> $currency_short</td>
 </tr>
 <tr>
 	<th>One day</th>
