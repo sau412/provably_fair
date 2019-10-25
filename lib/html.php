@@ -689,7 +689,7 @@ function html_earn($user_uid,$token) {
 
 <script>
 function recalc_earnings() {
-	let user_balance = document.getElementById('user_balance').value.parseFloat();
+	let user_balance = parseFloat(document.getElementById('user_balance').value);
 	document.getElementById('daily_earnings').innerHTML = (user_balance * $daily_percentage/100).toFixed(2);
 	document.getElementById('weekly_earnings').innerHTML = (user_balance * $weekly_percentage/100).toFixed(2);
 	document.getElementById('monthly_earnings').innerHTML = (user_balance * $monthly_percentage/100).toFixed(2);
