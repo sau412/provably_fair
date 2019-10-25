@@ -422,11 +422,11 @@ function set_current_bet(amount) {
 }
 
 function bet_double() {
-	set_current_bet(Math.min($user_balance,get_current_bet()*2));
+	set_current_bet(Math.min($user_balance,$bet_max,get_current_bet()*2));
 }
 
 function bet_half() {
-	set_current_bet(Math.max($bet_lo_limit,get_current_bet()/2));
+	set_current_bet(Math.max($bet_min,get_current_bet()/2));
 }
 
 function do_dice_roll(type) {
