@@ -738,10 +738,11 @@ _END;
 <tr><th>Round</th><th>Your place</th><th>Your reward</th></tr>
 
 _END;
-
+/*
 	$user_uid_escaped=db_escape($user_uid);
 	$all_round_data=db_query_to_array("SELECT `round_uid`,`best_hash`,`reward` FROM `lotto_tickets`
 		WHERE `user_uid`='$user_uid_escaped' ORDER BY `round_uid` DESC LIMIT 10");
+
 	foreach($all_round_data as $round_row) {
 		$round_uid=$round_row['round_uid'];
 		$reward=$round_row['reward'];
@@ -752,7 +753,7 @@ _END;
 			WHERE `round_uid`='$round_uid' AND `best_hash`<='$best_hash_escaped'");
 		echo "<tr><td>$round_uid</td><td>$place</td><td>$reward</td></tr>\n";
 	}
-
+*/
 	$result.="</table>\n";
 
 	return $result;
