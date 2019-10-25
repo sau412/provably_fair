@@ -636,9 +636,9 @@ function html_earn($user_uid,$token) {
 
 	$user_balance=get_user_balance($user_uid);
 
-	$weekly_percentage=pow(1+$daily_percentage,7);
-	$monthly_percentage=pow(1+$daily_percentage,30);
-	$yearly_percentage=pow(1+$yearly_percentage,365);
+	$weekly_percentage=pow(1+$daily_percentage,7)-1;
+	$monthly_percentage=pow(1+$daily_percentage,30)-1;
+	$yearly_percentage=pow(1+$daily_percentage,365)-1;
 
 	$daily_earnings=$user_balance*$daily_percentage;
 	$weekly_earnings=$user_balance*$weekly_percentage;
@@ -663,8 +663,8 @@ We add $daily_percentage % to user balance daily.
 <tr><th>Interval</th><th>Percentage</th><th>Earnings</th></tr>
 <tr><td>One day</td><td>$daily_percentage %</td><td>$daily_earnings</td></tr>
 <tr><td>One week</td><td>$weekly_percentage %</td><td>$weekly_earnings</td></tr>
-<tr><td>30 days (month)</td><td>$daily_percentage %</td><td>$monthly_earnings</td></tr>
-<tr><td>365 days (year)</td><td>$daily_percentage %</td><td>$yearly_earnings</td></tr>
+<tr><td>30 days (month)</td><td>$monthly_percentage %</td><td>$monthly_earnings</td></tr>
+<tr><td>365 days (year)</td><td>$yearly_percentage %</td><td>$yearly_earnings</td></tr>
 
 </table>
 _END;
