@@ -636,7 +636,7 @@ function html_earn_grc($user_uid,$token) {
 
 	$user_balance=get_user_balance($user_uid);
 
-	$weekly_percentage=pow($daily_percentage,7;
+	$weekly_percentage=pow($daily_percentage,7);
 	$monthly_percentage=pow($daily_percentage,30);
 	$yearly_percentage=pow($yearly_percentage,365);
 
