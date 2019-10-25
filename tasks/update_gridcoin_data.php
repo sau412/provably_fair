@@ -24,7 +24,7 @@ db_connect();
 $new_array=db_query_to_array("SELECT `uid` FROM `users` WHERE `wallet_uid` IS NULL OR `wallet_uid`=0");
 foreach($new_array as $user_info) {
         $uid=$user_info['uid'];
-	echo "1 grc_web_get_new_receiving_address()\n";
+	//echo "1 grc_web_get_new_receiving_address()\n";
         $result=grc_web_get_new_receiving_address();
         $wallet_uid=$result->uid;
         $uid_escaped=db_escape($uid);
@@ -38,7 +38,7 @@ foreach($pending_array as $user_info) {
         $uid=$user_info['uid'];
         $address_uid=$user_info['wallet_uid'];
         $prev_received=$user_info['deposited'];
-	echo "2 grc_web_get_new_receiving_address()\n";
+	//echo "2 grc_web_get_new_receiving_address()\n";
         $result=grc_web_get_receiving_address($address_uid);
         $address=$result->address;
         $received=$result->received;
@@ -48,6 +48,7 @@ foreach($pending_array as $user_info) {
                 $address_escaped=db_escape($address);
                 $received_escaped=db_escape($received);
                 db_query("UPDATE `users` SET `deposit_address`='$address_escaped',`deposited`='$received_escaped' WHERE `uid`='$uid_escaped'");
+		//write_log("New receiving address for user: $address",$uid)
                 //recalculate_balance($uid);
         }
 
@@ -123,9 +124,8 @@ foreach($payout_data_array as $payout_data) {
 
 // Sync transactions
 $transactions_data=grc_web_get_all_tx();
-//var_dump($transactions_data);
+
 foreach($transactions_data as $tx_row) {
-        //var_dump($tx_row);
         $uid=$tx_row->uid;
         $amount=$tx_row->amount;
         $address=$tx_row->address;

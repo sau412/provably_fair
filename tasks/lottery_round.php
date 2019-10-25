@@ -6,6 +6,9 @@ require_once("../lib/lottery.php");
 
 db_connect();
 
+write_log("Task: Lottery round start");
+
 lottery_close_round();
 
+write_log("Task: Lottery round finish");
 ?>

@@ -10,6 +10,8 @@ require_once("../lib/core.php");
 // Check if unsent rewards exists
 db_connect();
 
+write_log("Task: Payroll started");
+
 $users_data_array=db_query_to_array("SELECT `uid`,`balance` FROM `users`");
 
 foreach($users_data_array as $user_data) {
@@ -20,4 +22,7 @@ foreach($users_data_array as $user_data) {
 		do_payroll($user_uid,$amount);
 	}
 }
+
+write_log("Task: Payroll finished");
+
 ?>
