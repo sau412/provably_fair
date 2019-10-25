@@ -711,7 +711,8 @@ _END;
 	foreach($earnings_data as $earnings_row) {
 		$timestamp=$earnings_row['timestamp'];
 		$profit=$earnings_row['profit'];
-		$result.="<tr><td>$timestamp</td><td>$profit</td></tr>\n";
+		$profit=sprintf("%0.8f",$profit);
+		$result.="<tr><td>$timestamp</td><td>$profit $currency_short</td></tr>\n";
 	}
 
 	$result.="<table>\n";
