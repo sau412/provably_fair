@@ -68,7 +68,8 @@ function lotto_get_round_tickets($round_uid) {
 function lotto_get_round_user_tickets($round_uid,$user_uid) {
 	$round_uid_escaped=db_escape($round_uid);
 	$user_uid_escaped=db_escape($user_uid);
-	$tickets=db_query_to_variable("SELECT `tickets` FROM `lotto_tickets` WHERE `round_uid`='$round_uid' AND `user_uid`='$user_uid_escaped'");
+	$tickets=db_query_to_variable("SELECT `tickets` FROM `lotto_tickets`
+		WHERE `round_uid`='$round_uid_escaped' AND `user_uid`='$user_uid_escaped'");
 	if(!$tickets) $tickets=0;
 	return $tickets;
 }
@@ -198,9 +199,12 @@ function lotto_calc_all_users_best_hashes($round_uid) {
 
 // Lotto get user best hash
 function lotto_calc_user_best_hash($round_uid,$user_uid) {
-	$user_tickets=lotto_get_round_tickets($round_uid,$user_uid);
+	// Get required parameters
+	$user_tickets=lotto_get_round_user_tickets($round_uid,$user_uid);
 	$server_seed=lotto_get_server_seed($round_uid);
 	$user_seed=get_user_seed($user_uid);
+
+	// Calculate best user's hash
 	for($i=0;$i!=$user_tickets;$i++) {
 		$hash=hash("sha256","$i.$server_seed.$user_seed");
 		if(!isset($best_hash) || $hash<$best_hash) {
@@ -208,6 +212,7 @@ function lotto_calc_user_best_hash($round_uid,$user_uid) {
 		}
 	}
 
+	// Write this hash to DB
 	$user_uid_escaped=db_escape($user_uid);
 	$round_uid_escaped=db_escape($round_uid);
 	$user_seed_escaped=db_escape($user_seed);
