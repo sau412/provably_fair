@@ -749,9 +749,11 @@ _END;
 		$best_hash=$round_row['best_hash'];
 		$round_uid_escaped=db_escape($round_uid);
 		$best_hash_escaped=db_escape($best_hash);
+echo "SELECT count(*) FROM `lotto_tickets`
+                        WHERE `round_uid`='$round_uid' AND `best_hash`<='$best_hash_escaped'";
 		$place=db_query_to_variable("SELECT count(*) FROM `lotto_tickets`
 			WHERE `round_uid`='$round_uid' AND `best_hash`<='$best_hash_escaped'");
-		$result.="<tr><td>$round_uid</td><td>$place</td><td>$reward</td></tr>\n";
+		$result.="<tr><td>$round_uid</td><td>$place</td><td>$reward $currency_short</td></tr>\n";
 	}
 
 	$result.="</table>\n";
