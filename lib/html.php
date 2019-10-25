@@ -676,12 +676,12 @@ function html_earn($user_uid,$token) {
 	<td><span id=weekly_earnings>$weekly_earnings</span> $currency_short</td>
 </tr>
 <tr>
-	<th>30 days (month)</th>
+	<th>One month (30 days)</th>
 	<td>$monthly_percentage %</td>
 	<td><span id=monthly_earnings>$monthly_earnings</span> $currency_short</td>
 </tr>
 <tr>
-	<th>365 days (year)</th>
+	<th>One year (365 days)</th>
 	<td>$yearly_percentage %</td>
 	<td><span id=yearly_earnings>$yearly_earnings</span> $currency_short</td>
 </tr>
@@ -690,10 +690,10 @@ function html_earn($user_uid,$token) {
 <script>
 function recalc_earnings() {
 	let user_balance = parseFloat(document.getElementById('user_balance').value);
-	document.getElementById('daily_earnings').innerHTML = (user_balance * $daily_percentage/100).toFixed(2);
-	document.getElementById('weekly_earnings').innerHTML = (user_balance * $weekly_percentage/100).toFixed(2);
-	document.getElementById('monthly_earnings').innerHTML = (user_balance * $monthly_percentage/100).toFixed(2);
-	document.getElementById('yearly_earnings').innerHTML = (user_balance * $yearly_percentage/100).toFixed(2);
+	document.getElementById('daily_earnings').innerHTML = (user_balance * $daily_percentage/100).toFixed(4);
+	document.getElementById('weekly_earnings').innerHTML = (user_balance * $weekly_percentage/100).toFixed(4);
+	document.getElementById('monthly_earnings').innerHTML = (user_balance * $monthly_percentage/100).toFixed(4);
+	document.getElementById('yearly_earnings').innerHTML = (user_balance * $yearly_percentage/100).toFixed(4);
 }
 </script>
 _END;
