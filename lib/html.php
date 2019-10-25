@@ -683,7 +683,7 @@ function html_earn($user_uid,$token) {
 <tr>
 	<th>365 days (year)</th>
 	<td>$yearly_percentage %</td>
-	<td><span yearly_earnings>$yearly_earnings</span> $currency_short</td>
+	<td><span id=yearly_earnings>$yearly_earnings</span> $currency_short</td>
 </tr>
 </table>
 
