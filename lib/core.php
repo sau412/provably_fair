@@ -291,9 +291,9 @@ function update_user_balance($user_uid) {
 
 	$balance+=$amount_profits_m;
 
-	// Lotto data
-	$amount_spent_l=db_query_to_variable("SELECT SUM(`spent`) FROM `lotto_tickets` WHERE `user_uid`='$user_uid_escaped'");
-	$amount_profits_l=db_query_to_variable("SELECT SUM(`reward`) FROM `lotto_tickets` WHERE `user_uid`='$user_uid_escaped' AND `reward` IS NOT NULL");
+	// Lottery data
+	$amount_spent_l=db_query_to_variable("SELECT SUM(`spent`) FROM `lottery_tickets` WHERE `user_uid`='$user_uid_escaped'");
+	$amount_profits_l=db_query_to_variable("SELECT SUM(`reward`) FROM `lottery_tickets` WHERE `user_uid`='$user_uid_escaped' AND `reward` IS NOT NULL");
 
 	$balance-=$amount_spent_l;
 	$balance+=$amount_profits_l;
