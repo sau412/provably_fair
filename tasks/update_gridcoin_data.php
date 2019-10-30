@@ -153,6 +153,13 @@ foreach($transactions_data as $tx_row) {
 
                 if($user_uid=='') continue;
 
+		// Check if sending transaction already exists
+		if($status == 'sent' || $status === 'processing') {
+			$tx_exists = db_query_to_variable("SELECT 1 FROM `transactions`
+				WHERE `wallet_uid`='$uid_escaped' AND `status` IN ('requested','processing','sent')");
+			if($tx_exists) continue;
+		}
+
                 db_query("INSERT INTO `transactions` (`user_uid`,`amount`,`address`,`status`,`wallet_uid`,`tx_id`,`confirmations`,`timestamp`)
 VALUES ('$user_uid_escaped','$amount_escaped','$address_escaped','$status_escaped','$uid_escaped','$tx_id_escaped','$confirmations_escaped','$timestamp_escaped')");
         }
