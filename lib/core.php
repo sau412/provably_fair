@@ -319,6 +319,9 @@ function user_withdraw($user_uid,$amount) {
 
         if($address=="") return FALSE;
 
+	// Lock tables
+	db_query("LOCK TABLES `users` WRITE, `transactions` WRITE, `rolls` WRITE, `minesweeper` WRITE, `lottery_tickets` WRITE");
+
         // Check user balance
         $balance=get_user_balance($user_uid);
         if($balance<$amount) return FALSE;
@@ -332,6 +335,9 @@ function user_withdraw($user_uid,$amount) {
 
         // Adjust user balance
         update_user_balance($user_uid);
+
+	// Unlock tables
+	db_query("UNLOCK TABLES");
 
         // Send notifications
         $username=get_username_by_uid($user_uid);
