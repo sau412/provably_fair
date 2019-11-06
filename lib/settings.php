@@ -33,6 +33,7 @@ $daily_percentage=0;
 // Lottery
 $lottery_ticket_price=0.001;
 $lottery_round_length=86400;
+$lottery_min_funds=10;
 
 // Site settings
 $settings_api_enabled=TRUE;

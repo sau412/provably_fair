@@ -77,10 +77,11 @@ function lottery_get_round_user_tickets($round_uid,$user_uid) {
 // Get round prize fund
 function lottery_get_round_prize_fund($round_uid) {
 	global $lottery_ticket_price;
+	global $lottery_min_funds;
 	$round_uid_escaped=db_escape($round_uid);
 	$spent=db_query_to_variable("SELECT SUM(`spent`) FROM `lottery_tickets` WHERE `round_uid`='$round_uid'");
 	if(!$spent) $spent=0;
-	return $spent;
+	return max($spent,$lottery_min_funds);
 }
 
 // Free tickets
