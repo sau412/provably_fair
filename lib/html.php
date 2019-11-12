@@ -679,7 +679,7 @@ function html_earn($user_uid,$token) {
 	$result="";
 	$result.=<<<_END
 <h2>Earn $currency_short</h2>
-<p>We add $daily_percentage % to user balance daily as compound percent.</p>
+<p>We add $daily_percentage % to user balance daily as compound interest.</p>
 
 <table class='table_horizontal'>
 <tr>
