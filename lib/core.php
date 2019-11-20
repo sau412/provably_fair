@@ -10,6 +10,9 @@ function html_escape($data) {
 
 // Add message to log
 function write_log($message,$user_uid='') {
+        global $project_log_name;
+        syslog(LOG_DEBUG,"[$project_log_name] $message");
+        
         $message_escaped=db_escape($message);
         $user_uid_escaped=db_escape($user_uid);
         if($user_uid_escaped=='') $user_uid_escaped="NULL";
