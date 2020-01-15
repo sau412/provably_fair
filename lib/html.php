@@ -350,16 +350,14 @@ function do_free_roll() {
         });
 }
 
-function wait_cooldown(seconds) {
-        if(seconds > 0) {
+function wait_cooldown() {
+        if(cooldown_interval > 0) {
                 document.getElementById("roll_button").style.display = "none";
-                var minutes_show=Math.floor(seconds/60);
-                var seconds_show=seconds%60
-                if(minutes_show<10) minutes_show="0"+minutes_show;
-                if(seconds_show<10) seconds_show="0"+seconds_show;
-                document.getElementById("roll_wait_text").innerHTML="Wait for " + minutes_show + ":" + seconds_show + " before next roll";
-                var next_seconds=seconds-1;
-                setTimeout("wait_cooldown("+next_seconds+")",1000);
+                var minutes_show = Math.floor(cooldown_interval / 60);
+                var seconds_show = cooldown_interval % 60
+                if(minutes_show < 10) minutes_show = "0" + minutes_show;
+                if(seconds_show < 10) seconds_show = "0" + seconds_show;
+                document.getElementById("roll_wait_text").innerHTML = "Wait for " + minutes_show + ":" + seconds_show + " before next roll";
         } else {
                 document.getElementById("roll_button").style.display = "block";
                 document.getElementById("roll_wait_text").innerHTML="";
