@@ -355,7 +355,7 @@ function pretty_roll(roll_index, result_json) {
 	if(roll_index > 0) {
 		roll_index--;
 		document.getElementById("roll_result").innerHTML = ("00000" + Math.floor(Math.random()*10000)).slice(-5);
-		setTimeout(() => pretty_roll(roll_index,roll_result), 20);
+		setTimeout(() => pretty_roll(roll_index, result_json), 20);
 	}
 	else {
 		document.getElementById("roll_result").innerHTML = result_json.roll;
