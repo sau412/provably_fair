@@ -367,7 +367,7 @@ function pretty_roll(roll_index, result_json) {
 
 function wait_cooldown() {
 	if(!document.getElementById("roll_button")) return;
-	cooldown_interval = (Date.now() - cooldown_until) / 1000;
+	cooldown_interval = (cooldown_until - Date.now()) / 1000;
         if(cooldown_interval > 0) {
                 document.getElementById("roll_button").style.display = "none";
                 var minutes_show = Math.floor(cooldown_interval / 60);
