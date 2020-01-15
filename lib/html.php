@@ -339,11 +339,7 @@ function do_free_roll() {
         $.post("./", $("#free_roll_form").serialize(), function(result) {
                 var result_json = JSON.parse(result);
                 if(result_json.result == "ok") {
-			pretty_roll(50, result_json.roll);
-                        //document.getElementById("roll_result").innerHTML = result_json.roll;
-                        document.getElementById("roll_comment").innerHTML = "<span class=won>You earned " + result_json.reward + " $currency_short</span>";
-                        document.getElementById("balance").innerHTML = result_json.balance;
-                        document.getElementById("server_seed_hash").innerHTML = result_json.server_seed_hash;
+			pretty_roll(50, result_json);
 			cooldown_interval = $free_roll_cooldown_interval;
                 }
 		else if(result_json.result == "fail") {
@@ -355,14 +351,17 @@ function do_free_roll() {
         });
 }
 
-function pretty_roll(roll_index, roll_result) {
+function pretty_roll(roll_index, result_json) {
 	if(roll_index > 0) {
 		roll_index--;
 		document.getElementById("roll_result").innerHTML = ("00000" + Math.floor(Math.random()*10000)).slice(-5);
 		setTimeout(() => pretty_roll(roll_index,roll_result), 20);
 	}
 	else {
-		document.getElementById("roll_result").innerHTML = roll_result;
+		document.getElementById("roll_result").innerHTML = result_json.roll;
+		document.getElementById("roll_comment").innerHTML = "<span class=won>You earned " + result_json.reward + " $currency_short</span>";
+		document.getElementById("balance").innerHTML = result_json.balance;
+		document.getElementById("server_seed_hash").innerHTML = result_json.server_seed_hash;
 	}
 }
 
@@ -448,11 +447,7 @@ function do_dice_roll(type) {
         $.post("./",$("#dice_game").serialize(),function(result) {
                 var result_json=JSON.parse(result);
                 if(result_json.result=="ok") {
-                        document.getElementById("roll_result").innerHTML=result_json.roll;
-                        if(result_json.reward>0) document.getElementById("roll_comment").innerHTML="<span class=won>You earned " + result_json.bet + " $currency_short</span>";
-                        else document.getElementById("roll_comment").innerHTML="<span class=lost>You lost " + result_json.bet + " $currency_short</span>";
-                        document.getElementById("balance").innerHTML=result_json.balance;
-                        document.getElementById("server_seed_hash").innerHTML=result_json.server_seed_hash;
+			pretty_roll(50, result_json);
                 } else if(result_json.result=="fail") {
                         document.getElementById("roll_comment").innerHTML="<span class=lost>" + result_json.reason + "</span>";
                 } else {
@@ -460,6 +455,22 @@ function do_dice_roll(type) {
                 }
         });
 }
+
+function pretty_roll(roll_index, result_json) {
+	if(roll_index > 0) {
+		roll_index--;
+		document.getElementById("roll_result").innerHTML = ("00000" + Math.floor(Math.random()*10000)).slice(-5);
+		setTimeout(() => pretty_roll(roll_index,roll_result), 20);
+	}
+	else {
+		document.getElementById("roll_result").innerHTML = result_json.roll;
+		if(result_json.reward>0) document.getElementById("roll_comment").innerHTML = "<span class=won>You earned " + result_json.bet + " $currency_short</span>";
+		else document.getElementById("roll_comment").innerHTML = "<span class=lost>You lost " + result_json.bet + " $currency_short</span>";
+		document.getElementById("balance").innerHTML = result_json.balance;
+		document.getElementById("server_seed_hash").innerHTML = result_json.server_seed_hash;
+	}
+}
+
 </script>
 
 _END;
