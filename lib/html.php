@@ -330,9 +330,10 @@ function html_free_roll($user_uid,$token) {
 </form>
 <script>
 var cooldown_interval = $cooldown_time;
-var roll_result_
 
-setInterval("wait_cooldown()",1000);
+if(!window.cooldownIntervalValue) {
+	window.cooldownIntervalValue = setInterval(() => wait_cooldown(), 1000);
+}
 
 function do_free_roll() {
         $.post("./", $("#free_roll_form").serialize(), function(result) {
@@ -354,7 +355,7 @@ function do_free_roll() {
         });
 }
 
-function pretty_roll(roll_index,roll_result) {
+function pretty_roll(roll_index, roll_result) {
 	if(roll_index > 0) {
 		roll_index--;
 		document.getElementById("roll_result").innerHTML = ("00000" + Math.floor(Math.random()*10000)).slice(-5);
