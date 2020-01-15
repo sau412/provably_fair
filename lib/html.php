@@ -338,7 +338,7 @@ function do_free_roll() {
         $.post("./", $("#free_roll_form").serialize(), function(result) {
                 var result_json = JSON.parse(result);
                 if(result_json.result == "ok") {
-			pretty_roll(1000, result_json.roll);
+			pretty_roll(50, result_json.roll);
                         //document.getElementById("roll_result").innerHTML = result_json.roll;
                         document.getElementById("roll_comment").innerHTML = "<span class=won>You earned " + result_json.reward + " $currency_short</span>";
                         document.getElementById("balance").innerHTML = result_json.balance;
@@ -357,8 +357,8 @@ function do_free_roll() {
 function pretty_roll(roll_index,roll_result) {
 	if(roll_index > 0) {
 		roll_index--;
-		document.getElementById("roll_result").innerHTML = Math.floor(Math.random()*10);
-		setTimeout(() => pretty_roll(roll_index,roll_result), 50);
+		document.getElementById("roll_result").innerHTML = ("0000" + Math.floor(Math.random()*10000)).slice(-4);
+		setTimeout(() => pretty_roll(roll_index,roll_result), 50 + (20 - roll_index) * 5);
 	}
 	else {
 		document.getElementById("roll_result").innerHTML = result_json.roll;
