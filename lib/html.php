@@ -358,10 +358,10 @@ function pretty_roll(roll_index,roll_result) {
 	if(roll_index > 0) {
 		roll_index--;
 		document.getElementById("roll_result").innerHTML = ("0000" + Math.floor(Math.random()*10000)).slice(-4);
-		setTimeout(() => pretty_roll(roll_index,roll_result), 50 + (20 - roll_index) * 5);
+		setTimeout(() => pretty_roll(roll_index,roll_result), 50 + (20 - roll_index) * 50);
 	}
 	else {
-		document.getElementById("roll_result").innerHTML = result_json.roll;
+		document.getElementById("roll_result").innerHTML = roll_result;
 	}
 }
 
