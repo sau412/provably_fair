@@ -330,6 +330,9 @@ $recaptcha
 <p id=roll_comment></p>
 </form>
 <script>
+var cooldown_interval = $cooldown_time;
+setInterval("wait_cooldown",1000);
+
 function do_free_roll() {
         $.post("./",$("#free_roll_form").serialize(),function(result) {
                 var result_json=JSON.parse(result);
@@ -338,7 +341,7 @@ function do_free_roll() {
                         document.getElementById("roll_comment").innerHTML="<span class=won>You earned " + result_json.reward + " $currency_short</span>";
                         document.getElementById("balance").innerHTML=result_json.balance;
                         document.getElementById("server_seed_hash").innerHTML=result_json.server_seed_hash;
-                        wait_cooldown($free_roll_cooldown_interval);
+			cooldown_interval = $free_roll_cooldown_interval;
                 } else if(result_json.result=="fail") {
                         document.getElementById("roll_comment").innerHTML="<span class=lost>" + result_json.reason + "</span>";
                 } else {
@@ -366,14 +369,6 @@ function wait_cooldown(seconds) {
 
 _END;
         $result.="</p>\n";
-
-        if($cooldown_time>0) {
-                $result.=<<<_END
-<script>
-wait_cooldown($cooldown_time);
-</script>
-_END;
-        }
 
         return $result;
 }
