@@ -324,8 +324,7 @@ function html_free_roll($user_uid,$token) {
 <input type=hidden is=server_seed_hash name=server_seed_hash value='$server_seed_hash'>
 <p>User seed <input type=text id=user_seed name=user_seed value='$user_seed_html'></p>
 <p id=roll_wait_text></p>
-$recaptcha
-<p id=roll_button><input type=button id=roll_button value='Roll' onClick='do_free_roll()'></p>
+<p id=roll_button style='display:none;'><input type=button id=roll_button value='Roll' onClick='do_free_roll()'></p>
 <h2 id=roll_result></h2>
 <p id=roll_comment></p>
 </form>
@@ -358,6 +357,7 @@ function wait_cooldown() {
                 if(minutes_show < 10) minutes_show = "0" + minutes_show;
                 if(seconds_show < 10) seconds_show = "0" + seconds_show;
                 document.getElementById("roll_wait_text").innerHTML = "Wait for " + minutes_show + ":" + seconds_show + " before next roll";
+		cooldown_interval--;
         } else {
                 document.getElementById("roll_button").style.display = "block";
                 document.getElementById("roll_wait_text").innerHTML="";
