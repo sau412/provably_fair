@@ -329,10 +329,10 @@ function html_free_roll($user_uid,$token) {
 <p id=roll_comment></p>
 </form>
 <script>
-var cooldown_interval = $cooldown_time;
+var cooldown_until = Date.now() + $cooldown_time * 1000;
 
-if(!window.cooldownIntervalValue) {
-	window.cooldownIntervalValue = setInterval(() => wait_cooldown(), 1000);
+if(!window.cooldownIntervalTimerValue) {
+	window.cooldownIntervalTimerValue = setInterval(() => wait_cooldown(), 1000);
 }
 
 function do_free_roll() {
@@ -340,7 +340,7 @@ function do_free_roll() {
                 var result_json = JSON.parse(result);
                 if(result_json.result == "ok") {
 			pretty_roll(50, result_json);
-			cooldown_interval = $free_roll_cooldown_interval;
+			cooldown_until = Date.now() + $free_roll_cooldown_interval * 1000;
                 }
 		else if(result_json.result == "fail") {
                         document.getElementById("roll_comment").innerHTML = "<span class=lost>" + result_json.reason + "</span>";
@@ -367,7 +367,7 @@ function pretty_roll(roll_index, result_json) {
 
 function wait_cooldown() {
 	if(!document.getElementById("roll_button")) return;
-
+	cooldown_interval = (Date.now() - cooldown_until) / 1000;
         if(cooldown_interval > 0) {
                 document.getElementById("roll_button").style.display = "none";
                 var minutes_show = Math.floor(cooldown_interval / 60);
@@ -375,7 +375,6 @@ function wait_cooldown() {
                 if(minutes_show < 10) minutes_show = "0" + minutes_show;
                 if(seconds_show < 10) seconds_show = "0" + seconds_show;
                 document.getElementById("roll_wait_text").innerHTML = "Wait for " + minutes_show + ":" + seconds_show + " before next roll";
-		cooldown_interval--;
         } else {
                 document.getElementById("roll_button").style.display = "block";
                 document.getElementById("roll_wait_text").innerHTML="";
