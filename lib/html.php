@@ -331,7 +331,7 @@ $recaptcha
 </form>
 <script>
 var cooldown_interval = $cooldown_time;
-setInterval("wait_cooldown",1000);
+setInterval("wait_cooldown()",1000);
 
 function do_free_roll() {
         $.post("./",$("#free_roll_form").serialize(),function(result) {
