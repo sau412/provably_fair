@@ -389,7 +389,7 @@ function wait_cooldown() {
 function load_proof_seeds_free() {
 	$("#show_proof_seeds").load("./?ajax=1&block=proof_seeds_free",function() {
 		show_and_hide("show_proof_seeds","load_proof_seeds_request");
-	);
+	});
 	return false;
 }
 </script>
@@ -494,7 +494,7 @@ function pretty_roll(roll_index, result_json) {
 function load_proof_seeds_dice() {
 	$("#show_proof_seeds").load("./?ajax=1&block=proof_seeds_dice",function() {
 		show_and_hide("show_proof_seeds","load_proof_seeds_request");
-	);
+	});
 	return false;
 }
 
