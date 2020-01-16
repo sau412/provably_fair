@@ -110,3 +110,9 @@ html {
 	visibility: visible;
 }
 
+.seeds_link {
+}
+
+.seeds {
+	display: none;
+}

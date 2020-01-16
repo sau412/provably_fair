@@ -299,7 +299,6 @@ function html_free_roll($user_uid,$token) {
         $user_seed_html=html_escape($user_seed);
         $result="";
         $roll_rewards_data=db_query_to_array("SELECT `roll_min`,`roll_max`,`reward` FROM `rewards` ORDER BY roll_min ASC");
-        $result.="<p>Server seed hash: <strong id=server_seed_hash>$server_seed_hash</strong></p>\n";
         $result.="<p>\n";
         $result.="<table class='table_horizontal'>\n";
         $result.="<tr><th>Lucky number</th><th>Payout</th></tr>";
@@ -322,7 +321,11 @@ function html_free_roll($user_uid,$token) {
 <input type=hidden id=action name=action value='free_roll'>
 <input type=hidden id=token name=token value='$token'>
 <input type=hidden is=server_seed_hash name=server_seed_hash value='$server_seed_hash'>
+<a href='#' id='seeds_link' onClick='return show_and_hide("seeds","seeds_link")'>click here to view and edit seeds</a>
+<div id='seeds' class='seeds'>
+<p>Server seed hash: <strong id=server_seed_hash>$server_seed_hash</strong></p>
 <p>User seed <input type=text id=user_seed name=user_seed value='$user_seed_html'></p>
+</div>
 <p id=roll_wait_text></p>
 <p id=roll_button style='display:none;'><input type=button id=roll_button value='Roll' onClick='do_free_roll()'></p>
 <h2 id=roll_result></h2>
@@ -410,13 +413,16 @@ function html_dice_game($user_uid,$token) {
 <input type=hidden name=action value='dice_roll'>
 <input type=hidden name=token value='$token'>
 <input type=hidden id=type name=type value='low'>
-<p>Server seed hash: <strong id=server_seed_hash>$server_seed_hash</strong></p>
 <p>Bet <input type=text id=bet name=bet value='$bet_min'> $currency_short
 	<input type=button value='x2' onClick='bet_double();'>
 	<input type=button value='/2' onClick='bet_half();'>
 </p>
 <p>Min bet $bet_min $currency_short, max bet $bet_max $currency_short</p>
+<a href='#' id='seeds_link' onClick='return show_and_hide("seeds","seeds_link")'>click here to view and edit seeds</a>
+<div id='seeds' class='seeds'>
+<p>Server seed hash: <strong id=server_seed_hash>$server_seed_hash</strong></p>
 <p>User seed <input type=text id=user_seed name=user_seed value='$user_seed_html'></p>
+</div>
 <p><input type=button value='Bet LO' onClick='do_dice_roll("low")'> <input type=button value='Bet HI' onClick='do_dice_roll("high")'></p>
 Bet LO - below or equals $bet_lo_limit, bet HI - above or equals $bet_hi_limit
 <h2 id=roll_result></h2>
