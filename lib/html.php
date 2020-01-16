@@ -110,7 +110,7 @@ function html_tabs($user_uid) {
                 $result.=html_menu_element("free_roll","Free $currency_short");
                 //$result.=html_menu_element("minesweeper","Minesweeper");
                 $result.=html_menu_element("dice_roll","Multiply $currency_short");
-                $result.=html_menu_element("last_rolls","Last rolls");
+                //$result.=html_menu_element("last_rolls","Last rolls");
                 $result.=html_menu_element("lottery","Lottery");
                 $result.=html_menu_element("earn","Earn $currency_short");
                 $result.=html_menu_element("send_receive","Send and receive");
@@ -501,7 +501,7 @@ function load_proof_seeds_dice() {
 </script>
 
 <p id='load_proof_seeds_request'>
-<a href='#' id='roll_link' onClick='return load_proof_seeds_dice()'>click here to view last rolls seeds</a>
+<small><a href='#' id='roll_link' onClick='return load_proof_seeds_dice()'>click here to view last rolls seeds</a></small>
 </p>
 <p id='show_proof_seeds'>
 </p>
