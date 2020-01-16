@@ -327,7 +327,9 @@ function html_free_roll($user_uid,$token) {
 <p>User seed <input type=text id=user_seed name=user_seed value='$user_seed_html'></p>
 </div>
 <p id=roll_wait_text></p>
-<p id=roll_button style='display:none;'><input type=button id=roll_button value='Roll' onClick='do_free_roll()'></p>
+<p id=roll_button style='display:none;'>
+<input type=button id=roll_button value='Roll' onClick='do_free_roll()'>
+</p>
 <h2 id=roll_result></h2>
 <p id=roll_comment></p>
 </form>
@@ -383,10 +385,23 @@ function wait_cooldown() {
                 document.getElementById("roll_wait_text").innerHTML="";
         }
 }
+
+function load_proof_seeds_free() {
+	$("#show_proof_seeds").load("./?ajax=1&block=proof_seeds_free",function() {
+		show_and_hide("show_proof_seeds","load_proof_seeds_request");
+	);
+	return false;
+}
 </script>
 
+</p>
+
+<p id='load_proof_seeds_request'>
+<a href='#' id='roll_link' onClick='return load_proof_seeds_free()'>click here to view last rolls seeds</a>
+</p>
+<p id='show_proof_seeds'>
+</p>
 _END;
-        $result.="</p>\n";
 
         return $result;
 }
@@ -476,20 +491,41 @@ function pretty_roll(roll_index, result_json) {
 	}
 }
 
+function load_proof_seeds_dice() {
+	$("#show_proof_seeds").load("./?ajax=1&block=proof_seeds_dice",function() {
+		show_and_hide("show_proof_seeds","load_proof_seeds_request");
+	);
+	return false;
+}
+
 </script>
+
+<p id='load_proof_seeds_request'>
+<a href='#' id='roll_link' onClick='return load_proof_seeds_dice()'>click here to view last rolls seeds</a>
+</p>
+<p id='show_proof_seeds'>
+</p>
 
 _END;
         return $result;
 }
 
 // Last rolls
-function html_last_rolls($user_uid,$token) {
+function html_last_rolls($user_uid, $token, $roll_type = '') {
         global $currency_short;
-        $result="";
+        $result = "";
 
-        $user_uid_escaped=db_escape($user_uid);
+        $user_uid_escaped = db_escape($user_uid);
 
-        $rolls_data_array=db_query_to_array("SELECT `roll_type`,`server_seed`,`user_seed`,`roll_result`,`bet`,`profit`,`timestamp` FROM `rolls` WHERE `user_uid`='$user_uid_escaped' ORDER BY `timestamp` DESC LIMIT 20");
+	if($roll_type == 'free') {
+	        $rolls_data_array = db_query_to_array("SELECT `roll_type`,`server_seed`,`user_seed`,`roll_result`,`bet`,`profit`,`timestamp` FROM `rolls` WHERE `user_uid`='$user_uid_escaped' AND `roll_type` = 'free' ORDER BY `timestamp` DESC LIMIT 20");
+	}
+	else if($roll_type == 'bet') {
+	        $rolls_data_array = db_query_to_array("SELECT `roll_type`,`server_seed`,`user_seed`,`roll_result`,`bet`,`profit`,`timestamp` FROM `rolls` WHERE `user_uid`='$user_uid_escaped' AND `roll_type` IN ('high','low') ORDER BY `timestamp` DESC LIMIT 20");
+	}
+	else {
+	        $rolls_data_array = db_query_to_array("SELECT `roll_type`,`server_seed`,`user_seed`,`roll_result`,`bet`,`profit`,`timestamp` FROM `rolls` WHERE `user_uid`='$user_uid_escaped' ORDER BY `timestamp` DESC LIMIT 20");
+	}
         $result.="<p>\n";
         $result.="<table class='table_horizontal'>\n";
         $result.="<tr><th>Type</th><th>Seeds</th><th>Roll</th><th>Bet</th><th>Reward</th><th>Timestamp</th></tr>";

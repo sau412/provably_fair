@@ -155,6 +155,12 @@ if(isset($_GET['ajax']) && isset($_GET['block'])) {
                         case 'last_rolls':
                                 echo html_last_rolls($user_uid,$token);
                                 break;
+			case 'proof_seeds_free':
+				echo html_last_rolls($user_uid,$token,"free");
+				break;
+			case 'proof_seeds_dice':
+				echo html_last_rolls($user_uid,$token,"bet");
+				break;
                         case 'send_receive':
                                 echo html_send_receive($user_uid,$token);
                                 break;
