@@ -321,7 +321,7 @@ function html_free_roll($user_uid,$token) {
 <input type=hidden id=action name=action value='free_roll'>
 <input type=hidden id=token name=token value='$token'>
 <input type=hidden is=server_seed_hash name=server_seed_hash value='$server_seed_hash'>
-<a href='#' id='seeds_link' onClick='return show_and_hide("seeds","seeds_link")'>click here to view and edit seeds</a>
+<small><a href='#' id='seeds_link' onClick='return show_and_hide("seeds","seeds_link")'>view or edit seeds</a></small>
 <div id='seeds' class='seeds'>
 <p>Server seed hash: <strong id=server_seed_hash>$server_seed_hash</strong></p>
 <p>User seed <input type=text id=user_seed name=user_seed value='$user_seed_html'></p>
@@ -388,7 +388,7 @@ function wait_cooldown() {
 
 function load_proof_seeds_free() {
 	$("#show_proof_seeds").load("./?ajax=1&block=proof_seeds_free",function() {
-		show_and_hide("show_proof_seeds","load_proof_seeds_request");
+		show_and_hide("show_proof_seeds","");
 	});
 	return false;
 }
@@ -397,7 +397,7 @@ function load_proof_seeds_free() {
 </p>
 
 <p id='load_proof_seeds_request'>
-<a href='#' id='roll_link' onClick='return load_proof_seeds_free()'>click here to view last rolls seeds</a>
+<small><a href='#' id='roll_link' onClick='return load_proof_seeds_free()'>view last rolls seeds</a></small>
 </p>
 <p id='show_proof_seeds'>
 </p>
@@ -433,7 +433,7 @@ function html_dice_game($user_uid,$token) {
 	<input type=button value='/2' onClick='bet_half();'>
 </p>
 <p>Min bet $bet_min $currency_short, max bet $bet_max $currency_short</p>
-<a href='#' id='seeds_link' onClick='return show_and_hide("seeds","seeds_link")'>click here to view and edit seeds</a>
+<small><a href='#' id='seeds_link' onClick='return show_and_hide("seeds","seeds_link")'>view or edit seeds</a></small>
 <div id='seeds' class='seeds'>
 <p>Server seed hash: <strong id=server_seed_hash>$server_seed_hash</strong></p>
 <p>User seed <input type=text id=user_seed name=user_seed value='$user_seed_html'></p>
@@ -493,7 +493,7 @@ function pretty_roll(roll_index, result_json) {
 
 function load_proof_seeds_dice() {
 	$("#show_proof_seeds").load("./?ajax=1&block=proof_seeds_dice",function() {
-		show_and_hide("show_proof_seeds","load_proof_seeds_request");
+		show_and_hide("show_proof_seeds","");
 	});
 	return false;
 }
