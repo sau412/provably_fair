@@ -21,6 +21,7 @@ require_once("../lib/gridcoin_web_wallet.php");
 db_connect();
 
 // Get addresses for new users
+echo "Generating addresses for new users...\n";
 $new_array=db_query_to_array("SELECT `uid` FROM `users` WHERE `wallet_uid` IS NULL OR `wallet_uid`=0");
 foreach($new_array as $user_info) {
         $uid=$user_info['uid'];
@@ -29,10 +30,12 @@ foreach($new_array as $user_info) {
         $wallet_uid=$result->uid;
         $uid_escaped=db_escape($uid);
         $wallet_uid_escaped=db_escape($wallet_uid);
+        echo "Requested new address\n";
         db_query("UPDATE `users` SET `wallet_uid`='$wallet_uid_escaped' WHERE `uid`='$uid_escaped'");
 }
 
 // Update addresses data for all users
+echo "Updating addresses for all users...\n";
 $pending_array=db_query_to_array("SELECT `uid`,`wallet_uid`,`deposited` FROM `users` WHERE `wallet_uid` IS NOT NULL");
 foreach($pending_array as $user_info) {
         $uid=$user_info['uid'];
@@ -44,6 +47,7 @@ foreach($pending_array as $user_info) {
         $received=$result->received;
 
         if($address!='') {
+        		echo "User uid $uid address $address received $received\n";
                 $uid_escaped=db_escape($uid);
                 $address_escaped=db_escape($address);
                 $received_escaped=db_escape($received);
@@ -67,6 +71,7 @@ $payout_data_array=db_query_to_array("SELECT `uid`,`user_uid`,`address`,`amount`
                                         WHERE `status` IN ('requested','processing') AND `address` IS NOT NULL");
 
 // Sending unsent transactions
+echo "Sending transactions...\n";
 foreach($payout_data_array as $payout_data) {
         $uid=$payout_data['uid'];
         $user_uid=$payout_data['user_uid'];
@@ -123,6 +128,7 @@ foreach($payout_data_array as $payout_data) {
 }
 
 // Sync transactions
+echo "Syncing transactions...\n";
 $transactions_data=grc_web_get_all_tx();
 
 foreach($transactions_data as $tx_row) {
@@ -139,10 +145,15 @@ foreach($transactions_data as $tx_row) {
 
         $exists_tx_uid=db_query_to_variable("SELECT `uid` FROM `transactions` WHERE `wallet_uid`='$uid_escaped' AND `status` IN ('pending','received')");
         if($exists_tx_uid) {
+        		// Exists transaction - update data
+        		echo "Update data for existing transaction $exists_tx_uid\n";
                 $status_escaped=db_escape($status);
                 $confirmations_escaped=db_escape($confirmations);
                 db_query("UPDATE `transactions` SET `status`='$status_escaped',`confirmations`='$confirmations_escaped' WHERE `uid`='$exists_tx_uid'");
         } else {
+        		// Not exists - new transaction
+        		// Finding user with that address
+        		echo "New transaction found\n";
                 $amount_escaped=db_escape($amount);
                 $address_escaped=db_escape($address);
                 $status_escaped=db_escape($status);
@@ -151,15 +162,17 @@ foreach($transactions_data as $tx_row) {
                 $user_uid=db_query_to_variable("SELECT `uid` FROM `users` WHERE `deposit_address`='$address_escaped'");
                 $user_uid_escaped=db_escape($user_uid);
 
-                if($user_uid=='') continue;
-
-		// Check if sending transaction already exists
-		if($status == 'sent' || $status === 'processing') {
-			$tx_exists = db_query_to_variable("SELECT 1 FROM `transactions`
-				WHERE `wallet_uid`='$uid_escaped' AND `status` IN ('requested','processing','sent')");
-			if($tx_exists) continue;
-		}
-
+                if($user_uid=='') {
+                	echo "User not found for transaction $tx_id\n";
+                	continue;
+				}
+				// Check if sending transaction already exists
+				if($status == 'sent' || $status === 'processing') {
+					$tx_exists = db_query_to_variable("SELECT 1 FROM `transactions`
+						WHERE `wallet_uid`='$uid_escaped' AND `status` IN ('requested','processing','sent')");
+					if($tx_exists) continue;
+				}
+				echo "Adding new transaction\n";
                 db_query("INSERT INTO `transactions` (`user_uid`,`amount`,`address`,`status`,`wallet_uid`,`tx_id`,`confirmations`,`timestamp`)
 VALUES ('$user_uid_escaped','$amount_escaped','$address_escaped','$status_escaped','$uid_escaped','$tx_id_escaped','$confirmations_escaped','$timestamp_escaped')");
         }
