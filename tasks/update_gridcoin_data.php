@@ -130,18 +130,18 @@ echo "Syncing transactions...\n";
 $transactions_data=grc_web_get_all_tx();
 
 foreach($transactions_data as $tx_row) {
-        $uid=$tx_row->uid;
-        $amount=$tx_row->amount;
-        $address=$tx_row->address;
-        $status=$tx_row->status;
-        $tx_id=$tx_row->tx_id;
-        $confirmations=0;
-        $timestamp=$tx_row->timestamp;
+        $uid = $tx_row->uid;
+        $amount = $tx_row->amount;
+        $address = $tx_row->address;
+        $status = $tx_row->status;
+        $tx_id = $tx_row->tx_id;
+        $confirmations = $tx_row->confirmations;
+        $timestamp = $tx_row->timestamp;
 
         $tx_id_escaped=db_escape($tx_id);
         $uid_escaped=db_escape($uid);
 
-		// Need to check if incoming transaction
+		// Need to check only incoming transaction
 		if($status!='pending' && $status!='received') continue;
 		
         $exists_tx_uid=db_query_to_variable("SELECT `uid` FROM `transactions` WHERE `wallet_uid`='$uid_escaped' AND `status` IN ('pending','received')");
