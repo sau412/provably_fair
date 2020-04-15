@@ -150,10 +150,15 @@ foreach($transactions_data as $tx_row) {
         $uid_escaped=db_escape($uid);
 
 		// Need to check only incoming transaction
-		if($status!='pending' && $status!='received') continue;
-		
+		if($status!='pending' && $status!='received') {
+			echo "Skipping non-incoming transaction $tx_id\n";
+			continue;
+		}
 		// Skip transactions that was received already
-		if(in_array($tx_id,$tx_received_index_array)) continue;
+		if(in_array($tx_id,$tx_received_index_array)) {
+			echo "Skipping already received transaction $tx_id\n";
+			continue;
+		}
 		
         $exists_tx_uid=db_query_to_variable("SELECT `uid` FROM `transactions` WHERE `wallet_uid`='$uid_escaped' AND `status` IN ('pending','received')");
         if($exists_tx_uid) {
