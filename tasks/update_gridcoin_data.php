@@ -35,6 +35,7 @@ foreach($new_array as $user_info) {
 }
 
 // Update addresses data for all users
+// Deposit is not used, optimisation needed
 echo "Updating addresses for all users...\n";
 $pending_array=db_query_to_array("SELECT `uid`,`wallet_uid`,`deposited` FROM `users` WHERE `wallet_uid` IS NOT NULL");
 foreach($pending_array as $user_info) {
@@ -143,9 +144,13 @@ foreach($transactions_data as $tx_row) {
         $tx_id_escaped=db_escape($tx_id);
         $uid_escaped=db_escape($uid);
 
+		// Need to check if incoming transaction
+		if($status!='pending' && $status!='received') continue;
+		
         $exists_tx_uid=db_query_to_variable("SELECT `uid` FROM `transactions` WHERE `wallet_uid`='$uid_escaped' AND `status` IN ('pending','received')");
         if($exists_tx_uid) {
         		// Exists transaction - update data
+        		// Update if status changed?
         		echo "Update data for existing transaction $exists_tx_uid\n";
                 $status_escaped=db_escape($status);
                 $confirmations_escaped=db_escape($confirmations);
