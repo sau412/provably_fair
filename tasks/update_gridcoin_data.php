@@ -131,7 +131,7 @@ echo "Syncing transactions...\n";
 // Cache all received tx
 $tx_received_array = db_query_to_array("SELECT `tx_id` FROM `transactions` WHERE `status`='received'");
 $tx_received_index_array = array();
-foreach($tx_already_received_array as $received_tx_data) {
+foreach($tx_received_array as $received_tx_data) {
 	$tx_received_index_array[] = $received_tx_data['tx_id'];
 }
 
