@@ -35,31 +35,28 @@ foreach($new_array as $user_info) {
 }
 
 // Update addresses data for all users
-// Deposit is not used, optimisation needed
 echo "Updating addresses for all users...\n";
-$pending_array=db_query_to_array("SELECT `uid`,`wallet_uid`,`deposited` FROM `users` WHERE `wallet_uid` IS NOT NULL");
+$pending_array=db_query_to_array("SELECT `uid`,`wallet_uid`,`deposit_address`
+									FROM `users`
+									WHERE `wallet_uid` IS NOT NULL AND `deposit_address` IS NULL");
 foreach($pending_array as $user_info) {
-        $uid=$user_info['uid'];
-        $address_uid=$user_info['wallet_uid'];
-        $prev_received=$user_info['deposited'];
-	//echo "2 grc_web_get_new_receiving_address()\n";
-        $result=grc_web_get_receiving_address($address_uid);
-        $address=$result->address;
-        $received=$result->received;
+        $uid = $user_info['uid'];
+        $address_uid = $user_info['wallet_uid'];
+        $deposit_address = $user_info['deposit_address'];
+        $result = grc_web_get_receiving_address($address_uid);
+        $address = $result->address;
+        $received = $result->received;
 
-        if($address!='') {
-        		echo "User uid $uid address $address received $received\n";
-                $uid_escaped=db_escape($uid);
-                $address_escaped=db_escape($address);
-                $received_escaped=db_escape($received);
-                db_query("UPDATE `users` SET `deposit_address`='$address_escaped',`deposited`='$received_escaped' WHERE `uid`='$uid_escaped'");
-		//write_log("New receiving address for user: $address",$uid)
-                //recalculate_balance($uid);
+        if($address != '' && $deposit_address == '') {
+        		echo "User uid $uid address $address\n";
+                $uid_escaped = db_escape($uid);
+                $address_escaped = db_escape($address);
+                $received_escaped = db_escape($received);
+                db_query("UPDATE `users`
+                			SET `deposit_address`='$address_escaped'
+                			WHERE `uid`='$uid_escaped'");
         }
-
-//      if($prev_received!=$received) {
-                update_user_balance($uid);
-//      }
+        //update_user_balance($uid);
 }
 
 // Get balance
