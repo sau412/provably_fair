@@ -127,6 +127,14 @@ foreach($payout_data_array as $payout_data) {
 
 // Sync transactions
 echo "Syncing transactions...\n";
+
+// Cache all received tx
+$tx_received_array = db_query_to_array("SELECT `tx_id` FROM `transactions` WHERE `status`='received'");
+$tx_received_index_array = array();
+foreach($tx_already_received_array as $received_tx_data) {
+	$tx_received_index_array[] = $received_tx_data['tx_id'];
+}
+
 $transactions_data=grc_web_get_all_tx();
 
 foreach($transactions_data as $tx_row) {
@@ -143,6 +151,9 @@ foreach($transactions_data as $tx_row) {
 
 		// Need to check only incoming transaction
 		if($status!='pending' && $status!='received') continue;
+		
+		// Skip transactions that was received already
+		if(in_array($tx_id,$tx_received_index_array)) continue;
 		
         $exists_tx_uid=db_query_to_variable("SELECT `uid` FROM `transactions` WHERE `wallet_uid`='$uid_escaped' AND `status` IN ('pending','received')");
         if($exists_tx_uid) {
