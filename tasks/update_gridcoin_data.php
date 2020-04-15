@@ -160,7 +160,8 @@ foreach($transactions_data as $tx_row) {
 			continue;
 		}
 		
-        $exists_tx_uid=db_query_to_variable("SELECT `uid` FROM `transactions` WHERE `wallet_uid`='$uid_escaped' AND `status` IN ('pending','received')");
+        $exists_tx_uid=db_query_to_variable("SELECT `uid` FROM `transactions`
+        										WHERE `wallet_uid`='$uid_escaped' AND `status` IN ('pending','received')");
         if($exists_tx_uid) {
         		// Exists transaction - update data
         		// Update if status changed?
@@ -168,6 +169,10 @@ foreach($transactions_data as $tx_row) {
                 $status_escaped=db_escape($status);
                 $confirmations_escaped=db_escape($confirmations);
                 db_query("UPDATE `transactions` SET `status`='$status_escaped',`confirmations`='$confirmations_escaped' WHERE `uid`='$exists_tx_uid'");
+
+				$user_uid=db_query_to_variable("SELECT `user_uid` FROM `transactions`
+													WHERE `wallet_uid`='$uid_escaped' AND `status` IN ('pending','received')");
+                update_user_balance($user_uid);
         } else {
         		// Not exists - new transaction
         		// Finding user with that address
@@ -184,6 +189,8 @@ foreach($transactions_data as $tx_row) {
                 	echo "User not found for transaction $tx_id\n";
                 	continue;
 				}
+
+				update_user_balance($user_uid);
 				// Check if sending transaction already exists
 				if($status == 'sent' || $status === 'processing') {
 					$tx_exists = db_query_to_variable("SELECT 1 FROM `transactions`
