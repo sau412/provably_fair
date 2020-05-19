@@ -1,33 +1,22 @@
 <?php
 require_once("../lib/settings.php");
 require_once("../lib/db.php");
+require_once("../lib/core.php");
 
 db_connect();
 
-$wallet_balance=db_query_to_variable("SELECT `value` FROM `variables` WHERE `name`='wallet_balance'");
-$users_balance=db_query_to_variable("SELECT SUM(`balance`) FROM `users`");
+$wallet_balance = get_variable("wallet_balance");
+$users_balance = get_variable("users_balance");
 
-$rolls_stats=db_query_to_array("SELECT
-		SUM(IF(`roll_type` IN ('free'),1,0)) AS 'free',
-		SUM(IF(`roll_type` IN ('high','low'),1,0)) AS 'bet',
-		SUM(IF(`roll_type` IN ('pay'),1,0)) AS 'pay'
-	FROM `rolls`");
+$free_rolls = get_variable("free_rolls");
+$bet_rolls = get_variable("bet_rolls");
+$pay_rolls = get_variable("pay_rolls");
 
-$free_rolls = $rolls_stats[0]['free'];
-$bet_rolls = $rolls_stats[0]['bet'];
-$pay_rolls = $rolls_stats[0]['pay'];
+$lottery_tickets = get_variable("lottery_tickets");
+$lottery_funds = get_variable("lottery_funds");
 
-$lottery_stats = db_query_to_array("SELECT SUM(`spent`) AS spent, SUM(`tickets`) AS tickets
-	FROM `lottery_tickets`
-    JOIN `lottery_rounds` ON `lottery_rounds`.`uid` = `lottery_tickets`.`round_uid`
-	WHERE `lottery_rounds`.`stop` IS NULL");
-
-$lottery_tickets = $lottery_stats[0]['tickets'];
-$lottery_funds = $lottery_stats[0]['spent'];
-
-$total_users=db_query_to_variable("SELECT count(*) FROM `users`");
-$active_users=db_query_to_variable("SELECT count(DISTINCT `user_uid`)
-	FROM `rolls` WHERE DATE_SUB(NOW(),INTERVAL 1 DAY)<`timestamp`");
+$total_users = get_variable("total_users");
+$active_users = get_variable("active_users");
 
 echo "total_users:$total_users";
 echo " active_users:$active_users";
