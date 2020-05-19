@@ -6,9 +6,23 @@ db_connect();
 
 $wallet_balance=db_query_to_variable("SELECT `value` FROM `variables` WHERE `name`='wallet_balance'");
 $users_balance=db_query_to_variable("SELECT SUM(`balance`) FROM `users`");
+
+$rolls_stats=db_query_to_array("SELECT
+SUM(IF(`roll_type` IN ('free'),1,0)) AS 'free',
+SUM(IF(`roll_type` IN ('high','low'),1,0)) AS 'bet',
+SUM(IF(`roll_type` IN ('pay'),1,0)) AS 'pay'
+FROM `rolls`");
+
+$free_rolls = $rolls_stats[0]['free'];
+$bet_rolls = $rolls_stats[0]['bet'];
+$pay_rolls = $rolls_stats[0]['pay'];
+
+/*
 $free_rolls=db_query_to_variable("SELECT count(*) FROM `rolls` WHERE `roll_type`='free'");
 $bet_rolls=db_query_to_variable("SELECT count(*) FROM `rolls` WHERE `roll_type` IN ('high','low')");
 $pay_rolls=db_query_to_variable("SELECT count(*) FROM `rolls` WHERE `roll_type` IN ('pay')");
+*/
+
 $lottery_tickets=db_query_to_variable("SELECT SUM(`tickets`)
 	FROM `lottery_tickets`
 	WHERE `round_uid` IN (
