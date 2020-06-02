@@ -12,14 +12,14 @@ db_connect();
 
 write_log("Task: Payroll started");
 
-$users_data_array=db_query_to_array("SELECT `uid`,`balance` FROM `users`");
+$users_data_array = db_query_to_array("SELECT `uid`,`balance` FROM `users`");
 
 foreach($users_data_array as $user_data) {
-	$user_uid=$user_data['uid'];
-	$balance=$user_data['balance'];
-	$amount=$balance*$daily_percentage/100;
-	if($amount>0) {
-		do_payroll($user_uid,$amount);
+	$user_uid = $user_data['uid'];
+	$balance = $user_data['balance'];
+	$amount = $balance * $daily_percentage / 100;
+	if($amount > 0) {
+		do_payroll($user_uid, $amount);
 	}
 }
 
