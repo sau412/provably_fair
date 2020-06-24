@@ -16,6 +16,7 @@ require_once("../lib/settings.php");
 require_once("../lib/db.php");
 require_once("../lib/core.php");
 require_once("../lib/gridcoin_web_wallet.php");
+require_once("../lib/broker.php");
 
 // Check if unsent rewards exists
 db_connect();

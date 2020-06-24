@@ -9,10 +9,14 @@ function html_escape($data) {
 }
 
 // Add message to log
-function write_log($message, $user_uid = 0, $severity=7) {
+function write_log($message, $severity = 7) {
         global $project_log_name;
         
-        broker_add("logger", ["source" => $project_log_name, "severity" => $severity, "message" => $message]);
+        broker_add("logger", [
+        	"source" => $project_log_name,
+        	"severity" => $severity,
+        	"message" => $message,
+        ]);
 }
 
 // Checks is string contains only ASCII symbols
@@ -151,13 +155,13 @@ function user_login($session,$login,$password) {
                 $password_hash=hash("sha256",$password.strtolower($login).$salt.$global_salt);
 
                 if($password_hash==$exists_hash) {
-                        write_log("Logged in user '$login'",$user_uid);
+                        write_log("Logged in user '$login'");
                         //notify_user($user_uid,"Logged in $login","IP: ".$_SERVER['REMOTE_ADDR']);
                         db_query("UPDATE `sessions` SET `user_uid`='$user_uid' WHERE `session`='$session_escaped'");
                         db_query("UPDATE `users` SET `login_time`=NOW() WHERE `uid`='$user_uid_escaped'");
                         return "login_successfull";
                 } else {
-                        write_log("Invalid password for '$login'",$user_uid);
+                        write_log("Invalid password for '$login'");
                         //notify_user($user_uid,"Log in failed","IP: ".$_SERVER['REMOTE_ADDR']);
                         return "login_failed_invalid_password";
                 }
@@ -206,11 +210,11 @@ function user_change_settings($user_uid,$mail,$withdraw_address,$password,$new_p
                 }
 
                 //notify_user($user_uid,"Settings changed",$change_log);
-		write_log("Settings changed\n$change_log",$user_uid);
+		write_log("Settings changed\n$change_log");
                 return "user_change_settings_successfull";
         } else {
                 //notify_user($user_uid,"Change settings fail","Change settings failed, password incorrect");
-		write_log("Settings not changed: password incorrect",$user_uid);
+		write_log("Settings not changed: password incorrect");
                 return "user_change_settings_failed_password_incorrect";
         }
 }
@@ -248,7 +252,7 @@ function get_username_by_uid($user_uid) {
 function user_logout($session) {
         $user_uid=get_user_uid_by_session($session);
         $username=get_username_by_uid($user_uid);
-        write_log("Logged out user '$username'",$user_uid);
+        write_log("Logged out user '$username'");
         //notify_user($user_uid,"Log out $username","IP: ".$_SERVER['REMOTE_ADDR']);
 
         $session_escaped=db_escape($session);
@@ -339,7 +343,7 @@ function user_withdraw($user_uid,$amount) {
 
         // Send notifications
         $username=get_username_by_uid($user_uid);
-        write_log("Withdraw '$amount' $currency_short to address '$address'",$user_uid);
+        write_log("Withdraw '$amount' $currency_short to address '$address'");
         //notify_user($user_uid,"$username sent $amount $currency_short","Amount: $amount $currency_short\nAddress: $address\nIP: ".$_SERVER['REMOTE_ADDR']);
 
         return $transaction_uid;
@@ -506,7 +510,7 @@ VALUES ('$user_uid_escaped','$roll_type_escaped','$server_seed_escaped','$user_s
         );
 
 	// Log
-	write_log("Free roll, reward: $reward",$user_uid);
+	write_log("Free roll, reward: $reward");
 
         return $result;
 }
@@ -568,7 +572,7 @@ VALUES ('$user_uid_escaped','$roll_type_escaped','$server_seed_escaped','$user_s
         );
 
 	// Log
-	write_log("Dice roll, bet: $bet, reward: $reward",$user_uid);
+	write_log("Dice roll, bet: $bet, reward: $reward");
 
         return $result;
 }
