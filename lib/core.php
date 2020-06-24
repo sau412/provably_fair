@@ -9,15 +9,10 @@ function html_escape($data) {
 }
 
 // Add message to log
-function write_log($message,$user_uid='') {
+function write_log($message, $user_uid = 0, $severity=7) {
         global $project_log_name;
-        syslog(LOG_DEBUG,"[$project_log_name] $message");
         
-        $message_escaped=db_escape($message);
-        $user_uid_escaped=db_escape($user_uid);
-        if($user_uid_escaped=='') $user_uid_escaped="NULL";
-        else $user_uid_escaped="'$user_uid_escaped'";
-        db_query("INSERT INTO `log` (`message`,`user_uid`) VALUES ('$message_escaped',$user_uid_escaped)");
+        broker_add("logger", ["source" => $project_log_name, "severity" => $severity, "message" => $message]);
 }
 
 // Checks is string contains only ASCII symbols
