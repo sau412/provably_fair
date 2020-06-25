@@ -11,7 +11,7 @@ require_once("../lib/broker.php");
 // Check if unsent rewards exists
 db_connect();
 
-write_log("Task: Payroll started");
+log_write("Task: Payroll started");
 
 $users_data_array = db_query_to_array("SELECT `uid`,`balance` FROM `users`");
 
@@ -24,6 +24,6 @@ foreach($users_data_array as $user_data) {
 	}
 }
 
-write_log("Task: Payroll finished");
+log_write("Task: Payroll finished");
 
 ?>

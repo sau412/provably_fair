@@ -17,7 +17,7 @@ function db_query($query) {
                 $message["mysql_error"] = mysql_error();
                 $message["query"] = $query;
                 $message["debug_backtrace"] = debug_backtrace();
-                write_log($message, 3);
+                log_write($message, 3);
                 
                 die("Query error");
         }

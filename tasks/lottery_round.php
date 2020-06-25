@@ -7,9 +7,9 @@ require_once("../lib/broker.php");
 
 db_connect();
 
-write_log("Task: Lottery round start");
+log_write("Task: Lottery round start");
 
 lottery_close_round();
 
-write_log("Task: Lottery round finish");
+log_write("Task: Lottery round finish");
 ?>

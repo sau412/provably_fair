@@ -94,7 +94,7 @@ function lottery_free_tickets($round_uid,$user_uid,$amount) {
 			ON DUPLICATE KEY UPDATE `tickets`=`tickets`+VALUES(`tickets`)");
 
 	// Log
-	write_log("Lottery: free $amount tickets to user");
+	log_write("Lottery: free $amount tickets to user");
 }
 
 // Buy tickets
@@ -125,7 +125,7 @@ function lottery_buy_tickets($round_uid,$user_uid,$amount) {
 	change_user_balance($user_uid,-$spent);
 
 	// Log
-	write_log("Lottery: bought $amount tickets");
+	log_write("Lottery: bought $amount tickets");
 }
 
 // Lotto close round
@@ -152,7 +152,7 @@ function lottery_close_round() {
 	db_query("INSERT INTO `lottery_rounds` (`seed`,`start`) VALUES ('$seed_escaped',NOW())");
 
 	// Log
-	write_log("Lottery: old round closed, new round started");
+	log_write("Lottery: old round closed, new round started");
 }
 
 // Set winners
