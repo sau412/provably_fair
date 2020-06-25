@@ -2,6 +2,7 @@
 require_once("../lib/settings.php");
 require_once("../lib/db.php");
 require_once("../lib/core.php");
+require_once("../lib/logger.php");
 
 // Only ASCII parameters allowed
 foreach($_GET as $key => $value) {

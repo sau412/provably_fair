@@ -8,6 +8,7 @@ require_once("../lib/captcha.php");
 require_once("../lib/minesweeper.php");
 require_once("../lib/lottery.php");
 require_once("../lib/broker.php");
+require_once("../lib/logger.php");
 
 db_connect();
 
