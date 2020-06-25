@@ -1,6 +1,6 @@
 <?php
 
-function log_write($message, $severity) {
+function log_write($message, $severity = 7) {
         global $logger_url;
         global $project_log_name;
 
