@@ -52,5 +52,5 @@ $free_roll_cooldown_interval=300;
 // Gridcoin online wallet API key
 $grc_api_url="https://wallet.arikado.ru/api.php";
 $grc_api_key="";
- 
+
 ?>
