@@ -55,5 +55,3 @@ $grc_api_key="";
 $broker_url = "";
 $broker_key = "";
 $broker_project_name = "";
-
-?>
