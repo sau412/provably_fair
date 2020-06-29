@@ -6,11 +6,13 @@ $wallet_domain="";
 $wallet_receive_confirmations=10;
 $currency_short="";
 $currency="";
+
+$project_internal_name = "";
 // For counter
-$project_counter_name="";
+$project_counter_name = $project_internal_name;
 
 // For logging
-$project_log_name="";
+$project_log_name = $project_internal_name;
 $logger_url = "";
 
 // DB variables
@@ -54,4 +56,4 @@ $grc_api_key="";
 // Broker settings
 $broker_url = "";
 $broker_key = "";
-$broker_project_name = "";
+$broker_project_name = $project_internal_name;
