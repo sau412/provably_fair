@@ -293,7 +293,7 @@ function update_user_balance($user_uid) {
 }
 
 // Send
-function user_withdraw($user_uid,$amount) {
+function user_withdraw($user_uid, $amount) {
         global $currency_short;
 
         // Check payouts enabled
@@ -398,7 +398,7 @@ function update_user_seed($user_uid,$seed) {
 }
 
 // Change user balance
-function change_user_balance($user_uid,$balance_delta) {
+function change_user_balance($user_uid, $balance_delta) {
         $user_uid_escaped=db_escape($user_uid);
         $balance_delta_escaped=db_escape($balance_delta);
         db_query("UPDATE `users` SET `balance`=`balance`+'$balance_delta_escaped' WHERE `uid`='$user_uid_escaped'");
@@ -568,21 +568,21 @@ VALUES ('$user_uid_escaped','$roll_type_escaped','$server_seed_escaped','$user_s
 
 // Payroll
 function do_payroll($user_uid,$reward) {
-        $user_uid_escaped=db_escape($user_uid);
-        $user_seed_escaped="";
-        $server_seed_escaped="";
-        $bet_escaped=db_escape("0");
-        $roll_result_escaped="";
-        $roll_type_escaped=db_escape('pay');
+        $user_uid_escaped = db_escape($user_uid);
+        $user_seed_escaped = "";
+        $server_seed_escaped = "";
+        $bet_escaped = db_escape("0");
+        $roll_result_escaped = "";
+        $roll_type_escaped = db_escape('pay');
 
-        $reward_escaped=db_escape($reward);
+        $reward_escaped = db_escape($reward);
 
         db_query("INSERT INTO `rolls` (`user_uid`,`roll_type`,`server_seed`,`user_seed`,`bet`,`profit`)
 VALUES ('$user_uid_escaped','$roll_type_escaped','$server_seed_escaped','$user_seed_escaped','$bet_escaped','$reward_escaped')");
 
-        change_user_balance($user_uid,$reward);
+        change_user_balance($user_uid, $reward);
 
-        $balance=get_user_balance($user_uid);
+        $balance = get_user_balance($user_uid);
 }
 
 // For php 5 only variant for random_bytes is openssl_random_pseudo_bytes from openssl lib
