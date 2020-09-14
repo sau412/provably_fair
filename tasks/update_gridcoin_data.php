@@ -150,9 +150,7 @@ foreach($transactions_data as $tx_row) {
 
         $tx_id_escaped = db_escape($tx_id);
         $uid_escaped = db_escape($uid);
-        $address_escaped = db_escape($address);
-        $user_uid = db_query_to_variable("SELECT `uid` FROM `users` WHERE `deposit_address`='$address_escaped'");
-
+        
         // Need to check only incoming transaction
         if($status!='pending' && $status!='received') {
                 echo "Skipping non-incoming transaction $tx_id\n";
@@ -164,6 +162,9 @@ foreach($transactions_data as $tx_row) {
                 continue;
         }
 		
+        $address_escaped = db_escape($address);
+        $user_uid = db_query_to_variable("SELECT `uid` FROM `users` WHERE `deposit_address`='$address_escaped'");
+
         $exists_tx_uid=db_query_to_variable("SELECT `uid` FROM `transactions`
         					WHERE `wallet_uid`='$uid_escaped' AND `status` IN ('pending','received')");
         if($exists_tx_uid) {
