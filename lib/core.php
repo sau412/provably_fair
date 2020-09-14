@@ -402,6 +402,7 @@ function change_user_balance($user_uid, $balance_delta) {
         $user_uid_escaped=db_escape($user_uid);
         $balance_delta_escaped=db_escape($balance_delta);
         db_query("UPDATE `users` SET `balance`=`balance`+'$balance_delta_escaped' WHERE `uid`='$user_uid_escaped'");
+        log_write("change_user_balance($user_uid, $balance_delta)", 7);
 }
 
 // Get user deposit address
@@ -457,7 +458,10 @@ function do_free_roll($user_uid) {
 
         $wait_interval=free_roll_cooldown_active($user_uid);
         if($wait_interval>0) {
-                return array("result"=>"fail","reason"=>"Only one roll in $free_roll_cooldown_interval seconds allowed. Wait $wait_interval seconds more.");
+                return array(
+                        "result"=>"fail",
+                        "reason"=>"Only one roll in $free_roll_cooldown_interval seconds allowed. Wait $wait_interval seconds more."
+                );
         }
 
 	$user_uid_escaped=db_escape($user_uid);
