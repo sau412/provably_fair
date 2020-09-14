@@ -402,7 +402,7 @@ function change_user_balance($user_uid, $balance_delta) {
         $user_uid_escaped=db_escape($user_uid);
         $balance_delta_escaped=db_escape($balance_delta);
         db_query("UPDATE `users` SET `balance`=`balance`+'$balance_delta_escaped' WHERE `uid`='$user_uid_escaped'");
-        log_write("change_user_balance($user_uid, $balance_delta)", 7);
+        log_write(["change_user_balance", $user_uid, $balance_delta], 7);
 }
 
 // Get user deposit address
