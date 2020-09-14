@@ -17,7 +17,7 @@ foreach($user_uids_array as $row) {
 	$balance_old=$row['balance'];
 	$balance_detailed = get_user_balance_detailed($user_uid);
 
-    if($balance_old != $balance_detailed['balance']) {
+    if(abs($balance_old - $balance_detailed['balance']) > 0.0001) {
         echo "Balance mismatch: old balance $balance_old\n";
         var_dump($balance_detailed);
     }
