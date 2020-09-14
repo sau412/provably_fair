@@ -63,6 +63,6 @@ function get_user_balance_detailed($user_uid) {
 	$balance+=$amount_profits_l;
 
 	//db_query("UPDATE `users` SET `balance`='$balance' WHERE `uid`='$user_uid_escaped'");
-	$result['balance'] = $balance;
+	$result['balance'] = (string) $balance;
 	return $result;
 }
