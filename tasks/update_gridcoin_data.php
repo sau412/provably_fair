@@ -50,13 +50,13 @@ foreach($pending_array as $user_info) {
         $received = $result->received;
 
         if($address != '' && $deposit_address == '') {
-        		echo "User uid $uid address $address\n";
+        	echo "User uid $uid address $address\n";
                 $uid_escaped = db_escape($uid);
                 $address_escaped = db_escape($address);
                 $received_escaped = db_escape($received);
                 db_query("UPDATE `users`
-                			SET `deposit_address`='$address_escaped'
-                			WHERE `uid`='$uid_escaped'");
+                                SET `deposit_address`='$address_escaped'
+                                WHERE `uid`='$uid_escaped'");
         }
         //update_user_balance($uid);
 }
@@ -148,58 +148,70 @@ foreach($transactions_data as $tx_row) {
         $confirmations = $tx_row->confirmations;
         $timestamp = $tx_row->timestamp;
 
-        $tx_id_escaped=db_escape($tx_id);
-        $uid_escaped=db_escape($uid);
+        $tx_id_escaped = db_escape($tx_id);
+        $uid_escaped = db_escape($uid);
+        $address_escaped = db_escape($address);
+        $user_uid = db_query_to_variable("SELECT `uid` FROM `users` WHERE `deposit_address`='$address_escaped'");
 
-		// Need to check only incoming transaction
-		if($status!='pending' && $status!='received') {
-			echo "Skipping non-incoming transaction $tx_id\n";
-			continue;
-		}
-		// Skip transactions that was received already
-		if(in_array($tx_id,$tx_received_index_array)) {
-			echo "Skipping already received transaction $tx_id\n";
-			continue;
-		}
+        // Need to check only incoming transaction
+        if($status!='pending' && $status!='received') {
+                echo "Skipping non-incoming transaction $tx_id\n";
+                continue;
+        }
+        // Skip transactions that was received already
+        if(in_array($tx_id,$tx_received_index_array)) {
+                echo "Skipping already received transaction $tx_id\n";
+                continue;
+        }
 		
         $exists_tx_uid=db_query_to_variable("SELECT `uid` FROM `transactions`
-        										WHERE `wallet_uid`='$uid_escaped' AND `status` IN ('pending','received')");
+        					WHERE `wallet_uid`='$uid_escaped' AND `status` IN ('pending','received')");
         if($exists_tx_uid) {
-        		// Exists transaction - update data
-        		// Update if status changed?
-        		echo "Update data for existing transaction $exists_tx_uid\n";
+                // Exists transaction - update data
+                // Update if status changed?
+                echo "Update data for existing transaction $exists_tx_uid\n";
                 $status_escaped=db_escape($status);
+                if($status == 'received') {
+                        $exists_status = db_query_to_variable("SELECT `status` FROM `transactions` WHERE `uid` = '$exists_tx_uid'");
+                        if($exists_status == 'pending') {
+                                change_user_balance($user_uid, $amount);
+                        }
+                }
                 $confirmations_escaped=db_escape($confirmations);
-                db_query("UPDATE `transactions` SET `status`='$status_escaped',`confirmations`='$confirmations_escaped' WHERE `uid`='$exists_tx_uid'");
+                db_query("UPDATE `transactions` SET `status`='$status_escaped',
+                                        `confirmations`='$confirmations_escaped'
+                                WHERE `uid`='$exists_tx_uid'");
 
-				$user_uid=db_query_to_variable("SELECT `user_uid` FROM `transactions`
-													WHERE `wallet_uid`='$uid_escaped' AND `status` IN ('pending','received')");
-                update_user_balance($user_uid);
+                $user_uid=db_query_to_variable("SELECT `user_uid` FROM `transactions`
+                                                WHERE `wallet_uid`='$uid_escaped' AND `status` IN ('pending','received')");
+                //update_user_balance($user_uid);
         } else {
-        		// Not exists - new transaction
-        		// Finding user with that address
-        		echo "New transaction found\n";
+                // Not exists - new transaction
+                // Finding user with that address
+                echo "New transaction found\n";
                 $amount_escaped=db_escape($amount);
                 $address_escaped=db_escape($address);
                 $status_escaped=db_escape($status);
                 $confirmations_escaped=db_escape($confirmations);
                 $timestamp_escaped=db_escape($timestamp);
-                $user_uid=db_query_to_variable("SELECT `uid` FROM `users` WHERE `deposit_address`='$address_escaped'");
                 $user_uid_escaped=db_escape($user_uid);
 
                 if($user_uid=='') {
                 	echo "User not found for transaction $tx_id\n";
                 	continue;
-				}
+                }
 
-				update_user_balance($user_uid);
-				// Check if sending transaction already exists
-				if($status == 'sent' || $status === 'processing') {
-					$tx_exists = db_query_to_variable("SELECT 1 FROM `transactions`
-						WHERE `wallet_uid`='$uid_escaped' AND `status` IN ('requested','processing','sent')");
-					if($tx_exists) continue;
-				}
-				echo "Adding new transaction\n";
+                if($status == 'received') {
+                        change_user_balance($user_uid, $amount);
+                }
+                //update_user_balance($user_uid);
+                // Check if sending transaction already exists
+                if($status == 'sent' || $status === 'processing') {
+                        $tx_exists = db_query_to_variable("SELECT 1 FROM `transactions`
+                                WHERE `wallet_uid`='$uid_escaped' AND `status` IN ('requested','processing','sent')");
+                        if($tx_exists) continue;
+                }
+		echo "Adding new transaction\n";
                 db_query("INSERT INTO `transactions` (`user_uid`,`amount`,`address`,`status`,`wallet_uid`,`tx_id`,`confirmations`,`timestamp`)
 VALUES ('$user_uid_escaped','$amount_escaped','$address_escaped','$status_escaped','$uid_escaped','$tx_id_escaped','$confirmations_escaped','$timestamp_escaped')");
         }
@@ -207,5 +219,3 @@ VALUES ('$user_uid_escaped','$amount_escaped','$address_escaped','$status_escape
 
 $current_balance=grc_web_get_balance();
 set_variable("wallet_balance",$current_balance);
-
-?>
