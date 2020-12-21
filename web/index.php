@@ -98,9 +98,9 @@ if(isset($action)) {
                 $action=array("x"=>$x,"y"=>$y,"action"=>"open");
                 $result_data=apply_action($field,$action);
                 save_field($game_uid,$result_data['field'],$action);
-                if($result_data['result']!='continue') {
+                if($result_data['result'] != 'continue') {
                         echo json_encode($result_data);
-                        finish($game_uid);
+                        finish($game_uid, $result_data['result']);
                 } else {
                         $result_data['field']=to_user_field($result_data['field']);
                         echo json_encode($result_data);

@@ -163,14 +163,18 @@ function get_current_game_hash($game_uid) {
         return $server_seed_hash;
 }
 
-function finish($game_uid) {
+function finish($game_uid, $result) {
         $game_uid_escaped=db_escape($game_uid);
-        db_query("UPDATE `minesweeper` SET `is_finished`=1,`profit`=0.01 WHERE `uid`='$game_uid_escaped'");
-        $user_uid=db_query_to_variable("SELECT `user_uid` FROM `minesweeper` WHERE `uid`='$game_uid_escaped'");
-        change_user_balance($user_uid,0.01);
+        if($result == "win") {
+                db_query("UPDATE `minesweeper` SET `is_finished`=1,`profit`=0.01 WHERE `uid`='$game_uid_escaped'");
+                $user_uid=db_query_to_variable("SELECT `user_uid` FROM `minesweeper` WHERE `uid`='$game_uid_escaped'");
+                change_user_balance($user_uid, 0.01);
+        }
+        else {
+                db_query("UPDATE `minesweeper` SET `is_finished`=1,`profit`=0 WHERE `uid`='$game_uid_escaped'");
+        }
 }
 
 function to_user_field($field) {
         return str_replace("b","c",$field);
 }
-?>
