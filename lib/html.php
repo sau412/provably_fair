@@ -402,8 +402,10 @@ function load_proof_seeds_free() {
 </p>
 _END;
 
-        $result = "<p>Use <a href='https://microgrid.arikado.ru/'>microgrid</a> to earn some Gridcoin.</p>";
-
+        $result = "<p>Use <a href='https://microgrid.arikado.ru/'>microgrid</a> to earn some Gridcoin.</p>\n";
+        $result .= "<p>Microgrid is my distributed computing project that uses browser to solve computation tasks.</p>\n";
+        $result .= "<p>It's like mining, but computer's work is useful.</p>\n";
+        
         return $result;
 }
 
