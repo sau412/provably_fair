@@ -38,6 +38,12 @@ function set_variable($name,$value) {
         db_query("INSERT INTO `variables` (`name`,`value`) VALUES ('$name_escaped','$value_escaped') ON DUPLICATE KEY UPDATE `value`=VALUES(`value`)");
 }
 
+// Inc variable
+function inc_variable($name) {
+        $name_escaped = db_escape($name);
+        db_query("UPDATE `variables` SET `value` = `value` + 1 WHERE `name` = '$name_escaped'");
+}
+
 // Create or get session
 function get_session() {
         if(isset($_COOKIE['session_id']) && validate_ascii($_COOKIE['session_id'])) {
@@ -504,6 +510,7 @@ VALUES ('$user_uid_escaped','$roll_type_escaped','$server_seed_escaped','$user_s
 
 	// Log
 	log_write("Free roll, reward: $reward");
+        inc_variable("free_rolls");
 
         return $result;
 }
@@ -566,7 +573,7 @@ VALUES ('$user_uid_escaped','$roll_type_escaped','$server_seed_escaped','$user_s
 
 	// Log
 	log_write("Dice roll, bet: $bet, reward: $reward");
-
+        inc_variable("bet_rolls");
         return $result;
 }
 
@@ -585,8 +592,8 @@ function do_payroll($user_uid,$reward) {
 VALUES ('$user_uid_escaped','$roll_type_escaped','$server_seed_escaped','$user_seed_escaped','$bet_escaped','$reward_escaped')");
 
         change_user_balance($user_uid, $reward);
-
         $balance = get_user_balance($user_uid);
+        inc_variable("pay_rolls");
 }
 
 // For php 5 only variant for random_bytes is openssl_random_pseudo_bytes from openssl lib
