@@ -26,5 +26,3 @@ foreach($users_data_array as $user_data) {
 }
 
 log_write("Task: Payroll finished");
-
-?>

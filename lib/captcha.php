@@ -45,4 +45,3 @@ function captcha_check($session_id,$user_code) {
         if($user_code==$real_code) return TRUE;
         else return FALSE;
 }
-?>

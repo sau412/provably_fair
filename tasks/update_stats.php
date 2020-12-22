@@ -40,4 +40,3 @@ set_variable("pay_rolls", $pay_rolls);
 set_variable("lottery_tickets", $lottery_tickets);
 set_variable("lottery_funds", $lottery_funds);
 set_variable("active_users", $active_users);
-?>

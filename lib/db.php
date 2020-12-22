@@ -101,4 +101,3 @@ if(!function_exists("mysql_pconnect")) {
 				return mysqli_error($mysqli_res);
 		}
 }
-?>

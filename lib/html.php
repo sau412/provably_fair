@@ -951,4 +951,3 @@ _END;
 
 	return $result;
 }
-?>

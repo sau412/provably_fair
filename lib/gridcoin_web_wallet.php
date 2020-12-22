@@ -94,5 +94,3 @@ function grc_web_get_receiving_address($address_uid) {
         if(property_exists($data,"error")) return $data->error;
         return $data;
 }
-
-?>

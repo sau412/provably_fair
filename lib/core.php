@@ -602,4 +602,3 @@ if(!function_exists("random_bytes")) {
                 return openssl_random_pseudo_bytes($n);
         }
 }
-?>

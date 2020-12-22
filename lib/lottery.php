@@ -1,5 +1,5 @@
 <?php
-// Lotto-related functions
+// Lottery-related functions
 
 // Get actual round
 function lottery_get_actual_round() {
@@ -233,4 +233,3 @@ function lottery_calc_user_best_hash($round_uid,$user_uid) {
 		SET `user_seed`='$user_seed_escaped',`best_hash`='$best_hash_escaped'
 		WHERE `user_uid`='$user_uid_escaped' AND `round_uid`='$round_uid_escaped'");
 }
-?>

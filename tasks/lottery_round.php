@@ -13,4 +13,3 @@ log_write("Task: Lottery round start");
 lottery_close_round();
 
 log_write("Task: Lottery round finish");
-?>
