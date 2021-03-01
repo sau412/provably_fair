@@ -12,7 +12,7 @@ db_connect();
 
 $wallets_data = db_query_to_array("SELECT w.`uid`, w.`currency_uid`, c.`symbol`,
                                         w.`wallet_uid`, c.`wallet_api`, c.`wallet_key`,
-                                        c.`deposit_address`
+                                        w.`deposit_address`
                                     FROM `ex_wallets` AS w
                                     JOIN `ex_currencies` AS c ON w.`currency_uid` = c.`uid`");
 
@@ -25,7 +25,7 @@ foreach($wallets_data as $wallet_row) {
     $grc_api_key = $wallet_row['wallet_key'];
 
     $uid_escaped = db_escape($uid);
-    
+
     if($wallet_uid) {
         if(!$deposit_address) {
             $deposit_address = grc_web_get_receiving_address($wallet_uid);
