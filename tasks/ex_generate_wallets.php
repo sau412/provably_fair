@@ -28,7 +28,8 @@ foreach($wallets_data as $wallet_row) {
 
     if($wallet_uid) {
         if(!$deposit_address) {
-            $deposit_address = grc_web_get_receiving_address($wallet_uid);
+            $deposit_address_data = grc_web_get_receiving_address($wallet_uid);
+            $deposit_address = $deposit_address_data->address;
             $deposit_address_escaped = db_escape($deposit_address);
             db_query("UPDATE `ex_wallets`
                         SET `deposit_address` = '$deposit_address_escaped'
