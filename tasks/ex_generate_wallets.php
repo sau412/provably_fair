@@ -36,7 +36,8 @@ foreach($wallets_data as $wallet_row) {
         }
     }
     else {
-        $wallet_uid = grc_web_get_new_receiving_address();
+        $wallet_data = grc_web_get_new_receiving_address();
+        $wallet_uid = $wallet_data->uid;
         if($wallet_uid) {
             $wallet_uid_escaped = db_escape($wallet_uid);
             db_query("UPDATE `ex_wallets`
