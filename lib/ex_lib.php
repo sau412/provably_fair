@@ -8,7 +8,7 @@ function ex_get_user_uid_by_currency_uid_and_address($currency_uid, $address) {
     $currency_uid_escaped = db_escape($currency_uid);
     $address_escaped = db_escape($address);
 
-    $user_uid = db_query_to_variable("SELECT `uid` FROM `ex_wallets`
+    $user_uid = db_query_to_variable("SELECT `user_uid` FROM `ex_wallets`
                                         WHERE `currency_uid` = '$currency_uid_escaped' AND
                                             `deposit_address` = '$address_escaped'");
     return $user_uid;
