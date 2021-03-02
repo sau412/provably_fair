@@ -109,10 +109,6 @@ function ex_recalculate_balance($user_uid, $currency_uid) {
                 WHERE `user_uid` = '$user_uid_escaped' AND `currency_uid` = '$currency_uid_escaped'");
 }
 
-function ex_withdraw_transaction($user_uid, $currency_uid, $amount, $address) {
-
-}
-
 function ex_get_currencies_data() {
     return db_query_to_array("SELECT `uid`, `name`, `symbol`, `rate`, `balance` FROM `ex_currencies`");
 }
@@ -126,4 +122,36 @@ function ex_get_wallet_data_by_user_uid_currency_uid($user_uid, $currency_uid) {
                                 WHERE `user_uid` = '$user_uid_escaped' AND
                                     `currency_uid` = '$currency_uid_escaped'");
     return array_pop($wallets_data);
+}
+
+function ex_user_request_address($user_uid, $currency_uid) {
+    $user_uid_escaped = db_escape($user_uid);
+    $currency_uid_escaped = db_escape($currency_uid);
+
+    $currency_exists = db_query_to_variable("SELECT 1 FROM `ex_currency`
+                                                WHERE `uid` = '$currency_uid_escaped'");
+    if(!$currency_exists) {
+        return false;
+    }
+
+    $address_exists = db_query_to_variable("SELECT 1 FROM `ex_wallets`
+                                                WHERE `user_uid` = '$user_uid_escaped' AND
+                                                    `currency_uid` = '$currency_uid_escaped'");
+
+    if($address_exists) {
+        return false;
+    }
+
+    db_query("INSERT INTO `ex_wallets` (`user_uid`, `currency_uid`)
+                VALUES ('$user_uid_escaped', '$currency_uid_escaped')");
+    
+    return true;
+}
+
+function ex_user_withdraw($user_uid, $currency_uid, $amount, $address) {
+    return false;
+}
+
+function ex_exchange($user_uid, $from_currency_uid, $from_amount, $to_currency_uid) {
+    return false;
 }

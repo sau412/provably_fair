@@ -960,6 +960,7 @@ function html_exchange($user_uid, $token) {
         $result = "";
 
         $result .= <<<_END
+<h2>Balances</h2>
 <table class='table_horizontal'>
 <tr><th>Currency</th><th>Deposit address</th><th>Balance</th></tr>
 
@@ -984,9 +985,14 @@ _END;
                         $result .= "<td>$balance $currency_symbol</td></tr>\n";
                 }
                 else {
-                        $request_address = "<button>Request address</button>";
+                        $request_address_form = "<form method=post>";
+                        $request_address_form .= "<input type=hidden name='action' value='exchange_request_address'>";
+                        $request_address_form .= "<input type=hidden name='currency_uid' value='$currency_uid'>";
+                        $request_address_form .= "<input type=hidden name='token' value='$token'>";
+                        $request_address_form .= "<input type=submit value='Request address'>";
+                        $request_address_form .= "</form>";
                         $result .= "<tr><td>$currency_name</td>";
-                        $result .= "<td colspan=2>$request_address</td></tr>";
+                        $result .= "<td colspan=2>$request_address_form</td></tr>";
                 }
         }
 
