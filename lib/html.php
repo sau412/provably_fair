@@ -113,6 +113,7 @@ function html_tabs($user_uid) {
                 //$result.=html_menu_element("last_rolls","Last rolls");
                 $result.=html_menu_element("lottery","Lottery");
                 $result.=html_menu_element("earn","Earn $currency_short");
+                $result.=html_menu_element("exchange","Exchange");
                 $result.=html_menu_element("send_receive","Send and receive");
                 $result.=html_menu_element("settings","%tab_settings%");
                 if(is_admin($user_uid)) {
@@ -953,4 +954,42 @@ _END;
 	$result.="</table>\n";
 
 	return $result;
+}
+
+function html_exchange($user_uid, $token) {
+        $result = "";
+
+        $result .= <<<_END
+<table class='table_horizontal'>
+<tr><th>Currency</th><th>Deposit address</th><th>Balance</th></tr>
+
+_END;
+
+        $currencies_data = ex_get_currencies_data();
+        foreach($currencies_data as $currency_row) {
+                $currency_uid = $currency_row['uid'];
+                $currency_name = $currency_row['name'];
+                $currency_symbol = $currency_row['symbol'];
+
+                $wallet_data = ex_get_wallet_data_by_user_uid_currency_uid($user_uid, $currency_uid);
+
+                if($wallet_data) {
+                        $deposit_address = $wallet_data['deposit_address'];
+                        $balance = $wallet_data['balance'];
+                        if(!$deposit_address) {
+                                $deposit_address = "<i>generating...</i>";
+                        }
+                        $result .= "<tr><td>$currency_name</td>";
+                        $result .= "<td>$deposit_address</td>";
+                        $result .= "<td>$balance $currency_symbol</td></tr>\n";
+                }
+                else {
+                        $request_address = "<button>Request address</button>";
+                        $result .= "<tr><td>$currency_name</td>";
+                        $result .= "<td colspan=2>$request_address</td></tr>";
+                }
+        }
+
+        $result .= "</table>\n";
+        return $result;
 }

@@ -112,3 +112,17 @@ function ex_recalculate_balance($user_uid, $currency_uid) {
 function ex_withdraw_transaction($user_uid, $currency_uid, $amount, $address) {
 
 }
+
+function ex_get_currencies_data() {
+    return db_query_to_array("SELECT `uid`, `name`, `symbol`, `rate`, `balance` FROM `ex_currencies`");
+}
+
+function ex_get_wallet_data_by_user_uid_currency_uid($user_uid, $currency_uid) {
+    $user_uid_escaped = db_escape($user_uid);
+    $currency_uid_escaped = db_escape($currency_uid);
+
+    return db_query_to_array("SELECT `uid`, `currency_uid`, `deposit_address`, `balance`
+                                FROM `ex_wallets`
+                                WHERE `user_uid` = '$user_uid_escaped' AND
+                                    `currency_uid` = '$currency_uid_escaped'");
+}
