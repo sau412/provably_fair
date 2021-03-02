@@ -12,7 +12,7 @@ db_connect();
 
 $currency_data = db_query_to_array("SELECT `uid`, `wallet_api`, `wallet_key`
                                     FROM `ex_currencies`
-                                    WHERE c.`wallet_api` != ''");
+                                    WHERE `wallet_api` != ''");
 
 foreach($currency_data as $currency_row) {
     $currency_uid = $currency_row['uid'];
