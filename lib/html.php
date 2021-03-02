@@ -972,11 +972,20 @@ _END;
                 $currency_name = $currency_row['name'];
                 $currency_symbol = $currency_row['symbol'];
 
-                $wallet_data = ex_get_wallet_data_by_user_uid_currency_uid($user_uid, $currency_uid);
+                if($currency_symbol == 'GRC') {
+                        $wallet_data = [
+                                "deposit_address" => get_user_deposit_address($user_uid),
+                                "balance" => get_user_balance($user_uid),
+                        ];
+                }
+                else {
+                        $wallet_data = ex_get_wallet_data_by_user_uid_currency_uid($user_uid, $currency_uid);
+                }
 
                 if($wallet_data) {
                         $deposit_address = $wallet_data['deposit_address'];
                         $balance = $wallet_data['balance'];
+                        
                         if(!$deposit_address) {
                                 $deposit_address = "<i>generating...</i>";
                         }
