@@ -121,8 +121,9 @@ function ex_get_wallet_data_by_user_uid_currency_uid($user_uid, $currency_uid) {
     $user_uid_escaped = db_escape($user_uid);
     $currency_uid_escaped = db_escape($currency_uid);
 
-    return db_query_to_array("SELECT `uid`, `currency_uid`, `deposit_address`, `balance`
+    $wallets_data = db_query_to_array("SELECT `uid`, `currency_uid`, `deposit_address`, `balance`
                                 FROM `ex_wallets`
                                 WHERE `user_uid` = '$user_uid_escaped' AND
                                     `currency_uid` = '$currency_uid_escaped'");
+    return array_pop($wallets_data);
 }
