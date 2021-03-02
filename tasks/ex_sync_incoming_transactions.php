@@ -7,6 +7,7 @@ require_once("../lib/core.php");
 require_once("../lib/broker.php");
 require_once("../lib/logger.php");
 require_once("../lib/gridcoin_web_wallet.php");
+require_once("../lib/ex_lib.php");
 
 db_connect();
 
