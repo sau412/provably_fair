@@ -24,8 +24,9 @@ function ex_get_tx_uid_by_currency_uid_and_tx_id($currency_uid, $tx_id) {
     return $tx_uid;
 }
 
-function ex_add_incoming_transaction($user_uid, $wallet_uid, $status, $address, $amount, $tx_id) {
+function ex_add_incoming_transaction($user_uid, $currency_uid, $wallet_uid, $status, $address, $amount, $tx_id) {
     $user_uid_escaped = db_escape($user_uid);
+    $currency_uid_escaped = db_escape($currency_uid);
     $wallet_uid_escaped = db_escape($wallet_uid);
     $status_escaped = db_escape($status);
     $address_escaped = db_escape($address);
@@ -34,6 +35,7 @@ function ex_add_incoming_transaction($user_uid, $wallet_uid, $status, $address, 
 
     db_query("INSERT INTO `ex_transactions` (
                     `user_uid`,
+                    `currency_uid`,
                     `wallet_uid`,
                     `status`,
                     `address`,
@@ -41,6 +43,7 @@ function ex_add_incoming_transaction($user_uid, $wallet_uid, $status, $address, 
                     `tx_id`)
                 VALUES (
                     '$user_uid_escaped',
+                    '$currency_uid_escaped',
                     '$wallet_uid_escaped',
                     '$status_escaped',
                     '$address_escaped',

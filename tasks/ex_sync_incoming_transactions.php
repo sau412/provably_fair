@@ -21,8 +21,6 @@ foreach($currency_data as $currency_row) {
     $grc_api_url = $currency_row['wallet_api'];
     $grc_api_key = $currency_row['wallet_key'];
 
-    $currency_uid_escaped = db_escape($currency_uid);
-
     // Check for new receiving transactions
     $transactions_array = grc_web_get_all_tx();
     foreach($transactions_array as $tranaction_row) {
@@ -43,7 +41,7 @@ foreach($currency_data as $currency_row) {
                 // Add received transaction
                 $user_uid = ex_get_user_uid_by_currency_uid_and_address($currency_uid, $address);
                 if($user_uid) {
-                    ex_add_incoming_transaction($user_uid, $wallet_uid, $status, $address, $amount, $tx_id);
+                    ex_add_incoming_transaction($user_uid, $currency_uid, $wallet_uid, $status, $address, $amount, $tx_id);
                     ex_recalculate_balance($user_uid, $currency_uid);
                 }
             }
