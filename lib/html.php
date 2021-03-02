@@ -1010,7 +1010,7 @@ _END;
         $result .= <<<_END
 <h2>Transactions</h2>
 <table class='table_horizontal'>
-<tr><th>Currency</th><th>Amount</th><th>Address</th><th>TX ID</th><th>Status</th><th>Timestamp</th></tr>
+<tr><th>Currency</th><th>Amount</th><th>Address and TX ID</th><th>Status</th><th>Timestamp</th></tr>
 
 _END;
 
@@ -1026,10 +1026,9 @@ _END;
                 $result .= "<tr>\n";
                 $result .= "<td>$name</td>\n";
                 $result .= "<td>$amount</td>\n";
-                $result .= "<td>$address</td>\n";
-                $result .= "<td>$tx_id</td>\n";
+                $result .= "<td>$address<br>$tx_id</td>\n";
                 $result .= "<td>$status</td>\n";
-                $result .= "<td>$name</td>\n";
+                $result .= "<td>$timestamp</td>\n";
                 $result .= "</tr>\n";
         }
         $result .= "</table>\n";
