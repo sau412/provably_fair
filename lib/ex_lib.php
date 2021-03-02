@@ -128,7 +128,7 @@ function ex_user_request_address($user_uid, $currency_uid) {
     $user_uid_escaped = db_escape($user_uid);
     $currency_uid_escaped = db_escape($currency_uid);
 
-    $currency_exists = db_query_to_variable("SELECT 1 FROM `ex_currency`
+    $currency_exists = db_query_to_variable("SELECT 1 FROM `ex_currencies`
                                                 WHERE `uid` = '$currency_uid_escaped'");
     if(!$currency_exists) {
         return false;
