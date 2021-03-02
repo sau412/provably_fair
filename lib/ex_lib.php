@@ -155,3 +155,12 @@ function ex_user_withdraw($user_uid, $currency_uid, $amount, $address) {
 function ex_exchange($user_uid, $from_currency_uid, $from_amount, $to_currency_uid) {
     return false;
 }
+
+function ex_get_user_transactions($user_uid) {
+    $user_uid_escaped = db_escape($user_uid);
+
+    return db_query_to_array("SELECT t.`uid`, t.`currency_uid`, t.`amount`, t.`address`, t.`status`, t.`tx_id`, t.`timestamp`, c.`name`
+                                FROM `ex_transactions` AS t
+                                JOIN `ex_currencies` AS c ON c.`uid` = t.`currency_uid`
+                                WHERE t.`user_uid` = '$user_uid_escaped'");
+}

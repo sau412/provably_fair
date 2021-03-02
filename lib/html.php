@@ -985,7 +985,7 @@ _END;
                 if($wallet_data) {
                         $deposit_address = $wallet_data['deposit_address'];
                         $balance = $wallet_data['balance'];
-                        
+
                         if(!$deposit_address) {
                                 $deposit_address = "<i>generating...</i>";
                         }
@@ -1006,5 +1006,32 @@ _END;
         }
 
         $result .= "</table>\n";
+
+        $result .= <<<_END
+<h2>Transactions</h2>
+<table class='table_horizontal'>
+<tr><th>Currency</th><th>Amount</th><th>Address</th><th>TX ID</th><th>Status</th><th>Timestamp</th></tr>
+
+_END;
+
+        $transactions_data = ex_get_user_transactions($user_uid);
+        foreach($transactions_data as $tx_row) {
+                $amount = $tx_row['amount'];
+                $address = $tx_row['address'];
+                $name = $tx_row['name'];
+                $timestamp = $tx_row['timestamp'];
+                $tx_id = $tx_row['tx_id'];
+
+                $result .= "<tr>\n";
+                $result .= "<td>$name</td>\n";
+                $result .= "<td>$amount</td>\n";
+                $result .= "<td>$address</td>\n";
+                $result .= "<td>$tx_id</td>\n";
+                $result .= "<td>$status</td>\n";
+                $result .= "<td>$name</td>\n";
+                $result .= "</tr>\n";
+        }
+        $result .= "</table>\n";
+        
         return $result;
 }
