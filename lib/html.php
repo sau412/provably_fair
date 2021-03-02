@@ -1019,6 +1019,7 @@ _END;
                 $amount = $tx_row['amount'];
                 $address = $tx_row['address'];
                 $name = $tx_row['name'];
+                $status = $tx_row['status'];
                 $timestamp = $tx_row['timestamp'];
                 $tx_id = $tx_row['tx_id'];
 
