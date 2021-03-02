@@ -138,7 +138,7 @@ if(isset($action)) {
                 $from_amount = stripslashes($_POST['from_amount']);
                 $to_currency_uid = stripslashes($_POST['to_currency_uid']);
 
-                $result = ex_exchange($user_uid, $from_currency_uid, $from_amount, $to_currency_uid)
+                $result = ex_exchange($user_uid, $from_currency_uid, $from_amount, $to_currency_uid);
                 if($result) $message="request_successfull";
                 else $message="request_failed";
         } else if($action=='admin_change_settings' && is_admin($user_uid)) {
