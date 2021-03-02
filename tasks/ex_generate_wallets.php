@@ -1,6 +1,6 @@
 <?php
 
-// Update currency rates
+// Generate wallets
 require_once("../lib/settings.php");
 require_once("../lib/db.php");
 require_once("../lib/core.php");
@@ -14,7 +14,8 @@ $wallets_data = db_query_to_array("SELECT w.`uid`, w.`currency_uid`, c.`symbol`,
                                         w.`wallet_uid`, c.`wallet_api`, c.`wallet_key`,
                                         w.`deposit_address`
                                     FROM `ex_wallets` AS w
-                                    JOIN `ex_currencies` AS c ON w.`currency_uid` = c.`uid`");
+                                    JOIN `ex_currencies` AS c ON w.`currency_uid` = c.`uid`
+                                    WHERE c.`wallet_api` != ''");
 
 foreach($wallets_data as $wallet_row) {
     $uid = $wallet_row['uid'];
