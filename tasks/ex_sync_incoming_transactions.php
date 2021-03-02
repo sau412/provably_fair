@@ -26,7 +26,7 @@ foreach($currency_data as $currency_row) {
     // Check for new receiving transactions
     $transactions_array = grc_web_get_all_tx();
     foreach($transactions_array as $tranaction_row) {
-        $tx_uid = $tranaction_row->uid;
+        $wallet_uid = $tranaction_row->uid;
         $tx_id = $tranaction_row->tx_id;
         $amount = $tranaction_row->amount;
         $address = $tranaction_row->address;
