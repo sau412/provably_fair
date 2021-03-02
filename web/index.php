@@ -175,6 +175,9 @@ if(isset($_GET['ajax']) && isset($_GET['block'])) {
                         case 'earn':
                                 echo html_earn($user_uid,$token);
                                 break;
+                        case 'exchange':
+                                echo html_exchange($user_uid, $token);
+                                break;
                         case 'log':
                                 if(is_admin($user_uid)) {
                                         echo html_log_section_admin();
