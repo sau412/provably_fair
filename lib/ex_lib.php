@@ -122,7 +122,7 @@ function ex_get_currencies_data() {
 function ex_get_currency_withdraw_fee($currency_uid) {
     $currency_uid_escaped = db_escape($currency_uid);
     return db_query_to_variable("SELECT `withdraw_fee`
-                                FROM `ex_currencies` WHERE `currency_uid` = '$currency_uid_escaped'");
+                                FROM `ex_currencies` WHERE `uid` = '$currency_uid_escaped'");
 }
 
 function ex_get_wallet_data_by_user_uid_currency_uid($user_uid, $currency_uid) {
