@@ -38,7 +38,7 @@ function grc_web_get_balance() {
 // Send coins
 function grc_web_send($grc_address, $amount) {
         $query="method=send&address=$grc_address&amount=$amount";
-echo "$query";
+//echo "$query";
 //var_dump($query);
         $result=grc_web_send_query($query);
 //var_dump($result);
