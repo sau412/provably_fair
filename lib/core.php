@@ -243,6 +243,13 @@ function get_username_by_uid($user_uid) {
         return $login;
 }
 
+// Get email by uid
+function get_email_by_uid($user_uid) {
+        $user_uid_escaped = db_escape($user_uid);
+        $email = db_query_to_variable("SELECT `mail` FROM `users` WHERE `uid`='$user_uid_escaped'");
+        return $email;
+}
+
 // Logout user
 function user_logout($session) {
         $user_uid=get_user_uid_by_session($session);
@@ -511,6 +518,7 @@ VALUES ('$user_uid_escaped','$roll_type_escaped','$server_seed_escaped','$user_s
 	// Log
 	log_write("Free roll, reward: $reward");
         inc_variable("free_rolls");
+        generate_roll_token($user_uid);
 
         return $result;
 }
@@ -594,6 +602,54 @@ VALUES ('$user_uid_escaped','$roll_type_escaped','$server_seed_escaped','$user_s
         change_user_balance($user_uid, $reward);
         $balance = get_user_balance($user_uid);
         inc_variable("pay_rolls");
+}
+
+// Get user variable
+function get_user_variable($user_uid, $name) {
+        $user_uid_escaped = db_escape($user_uid);
+        $name_escaped = db_escape($name);
+        return db_query_to_variable("SELECT `value` FROM `user_variables`
+                                        WHERE `user_uid` = '$user_uid_escaped' AND `name` = '$name_escaped'");
+}
+
+// Set user variable
+function set_user_variable($user_uid, $name, $value) {
+        $user_uid_escaped = db_escape($user_uid);
+        $name_escaped = db_escape($name);
+        $value_escaped = db_escape($value);
+        db_query_to_variable("INSERT INTO `user_variables` (`user_uid`, `name`, `value`)
+                                VALUES ('$user_uid_escaped', '$name_escaped', '$value_escaped')
+                                ON DUPLICATE KEY UPDATE `value` = VALUES(`value`)");
+}
+
+// Generate roll token
+function generate_roll_token($user_uid) {
+        $token = bin2hex(random_bytes(16));
+
+        set_user_variable($user_uid, "roll_token", $token);
+
+        return $token;
+}
+
+// Check roll token
+function check_roll_token($user_uid, $token) {
+        $token_exists = get_user_variable($user_uid, "roll_token");
+        if($token == $token_exists) return true;
+        return false;
+}
+
+// Send roll token
+function send_free_roll_email($user_uid) {
+        $email = get_email_by_uid($user_uid);
+        $roll_token = generate_roll_token($user_uid);
+        $subject = '[freegridco.in] Free roll';
+        $body = <<<_END
+Press link to access free roll:
+
+<a href='https://freegridco.in/?roll_token=$roll_token#free_roll'>https://freegridco.in/?roll_token=$roll_token#free_roll</a>
+_END;
+
+        email_add($email, $subject, $body);
 }
 
 // For php 5 only variant for random_bytes is openssl_random_pseudo_bytes from openssl lib

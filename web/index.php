@@ -9,6 +9,8 @@ require_once("../lib/minesweeper.php");
 require_once("../lib/lottery.php");
 require_once("../lib/broker.php");
 require_once("../lib/logger.php");
+require_once("../lib/ex_lib.php");
+require_once("../lib/email.php");
 
 db_connect();
 
@@ -60,7 +62,12 @@ if(isset($action)) {
         } else if($action=='logout') {
                 user_logout($session);
                 $message="logout_successfull";
-        } else if($action=='free_roll') {
+        }
+        else if($action == 'request_free_roll') {
+                send_free_roll_email($user_uid);
+                $message = "roll_requested";
+        }
+        else if($action == 'free_roll') {
                 $user_seed=stripslashes($_POST['user_seed']);
 		//$recaptcha_response=stripslashes($_POST['g-recaptcha-response']);
 		if(TRUE || recaptcha_check($recaptcha_response)) {
@@ -119,6 +126,27 @@ if(isset($action)) {
                 $new_password2=stripslashes($_POST['new_password2']);
 
                 $message=user_change_settings($user_uid,$mail,$withdraw_address,$password,$new_password1,$new_password2);
+        } else if($action=='exchange_request_address') {
+                $currency_uid = stripslashes($_POST['currency_uid']);
+                $result = ex_user_request_address($user_uid, $currency_uid);
+                if($result) $message="request_successfull";
+                else $message="request_failed";
+        } else if($action=='exchange_withdraw') {
+                $currency_uid = stripslashes($_POST['currency_uid']);
+                $amount = stripslashes($_POST['amount']);
+                $address = stripslashes($_POST['address']);
+
+                $result = ex_user_withdraw($user_uid, $currency_uid, $amount, $address);
+                if($result) $message="request_successfull";
+                else $message="request_failed";
+        } else if($action=='exchange_exchange') {
+                $from_currency_uid = stripslashes($_POST['from_currency_uid']);
+                $from_amount = stripslashes($_POST['from_amount']);
+                $to_currency_uid = stripslashes($_POST['to_currency_uid']);
+
+                $result = ex_exchange($user_uid, $from_currency_uid, $from_amount, $to_currency_uid);
+                if($result) $message="request_successfull";
+                else $message="request_failed";
         } else if($action=='admin_change_settings' && is_admin($user_uid)) {
                 $login_enabled=stripslashes($_POST['login_enabled']);
                 $payouts_enabled=stripslashes($_POST['payouts_enabled']);
@@ -145,8 +173,12 @@ if(isset($_GET['ajax']) && isset($_GET['block'])) {
                                 }
                                 break;
                         default:
+                        case 'request_free_roll':
+                                echo html_request_free_roll($user_uid, $token);
+                                break;
                         case 'free_roll':
-                                echo html_free_roll($user_uid,$token);
+                                $free_roll_token = stripslashes($_GET['roll_token']);
+                                echo html_free_roll($user_uid, $token, $free_roll_token);
                                 break;
                         case 'minesweeper':
                                 echo html_minesweeper($user_uid,$token);
@@ -174,6 +206,9 @@ if(isset($_GET['ajax']) && isset($_GET['block'])) {
                                 break;
                         case 'earn':
                                 echo html_earn($user_uid,$token);
+                                break;
+                        case 'exchange':
+                                echo html_exchange($user_uid, $token);
                                 break;
                         case 'log':
                                 if(is_admin($user_uid)) {
@@ -226,5 +261,3 @@ echo html_loadable_block();
 //echo "Token $token\n";
 
 echo html_page_end();
-
-?>

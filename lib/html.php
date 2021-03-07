@@ -107,12 +107,13 @@ function html_tabs($user_uid) {
         $result.="<ul class=horizontal_menu>\n";
         if($user_uid) {
                 $result.=html_menu_element("info","Info");
-                $result.=html_menu_element("free_roll","Free $currency_short");
+                $result.=html_menu_element("request_free_roll","Free $currency_short");
                 //$result.=html_menu_element("minesweeper","Minesweeper");
                 $result.=html_menu_element("dice_roll","Multiply $currency_short");
                 //$result.=html_menu_element("last_rolls","Last rolls");
                 $result.=html_menu_element("lottery","Lottery");
                 $result.=html_menu_element("earn","Earn $currency_short");
+                //$result.=html_menu_element("exchange","Exchange");
                 $result.=html_menu_element("send_receive","Send and receive");
                 $result.=html_menu_element("settings","%tab_settings%");
                 if(is_admin($user_uid)) {
@@ -289,8 +290,28 @@ function html_recaptcha() {
 _END;
 }
 
+// Request free roll
+function html_request_free_roll($user_uid, $token) {
+        $result = '';
+
+        $result .= <<<_END
+<form method=post>
+<input type=hidden name=action value='request_free_roll'>
+<input type=hidden name=token value='$token'>
+<input type=submit value='Request free roll via email'>
+</form>
+
+_END;
+
+        return $result;
+}
+
 // Free coins
-function html_free_roll($user_uid,$token) {
+function html_free_roll($user_uid, $token, $free_roll_token) {
+        // Check token roll
+        if(!check_roll_token($user_uid, $free_roll_token)) {
+                return "<p>Use link from your email</p>\n";
+        }
         global $currency_short;
         global $free_roll_cooldown_interval;
         $server_seed_hash=get_server_seed_hash($user_uid);
@@ -402,8 +423,8 @@ function load_proof_seeds_free() {
 </p>
 _END;
 
-        $result = "<p>You also can use <a href='https://nicegrc.arikado.ru/'>NiceHash-to-Gridcoin service</a> to earn some Gridcoin.</p>\n";
-        $result .= "<p>That is direct mining to NiceHash with Gridcoin payouts.</p>\n";
+        //$result = "<p>You also can use <a href='https://nicegrc.arikado.ru/'>NiceHash-to-Gridcoin service</a> to earn some Gridcoin.</p>\n";
+        //$result .= "<p>That is direct mining to NiceHash with Gridcoin payouts.</p>\n";
         
         return $result;
 }
@@ -953,4 +974,84 @@ _END;
 	$result.="</table>\n";
 
 	return $result;
+}
+
+function html_exchange($user_uid, $token) {
+        $result = "";
+
+        $result .= <<<_END
+<h2>Balances</h2>
+<table class='table_horizontal'>
+<tr><th>Currency</th><th>Deposit address</th><th>Balance</th></tr>
+
+_END;
+
+        $currencies_data = ex_get_currencies_data();
+        foreach($currencies_data as $currency_row) {
+                $currency_uid = $currency_row['uid'];
+                $currency_name = $currency_row['name'];
+                $currency_symbol = $currency_row['symbol'];
+
+                if($currency_symbol == 'GRC') {
+                        $wallet_data = [
+                                "deposit_address" => get_user_deposit_address($user_uid),
+                                "balance" => get_user_balance($user_uid),
+                        ];
+                }
+                else {
+                        $wallet_data = ex_get_wallet_data_by_user_uid_currency_uid($user_uid, $currency_uid);
+                }
+
+                if($wallet_data) {
+                        $deposit_address = $wallet_data['deposit_address'];
+                        $balance = $wallet_data['balance'];
+
+                        if(!$deposit_address) {
+                                $deposit_address = "<i>generating...</i>";
+                        }
+                        $result .= "<tr><td>$currency_name</td>";
+                        $result .= "<td>$deposit_address</td>";
+                        $result .= "<td>$balance $currency_symbol</td></tr>\n";
+                }
+                else {
+                        $request_address_form = "<form method=post>";
+                        $request_address_form .= "<input type=hidden name='action' value='exchange_request_address'>";
+                        $request_address_form .= "<input type=hidden name='currency_uid' value='$currency_uid'>";
+                        $request_address_form .= "<input type=hidden name='token' value='$token'>";
+                        $request_address_form .= "<input type=submit value='Request address'>";
+                        $request_address_form .= "</form>";
+                        $result .= "<tr><td>$currency_name</td>";
+                        $result .= "<td colspan=2>$request_address_form</td></tr>";
+                }
+        }
+
+        $result .= "</table>\n";
+
+        $result .= <<<_END
+<h2>Transactions</h2>
+<table class='table_horizontal'>
+<tr><th>Currency</th><th>Amount</th><th>Address and TX ID</th><th>Status</th><th>Timestamp</th></tr>
+
+_END;
+
+        $transactions_data = ex_get_user_transactions($user_uid);
+        foreach($transactions_data as $tx_row) {
+                $amount = $tx_row['amount'];
+                $address = $tx_row['address'];
+                $name = $tx_row['name'];
+                $status = $tx_row['status'];
+                $timestamp = $tx_row['timestamp'];
+                $tx_id = $tx_row['tx_id'];
+
+                $result .= "<tr>\n";
+                $result .= "<td>$name</td>\n";
+                $result .= "<td>$amount</td>\n";
+                $result .= "<td>$address<br>$tx_id</td>\n";
+                $result .= "<td>$status</td>\n";
+                $result .= "<td>$timestamp</td>\n";
+                $result .= "</tr>\n";
+        }
+        $result .= "</table>\n";
+        
+        return $result;
 }
