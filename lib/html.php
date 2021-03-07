@@ -423,8 +423,8 @@ function load_proof_seeds_free() {
 </p>
 _END;
 
-        $result = "<p>You also can use <a href='https://nicegrc.arikado.ru/'>NiceHash-to-Gridcoin service</a> to earn some Gridcoin.</p>\n";
-        $result .= "<p>That is direct mining to NiceHash with Gridcoin payouts.</p>\n";
+        //$result = "<p>You also can use <a href='https://nicegrc.arikado.ru/'>NiceHash-to-Gridcoin service</a> to earn some Gridcoin.</p>\n";
+        //$result .= "<p>That is direct mining to NiceHash with Gridcoin payouts.</p>\n";
         
         return $result;
 }
