@@ -1,6 +1,12 @@
 // Show only one block from the page
 function show_block(block_name) {
-        $("#main_block").load("./?ajax=1&block=" + encodeURI(block_name));
+		const params = new URLSearchParams(window.location.search);
+		const roll_token = params.get("roll_token");
+		if(roll_token)
+			$("#main_block").load("./?ajax=1&roll_token=" + roll_token + "&block=" + encodeURI(block_name));
+		else {
+			$("#main_block").load("./?ajax=1&block=" + encodeURI(block_name));
+		}
         return true;
 }
 

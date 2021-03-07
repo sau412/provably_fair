@@ -261,5 +261,3 @@ echo html_loadable_block();
 //echo "Token $token\n";
 
 echo html_page_end();
-
-?>
