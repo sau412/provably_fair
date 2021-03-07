@@ -1077,7 +1077,7 @@ $currency_select
 <p>Address: <input type=text name='address' size=40></p>
 <p>Amount: <input type=text name='amount' value='0.00000000'></p>
 <p>Password: <input type=password name='password'></p>
-<input type=submit value='withdraw'>
+<input type=submit value='Withdraw'>
 </form>
 </p>
 

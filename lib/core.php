@@ -214,6 +214,22 @@ function user_change_settings($user_uid,$mail,$withdraw_address,$password,$new_p
         }
 }
 
+// Check password
+function user_check_password($user_uid, $password) {
+        global $global_salt;
+
+        $user_uid_escaped = db_escape($user_uid);
+        $user_data_array = db_query_to_array("SELECT `login`, `salt`, `password_hash`
+                                                FROM `users` WHERE `uid` = '$user_uid_escaped'");
+        $user_data = array_pop($user_data_array);
+        $login = $user_data['login'];
+        $salt = $user_data['salt'];
+        $password_hash = $user_data['password_hash'];
+        $entered_password_hash = hash("sha256",$password.strtolower($login).$salt.$global_salt);
+        if($entered_password_hash == $password_hash) return true;
+        return false;
+}
+
 // Admin change settings
 function admin_change_settings($login_enabled,$payouts_enabled,$info,$global_message) {
         // Login enabled

@@ -113,6 +113,12 @@ function ex_get_currencies_data() {
     return db_query_to_array("SELECT `uid`, `name`, `symbol`, `rate`, `balance` FROM `ex_currencies`");
 }
 
+function ex_get_currency_withdraw_fee($currency_uid) {
+    $currency_uid_escaped = db_escape($currency_uid);
+    return db_query_to_variable("SELECT `withdraw_fee`
+                                FROM `ex_currencies` WHERE `currency_uid` = '$currency_uid_escaped'");
+}
+
 function ex_get_wallet_data_by_user_uid_currency_uid($user_uid, $currency_uid) {
     $user_uid_escaped = db_escape($user_uid);
     $currency_uid_escaped = db_escape($currency_uid);
@@ -149,6 +155,23 @@ function ex_user_request_address($user_uid, $currency_uid) {
 }
 
 function ex_user_withdraw($user_uid, $currency_uid, $amount, $address) {
+    $user_uid_escaped = db_escape($user_uid);
+    $currency_uid_escaped = db_escape($currency_uid);
+    $amount_escaped = db_escape($amount);
+    $address_escaped = db_escape($address);
+
+    $withdraw_fee = ex_get_currency_withdraw_fee($currency_uid);
+    $withdraw_fee_escaped = db_escape($withdraw_fee);
+
+    $user_data = ex_get_wallet_data_by_user_uid_currency_uid($user_uid, $currency_uid);
+    $user_balance = $user_data['balance'];
+
+    if($user_balance >= ($amount + $withdraw_fee)) {
+        db_query("INSERT INTO `ex_transactions` (`user_uid`, `currency_uid`, `amount`, `fee`, `address`, `status`)
+                    VALUES ('$user_uid_escaped', '$currency_uid_escaped', '$amount_escaped',
+                        '$withdraw_fee_escaped', '$address_escaped', 'pending')");
+        return true;
+    }
     return false;
 }
 
