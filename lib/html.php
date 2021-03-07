@@ -295,11 +295,22 @@ function html_request_free_roll($user_uid, $token) {
         $result = '';
 
         $result .= <<<_END
+<p>
+You can use faucet with your e-mail (specified in your settings). You receive your roll link with letter.
+</p>
+<p>
+If you see no e-mail, check spam folder. If you didn't receive mail anyways, write me.
+</p>
+<p>
 <form method=post>
 <input type=hidden name=action value='request_free_roll'>
 <input type=hidden name=token value='$token'>
 <input type=submit value='Request free roll via email'>
 </form>
+</p>
+<p>
+If you interested in your message in mail (like an advertisement), write me.
+</p>
 
 _END;
 
