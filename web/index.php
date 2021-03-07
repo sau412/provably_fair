@@ -173,6 +173,9 @@ if(isset($_GET['ajax']) && isset($_GET['block'])) {
                                 }
                                 break;
                         default:
+                        case 'request_free_roll':
+                                echo html_request_free_roll($user_uid, $token);
+                                break;
                         case 'free_roll':
                                 echo html_free_roll($user_uid,$token);
                                 break;
