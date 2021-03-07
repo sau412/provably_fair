@@ -644,9 +644,16 @@ function send_free_roll_email($user_uid) {
         $roll_token = generate_roll_token($user_uid);
         $subject = '[freegridco.in] Free roll';
         $body = <<<_END
-Press link to access free roll:
-
+<p>
+Mandatory Update on block 2197000<br>
+Gridcoin Research has a mandatory update on block 2197000.
+<a href='https://github.com/gridcoin-community/Gridcoin-Research/releases'>Version 5.2.0.0 required!</a><br>
+</p>
+<p>
+Press link to access free roll:<br>
 <a href='https://freegridco.in/?roll_token=$roll_token#free_roll'>https://freegridco.in/?roll_token=$roll_token#free_roll</a>
+</p>
+
 _END;
 
         email_add($email, $subject, $body);
