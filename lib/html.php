@@ -1064,5 +1064,37 @@ _END;
         }
         $result .= "</table>\n";
         
+        $currency_select = html_currency_select();
+        $result .= <<<_END
+<h2>Withdraw</h2>
+<p>
+<form method=post>
+<input type=hidden name='action' value='exchange_withdraw'>
+<input type=hidden name='token' value='$token'>
+<select name='currency_uid'>
+$currency_select
+</select>
+Address: <input type=text name='address'>
+Amount: <input type=text name='amount'>
+Password: <input type=password name='password'>
+<input type=submit value='withdraw'>
+</form>
+</p>
+
+_END;
+
+        return $result;
+}
+
+function html_currency_select() {
+        $result = '';
+
+        $currencies_data = ex_get_currencies_data();
+        foreach($currencies_data as $currency_row) {
+                $currency_uid = $currency_row['uid'];
+                $currency_name = $currency_row['name'];
+                $result .= "<option value='$currency_uid'>$currency_name</option>\n";
+        }
+
         return $result;
 }
