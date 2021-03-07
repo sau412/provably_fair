@@ -296,7 +296,7 @@ function html_request_free_roll($user_uid, $token) {
 
         $result .= <<<_END
 <form method=post>
-<input type=hidden name=action value=''>
+<input type=hidden name=action value='request_free_roll'>
 <input type=hidden name=token value='$token'>
 <input type=submit value='Request free roll via email'>
 </form>
