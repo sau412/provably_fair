@@ -139,13 +139,19 @@ if(isset($action)) {
                 $amount = stripslashes($_POST['amount']);
                 $address = stripslashes($_POST['address']);
                 $password = stripslashes($_POST['password']);
-                $message="request_failed";
+                $message = "request_failed";
 
                 if(user_check_password($user_uid, $password)) {
                         $result = ex_user_withdraw($user_uid, $currency_uid, $amount, $address);
                         if($result) {
                                 $message = "request_successfull";
                         }
+                        else {
+                                $message = "withdraw_failed";
+                        }
+                }
+                else {
+                        $message = "password_failed";
                 }
         }
         else if($action == 'exchange_exchange') {
