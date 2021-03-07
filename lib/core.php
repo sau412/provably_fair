@@ -518,6 +518,7 @@ VALUES ('$user_uid_escaped','$roll_type_escaped','$server_seed_escaped','$user_s
 	// Log
 	log_write("Free roll, reward: $reward");
         inc_variable("free_rolls");
+        generate_roll_token($user_uid);
 
         return $result;
 }
