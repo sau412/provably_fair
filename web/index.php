@@ -10,6 +10,7 @@ require_once("../lib/lottery.php");
 require_once("../lib/broker.php");
 require_once("../lib/logger.php");
 require_once("../lib/ex_lib.php");
+require_once("../lib/email.php");
 
 db_connect();
 
@@ -61,7 +62,12 @@ if(isset($action)) {
         } else if($action=='logout') {
                 user_logout($session);
                 $message="logout_successfull";
-        } else if($action=='free_roll') {
+        }
+        else if($action == 'request_free_roll') {
+                send_free_roll_email($user_uid);
+                $message = "roll_requested";
+        }
+        else if($action == 'free_roll') {
                 $user_seed=stripslashes($_POST['user_seed']);
 		//$recaptcha_response=stripslashes($_POST['g-recaptcha-response']);
 		if(TRUE || recaptcha_check($recaptcha_response)) {

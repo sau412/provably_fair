@@ -290,6 +290,22 @@ function html_recaptcha() {
 _END;
 }
 
+// Request free roll
+function html_request_free_roll($user_uid, $token) {
+        $result = '';
+
+        $result .= <<<_END
+<form method=post>
+<input type=hidden name=action value=''>
+<input type=hidden name=token value='$token'>
+<input type=submit value='Request free roll via email'>
+</form>
+
+_END;
+
+        return $result;
+}
+
 // Free coins
 function html_free_roll($user_uid,$token) {
         global $currency_short;
