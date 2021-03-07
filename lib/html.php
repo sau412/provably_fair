@@ -1071,12 +1071,12 @@ _END;
 <form method=post>
 <input type=hidden name='action' value='exchange_withdraw'>
 <input type=hidden name='token' value='$token'>
-<select name='currency_uid'>
+<p>Currency: <select name='currency_uid'>
 $currency_select
-</select>
-Address: <input type=text name='address'>
-Amount: <input type=text name='amount'>
-Password: <input type=password name='password'>
+</select></p>
+<p>Address: <input type=text name='address' size=40></p>
+<p>Amount: <input type=text name='amount' value='0.00000000'></p>
+<p>Password: <input type=password name='password'></p>
 <input type=submit value='withdraw'>
 </form>
 </p>
