@@ -176,6 +176,7 @@ function ex_user_withdraw($user_uid, $currency_uid, $amount, $address) {
         db_query("INSERT INTO `ex_transactions` (`user_uid`, `currency_uid`, `amount`, `fee`, `address`, `status`)
                     VALUES ('$user_uid_escaped', '$currency_uid_escaped', '$amount_escaped',
                         '$withdraw_fee_escaped', '$address_escaped', 'pending')");
+        ex_recalculate_balance($user_uid, $currency_uid);
         return true;
     }
     return false;
