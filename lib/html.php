@@ -113,7 +113,7 @@ function html_tabs($user_uid) {
                 //$result.=html_menu_element("last_rolls","Last rolls");
                 $result.=html_menu_element("lottery","Lottery");
                 $result.=html_menu_element("earn","Earn $currency_short");
-                $result.=html_menu_element("exchange","Exchange");
+                //$result.=html_menu_element("exchange","Exchange");
                 $result.=html_menu_element("send_receive","Send and receive");
                 $result.=html_menu_element("settings","%tab_settings%");
                 if(is_admin($user_uid)) {
