@@ -177,7 +177,8 @@ if(isset($_GET['ajax']) && isset($_GET['block'])) {
                                 echo html_request_free_roll($user_uid, $token);
                                 break;
                         case 'free_roll':
-                                echo html_free_roll($user_uid,$token);
+                                $free_roll_token = stripslashes($_GET['roll_token']);
+                                echo html_free_roll($user_uid, $token, $free_roll_token);
                                 break;
                         case 'minesweeper':
                                 echo html_minesweeper($user_uid,$token);

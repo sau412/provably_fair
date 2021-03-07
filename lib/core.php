@@ -630,6 +630,13 @@ function generate_roll_token($user_uid) {
         return $token;
 }
 
+// Check roll token
+function check_roll_token($user_uid, $token) {
+        $token_exists = get_user_variable($user_uid, "roll_token");
+        if($token == $token_exists) return true;
+        return false;
+}
+
 // Send roll token
 function send_free_roll_email($user_uid) {
         $email = get_email_by_uid($user_uid);
@@ -638,7 +645,7 @@ function send_free_roll_email($user_uid) {
         $body = <<<_END
 Press link to access free roll:
 
-<a href='https://freegridco.in/?roll_token=$roll_token'>https://freegridco.in/?roll_token=$roll_token</a>
+<a href='https://freegridco.in/?roll_token=$roll_token#free_roll'>https://freegridco.in/?roll_token=$roll_token#free_roll</a>
 _END;
 
         email_add($email, $subject, $body);

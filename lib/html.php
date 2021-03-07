@@ -307,7 +307,11 @@ _END;
 }
 
 // Free coins
-function html_free_roll($user_uid,$token) {
+function html_free_roll($user_uid, $token, $free_roll_token) {
+        // Check token roll
+        if(!check_roll_token($user_uid, $free_roll_token)) {
+                return "<p>Use link from your email</p>\n";
+        }
         global $currency_short;
         global $free_roll_cooldown_interval;
         $server_seed_hash=get_server_seed_hash($user_uid);
