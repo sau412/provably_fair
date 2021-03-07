@@ -92,6 +92,12 @@ function ex_recalculate_balance($user_uid, $currency_uid) {
                                             `currency_uid` = '$currency_uid_escaped' AND
                                             `status` IN ('pending', 'processing', 'sent')");
     
+    $sent_fee_sum = db_query_to_variable("SELECT SUM(`fee`)
+                                            FROM `ex_transactions`
+                                            WHERE `user_uid` = '$user_uid_escaped' AND
+                                            `currency_uid` = '$currency_uid_escaped' AND
+                                            `status` IN ('pending', 'processing', 'sent')");
+    
     $exchange_from = db_query_to_variable("SELECT SUM(`from_amount`)
                                             FROM `ex_exchanges`
                                             WHERE `user_uid` = '$user_uid_escaped' AND
@@ -102,10 +108,10 @@ function ex_recalculate_balance($user_uid, $currency_uid) {
                                             WHERE `user_uid` = '$user_uid_escaped' AND
                                             `to_currency_uid` = '$currency_uid_escaped'");
 
-    $balance = db_query_to_variable("SELECT '$received_sum' + '$sent_sum' + '$exchange_from' + '$exchange_to'");
+    $balance = db_query_to_variable("SELECT '$received_sum' + '$exchange_to' - '$exchange_from' - '$sent_fee_sum' - '$sent_sum'");
 
     db_query("UPDATE `ex_wallets`
-                SET `balance` = '$received_sum' + '$sent_sum' + '$exchange_from' + '$exchange_to'
+                SET `balance` = '$received_sum' + '$exchange_to' - '$exchange_from' - '$sent_fee_sum' - '$sent_sum'
                 WHERE `user_uid` = '$user_uid_escaped' AND `currency_uid` = '$currency_uid_escaped'");
 }
 
