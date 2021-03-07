@@ -107,7 +107,7 @@ function html_tabs($user_uid) {
         $result.="<ul class=horizontal_menu>\n";
         if($user_uid) {
                 $result.=html_menu_element("info","Info");
-                $result.=html_menu_element("free_roll","Free $currency_short");
+                $result.=html_menu_element("request_free_roll","Free $currency_short");
                 //$result.=html_menu_element("minesweeper","Minesweeper");
                 $result.=html_menu_element("dice_roll","Multiply $currency_short");
                 //$result.=html_menu_element("last_rolls","Last rolls");
