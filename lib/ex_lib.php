@@ -125,6 +125,12 @@ function ex_get_currency_withdraw_fee($currency_uid) {
                                 FROM `ex_currencies` WHERE `uid` = '$currency_uid_escaped'");
 }
 
+function ex_get_currency_rate($currency_uid) {
+    $currency_uid_escaped = db_escape($currency_uid);
+    return db_query_to_variable("SELECT `rate`
+                                FROM `ex_currencies` WHERE `uid` = '$currency_uid_escaped'");
+}
+
 function ex_get_wallet_data_by_user_uid_currency_uid($user_uid, $currency_uid) {
     $user_uid_escaped = db_escape($user_uid);
     $currency_uid_escaped = db_escape($currency_uid);
@@ -166,6 +172,8 @@ function ex_user_withdraw($user_uid, $currency_uid, $amount, $address) {
     $amount_escaped = db_escape($amount);
     $address_escaped = db_escape($address);
 
+    // Locks required
+
     $withdraw_fee = ex_get_currency_withdraw_fee($currency_uid);
     $withdraw_fee_escaped = db_escape($withdraw_fee);
 
@@ -183,6 +191,33 @@ function ex_user_withdraw($user_uid, $currency_uid, $amount, $address) {
 }
 
 function ex_exchange($user_uid, $from_currency_uid, $from_amount, $to_currency_uid) {
+    global $exchange_fee;
+    
+    $user_uid_escaped = db_escape($user_uid);
+    $from_currency_uid_escaped = db_escape($from_currency_uid);
+    $to_currency_uid_escaped = db_escape($to_currency_uid);
+    $from_amount_escaped = db_escape($from_amount);
+
+    // Locks required
+    $user_data = ex_get_wallet_data_by_user_uid_currency_uid($user_uid, $currency_uid);
+    $user_balance = $user_data['balance'];
+
+    if($user_balance >= $from_amount) {
+        $from_rate = ex_get_currency_rate($from_currency_uid);
+        $to_rate = ex_get_currency_rate($to_currency_uid);
+        $rate = $from_rate / $to_rate;
+        $to_amount = $from_amount * $rate;
+        $to_amount *= (1 - $exchange_fee);
+        $rate_escaped = db_escape($rate);
+        $to_amount_escaped = db_escape($to_amount);
+
+        db_query("INSERT INTO `ex_exchanges` (`user_uid`, `from_currency_uid`, `from_amount`, `rate`, `to_currency_uid`, `to_amount`)
+                    VALUES ('$user_uid_escaped', '$from_currency_uid_escaped', '$from_amount_escaped', '$rate_escaped'
+                        '$to_currency_uid_escaped', '$to_amount_escaped')");
+        ex_recalculate_balance($user_uid, $currency_uid);
+        return true;
+    }
+
     return false;
 }
 
