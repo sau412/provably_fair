@@ -18,5 +18,5 @@ function email_add($to, $subject, $body) {
 	
 	log_write($message, 6);
 	
-	broker_add("mailer", $message);
+	broker_add("smtp2go", $message);
 }
