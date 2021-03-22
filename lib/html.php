@@ -1067,7 +1067,8 @@ _END;
         }
         $result .= "</table>\n";
         
-        $currency_select = html_currency_select();
+        $currency_select = html_currency_select_without_grc();
+
         $result .= <<<_END
 <h2>Withdraw</h2>
 <p>
@@ -1087,6 +1088,8 @@ $currency_select
 </p>
 
 _END;
+
+        $currency_select = html_currency_select();
 
         $result .= <<<_END
 <h2>Exchange</h2>
@@ -1190,6 +1193,20 @@ function html_currency_select() {
         foreach($currencies_data as $currency_row) {
                 $currency_uid = $currency_row['uid'];
                 $currency_name = $currency_row['name'];
+                $result .= "<option value='$currency_uid'>$currency_name</option>\n";
+        }
+
+        return $result;
+}
+
+function html_currency_select_without_grc() {
+        $result = '';
+
+        $currencies_data = ex_get_currencies_data();
+        foreach($currencies_data as $currency_row) {
+                $currency_uid = $currency_row['uid'];
+                $currency_name = $currency_row['name'];
+                if($currency_uid == 4) continue;
                 $result .= "<option value='$currency_uid'>$currency_name</option>\n";
         }
 
