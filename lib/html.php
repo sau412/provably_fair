@@ -1140,7 +1140,7 @@ function updateExchangeAmount() {
         let to_currency = getcurrencyDataByUid(to_currency_uid);
         
         let from_amount = parseFloat($("#from_amount").val());
-        let rate = to_currency.rate / from_currency.rate;
+        let rate = from_currency.rate / to_currency.rate;
         
         $("#to_amount").val(from_amount * rate * (1 - exchangeFee));
         $("#exchange_fee_amount").val(from_amount * rate * exchangeFee);
