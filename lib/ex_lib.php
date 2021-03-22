@@ -228,7 +228,7 @@ function ex_exchange($user_uid, $from_currency_uid, $from_amount, $to_currency_u
     db_query("LOCK TABLES `ex_transactions` READ, `ex_currencies` READ, `ex_wallets` WRITE, `ex_exchanges` WRITE,
                 `transactions` READ, `rolls` READ, `minesweeper` READ, `lottery_tickets` READ, `users` WRITE");
     
-    if($currency_uid == 4) {
+    if($from_currency_uid == 4) {
         $user_balance = get_user_balance($user_uid);
     }
     else {
