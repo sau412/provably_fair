@@ -216,7 +216,7 @@ function ex_exchange($user_uid, $from_currency_uid, $from_amount, $to_currency_u
         $to_amount_escaped = db_escape($to_amount);
 
         db_query("INSERT INTO `ex_exchanges` (`user_uid`, `from_currency_uid`, `from_amount`, `rate`, `to_currency_uid`, `to_amount`)
-                    VALUES ('$user_uid_escaped', '$from_currency_uid_escaped', '$from_amount_escaped', '$rate_escaped'
+                    VALUES ('$user_uid_escaped', '$from_currency_uid_escaped', '$from_amount_escaped', '$rate_escaped',
                         '$to_currency_uid_escaped', '$to_amount_escaped')");
         ex_recalculate_balance($user_uid, $currency_uid);
         db_query("UNLOCK TABLES");
