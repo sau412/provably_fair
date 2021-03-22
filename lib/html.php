@@ -988,19 +988,11 @@ _END;
 }
 
 function html_exchange($user_uid, $token) {
+        global $exchange_fee;
         $result = "";
 
         $currencies_data = ex_get_currencies_data();
         
-        // JS functions
-        $currencies_data_json = json_encode($currencies_data);
-        $result .= <<<_END
-<script>
-let currenciesData = JSON.parse('$currencies_data_json');
-</script>
-
-_END;
-
         // Balances block
         $result .= <<<_END
 <h2>Balances</h2>
@@ -1082,11 +1074,13 @@ _END;
 <form method=post>
 <input type=hidden name='action' value='exchange_withdraw'>
 <input type=hidden name='token' value='$token'>
-<p>Currency: <select name='currency_uid'>
+<p>Currency: <select name='currency_uid' id='withdraw_currency_uid' onChange='updateWithdrawFee();'>
 $currency_select
 </select></p>
 <p>Address: <input type=text name='address' size=40></p>
-<p>Amount: <input type=text name='amount' value='0.00000000'></p>
+<p>Amount: <input type=text name='amount' id='withdraw_amount' value='0.00000000' onChange='updateWithdrawFee();'></p>
+<p>Fee: <input type=text name='withdraw_fee' id='withdraw_fee' value='0' disabled></p>
+<p>Total: <input type=text name='withdraw_total' id='withdraw_total' value='0' disabled></p>
 <p>Password: <input type=password name='password'></p>
 <input type=submit value='Withdraw'>
 </form>
@@ -1100,17 +1094,44 @@ _END;
 <form method=post>
 <input type=hidden name='action' value='exchange_exchange'>
 <input type=hidden name='token' value='$token'>
-<p>From currency: <select name='from_currency_uid'>
+<p>From currency: <select name='from_currency_uid' id='from_currency_uid'>
 $currency_select
 </select></p>
-<p>Amount: <input type=text name='from_amount' value='0.00000000'></p>
-<p>To currency: <select name='to_currency_uid'>
+<p>Amount: <input type=text name='from_amount' id='from_amount' value='0.00000000'></p>
+<p>To currency: <select name='to_currency_uid' id='to_currency_uid'>
 $currency_select
 </select></p>
+<p>Exchange fee: <input type=text id=exchange_fee_amount disabled></p>
 <p>Result (estimation): <input type=text id=to_amount disabled></p>
 <input type=submit value='Exchange'>
 </form>
 </p>
+_END;
+
+        // JS functions
+        $currencies_data_json = json_encode($currencies_data);
+        $result .= <<<_END
+<script>
+let currenciesData = JSON.parse('$currencies_data_json');
+let exchangeFee = parseInt("$exchange_fee");
+
+function updateWithdrawFee() {
+        let currency_uid = $("#withdraw_currency_uid").val();
+        $("#withdraw_fee").val(currenciesData[currency_uid].withdraw_fee);
+        $("#withdraw_total").val($("#withdraw_amount").val() + currenciesData[currency_uid].withdraw_fee);
+}
+
+function updateExchangeAmount() {
+        let from_currency_uid = $("#from_currency_uid").val();
+        let to_currency_uid = $("#to_currency_uid").val();
+        let from_amount = $("#from_amount").val();
+        let rate = currenciesData[to_currency_uid].rate / currenciesData[from_currency_uid].rate;
+        
+        $("#to_amount").val(from_amount * rate * (1 - exchangeFee));
+        $("#exchange_fee_amount").val(from_amount * rate * exchangeFee);
+}
+</script>
+
 _END;
 
         return $result;
