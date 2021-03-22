@@ -172,8 +172,8 @@ function ex_user_withdraw($user_uid, $currency_uid, $amount, $address) {
     $amount_escaped = db_escape($amount);
     $address_escaped = db_escape($address);
 
-    // Locks required
-
+    // Locks
+    db_query("LOCK TABLES `ex_transactions` WRITE, `ex_currency` WRITE, `ex_wallets` READ, `ex_exchanges` READ");
     $withdraw_fee = ex_get_currency_withdraw_fee($currency_uid);
     $withdraw_fee_escaped = db_escape($withdraw_fee);
 
@@ -185,8 +185,10 @@ function ex_user_withdraw($user_uid, $currency_uid, $amount, $address) {
                     VALUES ('$user_uid_escaped', '$currency_uid_escaped', '$amount_escaped',
                         '$withdraw_fee_escaped', '$address_escaped', 'pending')");
         ex_recalculate_balance($user_uid, $currency_uid);
+        db_query("UNLOCK TABLES");
         return true;
     }
+    db_query("UNLOCK TABLES");
     return false;
 }
 
