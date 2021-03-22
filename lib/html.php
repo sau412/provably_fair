@@ -1094,11 +1094,11 @@ _END;
 <form method=post>
 <input type=hidden name='action' value='exchange_exchange'>
 <input type=hidden name='token' value='$token'>
-<p>From currency: <select name='from_currency_uid' id='from_currency_uid'>
+<p>From currency: <select name='from_currency_uid' id='from_currency_uid' onChange='updateExchangeAmount();'>
 $currency_select
 </select></p>
-<p>Amount: <input type=text name='from_amount' id='from_amount' value='0.00000000'></p>
-<p>To currency: <select name='to_currency_uid' id='to_currency_uid'>
+<p>Amount: <input type=text name='from_amount' id='from_amount' value='0.00000000' onChange='updateExchangeAmount();'></p>
+<p>To currency: <select name='to_currency_uid' id='to_currency_uid' onChange='updateExchangeAmount();'>
 $currency_select
 </select></p>
 <p>Exchange fee: <input type=text id=exchange_fee_amount disabled></p>
@@ -1113,7 +1113,7 @@ _END;
         $result .= <<<_END
 <script>
 let currenciesData = JSON.parse('$currencies_data_json');
-let exchangeFee = parseInt("$exchange_fee");
+let exchangeFee = parseFloat("$exchange_fee");
 
 function getcurrencyDataByUid(currency_uid) {
         let result = null;
@@ -1127,9 +1127,10 @@ function getcurrencyDataByUid(currency_uid) {
 
 function updateWithdrawFee() {
         let currency_uid = $("#withdraw_currency_uid").val();
-        let currency = getcurrencyDataByUid(currency_uid)
+        let currency = getcurrencyDataByUid(currency_uid);
+
         $("#withdraw_fee").val(currency.withdraw_fee);
-        $("#withdraw_total").val($("#withdraw_amount").val() + currency.withdraw_fee);
+        $("#withdraw_total").val(parseFloat($("#withdraw_amount").val()) + parseFloat(currency.withdraw_fee));
 }
 
 function updateExchangeAmount() {
@@ -1138,7 +1139,7 @@ function updateExchangeAmount() {
         let from_currency = getcurrencyDataByUid(from_currency_uid);
         let to_currency = getcurrencyDataByUid(to_currency_uid);
         
-        let from_amount = $("#from_amount").val();
+        let from_amount = parseFloat($("#from_amount").val());
         let rate = to_currency.rate / from_currency.rate;
         
         $("#to_amount").val(from_amount * rate * (1 - exchangeFee));
