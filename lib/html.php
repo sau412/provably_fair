@@ -1145,6 +1145,9 @@ function updateExchangeAmount() {
         $("#to_amount").val(from_amount * rate * (1 - exchangeFee));
         $("#exchange_fee_amount").val(from_amount * rate * exchangeFee);
 }
+
+updateWithdrawFee();
+updateExchangeAmount();
 </script>
 
 _END;
