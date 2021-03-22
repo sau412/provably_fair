@@ -990,6 +990,18 @@ _END;
 function html_exchange($user_uid, $token) {
         $result = "";
 
+        $currencies_data = ex_get_currencies_data();
+        
+        // JS functions
+        $currencies_data_json = json_encode($currencies_data);
+        $result .= <<<_END
+<script>
+let currencies_data = JSON.parse("$currencies_data_json");
+</script>
+
+_END;
+
+        // Balances block
         $result .= <<<_END
 <h2>Balances</h2>
 <table class='table_horizontal'>
@@ -997,7 +1009,6 @@ function html_exchange($user_uid, $token) {
 
 _END;
 
-        $currencies_data = ex_get_currencies_data();
         foreach($currencies_data as $currency_row) {
                 $currency_uid = $currency_row['uid'];
                 $currency_name = $currency_row['name'];
