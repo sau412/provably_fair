@@ -83,10 +83,6 @@ function ex_recalculate_balance($user_uid, $currency_uid) {
     // For Gridcoin
     if($currency_uid == 4) {
         update_user_balance($user_uid);
-        $balance = get_user_balance($user_uid);
-        db_query("UPDATE `ex_wallets`
-                SET `balance` = '$balance'
-                WHERE `user_uid` = '$user_uid_escaped' AND `currency_uid` = '$currency_uid_escaped'");
     }
     // For others
     else {
@@ -193,8 +189,13 @@ function ex_user_withdraw($user_uid, $currency_uid, $amount, $address) {
     $withdraw_fee = ex_get_currency_withdraw_fee($currency_uid);
     $withdraw_fee_escaped = db_escape($withdraw_fee);
 
-    $user_data = ex_get_wallet_data_by_user_uid_currency_uid($user_uid, $currency_uid);
-    $user_balance = $user_data['balance'];
+    if($currency_uid == 4) {
+        $user_balance = get_user_balance($user_uid);
+    }
+    else {
+        $user_data = ex_get_wallet_data_by_user_uid_currency_uid($user_uid, $currency_uid);
+        $user_balance = $user_data['balance'];
+    }
 
     if($user_balance >= ($amount + $withdraw_fee)) {
         db_query("INSERT INTO `ex_transactions` (`user_uid`, `currency_uid`, `amount`, `fee`, `address`, `status`)
@@ -227,9 +228,14 @@ function ex_exchange($user_uid, $from_currency_uid, $from_amount, $to_currency_u
     db_query("LOCK TABLES `ex_transactions` READ, `ex_currencies` READ, `ex_wallets` WRITE, `ex_exchanges` WRITE,
                 `transactions` READ, `rolls` READ, `minesweeper` READ, `lottery_tickets` READ, `users` WRITE");
     
-    $user_data = ex_get_wallet_data_by_user_uid_currency_uid($user_uid, $from_currency_uid);
-    $user_balance = $user_data['balance'];
-
+    if($currency_uid == 4) {
+        $user_balance = get_user_balance($user_uid);
+    }
+    else {
+        $user_data = ex_get_wallet_data_by_user_uid_currency_uid($user_uid, $currency_uid);
+        $user_balance = $user_data['balance'];
+    }
+            
     if($user_balance >= $from_amount) {
         $from_rate = ex_get_currency_rate($from_currency_uid);
         $to_rate = ex_get_currency_rate($to_currency_uid);
