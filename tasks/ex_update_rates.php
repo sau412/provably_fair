@@ -57,6 +57,9 @@ foreach($currency_data as $currency_row) {
         log_write("Incorrect $currency price data", 4);
         continue;
     }
+
+    echo "Currency $coingecko_name rate $rate\n";
+
     $uid_escaped = db_escape($uid);
     $rate_escaped = db_escape($rate);
     db_query("UPDATE `ex_currencies` SET `rate` = '$rate_escaped' WHERE `uid` = '$uid_escaped'");
