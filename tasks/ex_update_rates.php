@@ -10,22 +10,38 @@ require_once("../lib/logger.php");
 db_connect();
 
 function get_coingecko_rate($currency) {
+    if($currency == 'bitcoin') {
+        return 1;
+    }
+
     // Setup cURL
-    $ch=curl_init();
-    curl_setopt($ch,CURLOPT_RETURNTRANSFER,TRUE);
-    curl_setopt($ch,CURLOPT_FOLLOWLOCATION,TRUE);
-    curl_setopt($ch,CURLOPT_POST,FALSE);
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+    curl_setopt($ch, CURLOPT_POST, FALSE);
 
     // Get XMR price
-    curl_setopt($ch,CURLOPT_URL,"https://api.coingecko.com/api/v3/coins/$currency");
-    $result=curl_exec($ch);
-    if($result=="") {
+    curl_setopt($ch, CURLOPT_URL,"https://api.coingecko.com/api/v3/coins/$currency");
+    $result = curl_exec($ch);
+    if($result == "") {
             echo "No $currency price data\n";
             log_write("No $currency price data", 4);
             die();
     }
-    $parsed_data=json_decode($result);
-    $btc_per_coin_price=(string)$parsed_data->market_data->current_price->btc;
+    $parsed_data = json_decode($result, true);
+
+    $symbol = $parsed_data['symbol'];
+
+    foreach($parsed_data['tickers'] as $ticker) {
+        $base = $ticker['base'];
+        $target = $ticker['target'];
+        $exchange_name = $ticker['market']['identifier'];
+
+        if($exchange_name == 'south_xchange' && strtolower($base) == strtolower($symbol) && $target == 'BTC') {
+            $btc_per_coin_price = $ticker['last'];
+        }
+    }
+    //$btc_per_coin_price=(string)$parsed_data->market_data->current_price->btc;
     return $btc_per_coin_price;
 }
 
