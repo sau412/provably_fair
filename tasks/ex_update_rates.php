@@ -41,7 +41,9 @@ function get_coingecko_rate($currency) {
             $btc_per_coin_price = $ticker['last'];
         }
     }
-    //$btc_per_coin_price=(string)$parsed_data->market_data->current_price->btc;
+    if(!$btc_per_coin_price) {
+        $btc_per_coin_price=$parsed_data['market_data']['current_price']['btc'];
+    }
     return $btc_per_coin_price;
 }
 
