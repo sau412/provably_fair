@@ -80,39 +80,50 @@ function ex_recalculate_balance($user_uid, $currency_uid) {
     $user_uid_escaped = db_escape($user_uid);
     $currency_uid_escaped = db_escape($currency_uid);
 
-    $received_sum = db_query_to_variable("SELECT SUM(`amount`)
-                                            FROM `ex_transactions`
-                                            WHERE `user_uid` = '$user_uid_escaped' AND
-                                            `currency_uid` = '$currency_uid_escaped' AND
-                                            `status` IN ('received')");
-
-    $sent_sum = db_query_to_variable("SELECT SUM(`amount`)
-                                            FROM `ex_transactions`
-                                            WHERE `user_uid` = '$user_uid_escaped' AND
-                                            `currency_uid` = '$currency_uid_escaped' AND
-                                            `status` IN ('pending', 'processing', 'sent')");
-    
-    $sent_fee_sum = db_query_to_variable("SELECT SUM(`fee`)
-                                            FROM `ex_transactions`
-                                            WHERE `user_uid` = '$user_uid_escaped' AND
-                                            `currency_uid` = '$currency_uid_escaped' AND
-                                            `status` IN ('pending', 'processing', 'sent')");
-    
-    $exchange_from = db_query_to_variable("SELECT SUM(`from_amount`)
-                                            FROM `ex_exchanges`
-                                            WHERE `user_uid` = '$user_uid_escaped' AND
-                                            `from_currency_uid` = '$currency_uid_escaped'");
-
-    $exchange_to = db_query_to_variable("SELECT SUM(`to_amount`)
-                                            FROM `ex_exchanges`
-                                            WHERE `user_uid` = '$user_uid_escaped' AND
-                                            `to_currency_uid` = '$currency_uid_escaped'");
-
-    $balance = db_query_to_variable("SELECT '$received_sum' + '$exchange_to' - '$exchange_from' - '$sent_fee_sum' - '$sent_sum'");
-
-    db_query("UPDATE `ex_wallets`
-                SET `balance` = '$received_sum' + '$exchange_to' - '$exchange_from' - '$sent_fee_sum' - '$sent_sum'
+    // For Gridcoin
+    if($currency_uid == 4) {
+        update_user_balance($user_uid);
+        $balance = get_user_balance($user_uid);
+        db_query("UPDATE `ex_wallets`
+                SET `balance` = '$balance'
                 WHERE `user_uid` = '$user_uid_escaped' AND `currency_uid` = '$currency_uid_escaped'");
+    }
+    // For others
+    else {
+        $received_sum = db_query_to_variable("SELECT SUM(`amount`)
+                                                FROM `ex_transactions`
+                                                WHERE `user_uid` = '$user_uid_escaped' AND
+                                                `currency_uid` = '$currency_uid_escaped' AND
+                                                `status` IN ('received')");
+
+        $sent_sum = db_query_to_variable("SELECT SUM(`amount`)
+                                                FROM `ex_transactions`
+                                                WHERE `user_uid` = '$user_uid_escaped' AND
+                                                `currency_uid` = '$currency_uid_escaped' AND
+                                                `status` IN ('pending', 'processing', 'sent')");
+        
+        $sent_fee_sum = db_query_to_variable("SELECT SUM(`fee`)
+                                                FROM `ex_transactions`
+                                                WHERE `user_uid` = '$user_uid_escaped' AND
+                                                `currency_uid` = '$currency_uid_escaped' AND
+                                                `status` IN ('pending', 'processing', 'sent')");
+        
+        $exchange_from = db_query_to_variable("SELECT SUM(`from_amount`)
+                                                FROM `ex_exchanges`
+                                                WHERE `user_uid` = '$user_uid_escaped' AND
+                                                `from_currency_uid` = '$currency_uid_escaped'");
+
+        $exchange_to = db_query_to_variable("SELECT SUM(`to_amount`)
+                                                FROM `ex_exchanges`
+                                                WHERE `user_uid` = '$user_uid_escaped' AND
+                                                `to_currency_uid` = '$currency_uid_escaped'");
+
+        $balance = db_query_to_variable("SELECT '$received_sum' + '$exchange_to' - '$exchange_from' - '$sent_fee_sum' - '$sent_sum'");
+
+        db_query("UPDATE `ex_wallets`
+                    SET `balance` = '$received_sum' + '$exchange_to' - '$exchange_from' - '$sent_fee_sum' - '$sent_sum'
+                    WHERE `user_uid` = '$user_uid_escaped' AND `currency_uid` = '$currency_uid_escaped'");
+    }
 }
 
 function ex_get_currencies_data() {

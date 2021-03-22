@@ -318,6 +318,38 @@ function update_user_balance($user_uid) {
 	$balance-=$amount_spent_l;
 	$balance+=$amount_profits_l;
 
+        // Exchange data
+        $currency_uid_escaped = 4; // 4 is Gridcoin
+        $received_sum = db_query_to_variable("SELECT SUM(`amount`)
+                                                FROM `ex_transactions`
+                                                WHERE `user_uid` = '$user_uid_escaped' AND
+                                                `currency_uid` = '$currency_uid_escaped' AND
+                                                `status` IN ('received')");
+
+        $sent_sum = db_query_to_variable("SELECT SUM(`amount`)
+                                                FROM `ex_transactions`
+                                                WHERE `user_uid` = '$user_uid_escaped' AND
+                                                `currency_uid` = '$currency_uid_escaped' AND
+                                                `status` IN ('pending', 'processing', 'sent')");
+        
+        $sent_fee_sum = db_query_to_variable("SELECT SUM(`fee`)
+                                                FROM `ex_transactions`
+                                                WHERE `user_uid` = '$user_uid_escaped' AND
+                                                `currency_uid` = '$currency_uid_escaped' AND
+                                                `status` IN ('pending', 'processing', 'sent')");
+        
+        $exchange_from = db_query_to_variable("SELECT SUM(`from_amount`)
+                                                FROM `ex_exchanges`
+                                                WHERE `user_uid` = '$user_uid_escaped' AND
+                                                `from_currency_uid` = '$currency_uid_escaped'");
+
+        $exchange_to = db_query_to_variable("SELECT SUM(`to_amount`)
+                                                FROM `ex_exchanges`
+                                                WHERE `user_uid` = '$user_uid_escaped' AND
+                                                `to_currency_uid` = '$currency_uid_escaped'");
+
+        $balance += $received_sum - $sent_sum - $sent_fee_sum - $exchange_from + $exchange_to;
+
         db_query("UPDATE `users` SET `balance`='$balance' WHERE `uid`='$user_uid_escaped'");
 }
 
