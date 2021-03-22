@@ -172,6 +172,10 @@ function ex_user_withdraw($user_uid, $currency_uid, $amount, $address) {
     $amount_escaped = db_escape($amount);
     $address_escaped = db_escape($address);
 
+    if($amount <= 0) {
+        return false;
+    }
+    
     // Locks
     db_query("LOCK TABLES `ex_transactions` WRITE, `ex_currencies` READ, `ex_wallets` WRITE, `ex_exchanges` READ");
     $withdraw_fee = ex_get_currency_withdraw_fee($currency_uid);
@@ -201,7 +205,7 @@ function ex_exchange($user_uid, $from_currency_uid, $from_amount, $to_currency_u
     if($from_amount <= 0) {
         return false;
     }
-    
+
     $user_uid_escaped = db_escape($user_uid);
     $from_currency_uid_escaped = db_escape($from_currency_uid);
     $to_currency_uid_escaped = db_escape($to_currency_uid);
