@@ -232,7 +232,7 @@ function ex_exchange($user_uid, $from_currency_uid, $from_amount, $to_currency_u
         $user_balance = get_user_balance($user_uid);
     }
     else {
-        $user_data = ex_get_wallet_data_by_user_uid_currency_uid($user_uid, $currency_uid);
+        $user_data = ex_get_wallet_data_by_user_uid_currency_uid($user_uid, $from_currency_uid);
         $user_balance = $user_data['balance'];
     }
             
