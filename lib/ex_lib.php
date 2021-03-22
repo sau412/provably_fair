@@ -201,7 +201,9 @@ function ex_exchange($user_uid, $from_currency_uid, $from_amount, $to_currency_u
     $from_amount_escaped = db_escape($from_amount);
 
     // Locks required
-    $user_data = ex_get_wallet_data_by_user_uid_currency_uid($user_uid, $currency_uid);
+    db_query("LOCK TABLES `ex_transactions` WRITE, `ex_currency` WRITE, `ex_wallets` READ, `ex_exchanges` READ");
+    
+    $user_data = ex_get_wallet_data_by_user_uid_currency_uid($user_uid, $from_currency_uid);
     $user_balance = $user_data['balance'];
 
     if($user_balance >= $from_amount) {
@@ -217,9 +219,11 @@ function ex_exchange($user_uid, $from_currency_uid, $from_amount, $to_currency_u
                     VALUES ('$user_uid_escaped', '$from_currency_uid_escaped', '$from_amount_escaped', '$rate_escaped'
                         '$to_currency_uid_escaped', '$to_amount_escaped')");
         ex_recalculate_balance($user_uid, $currency_uid);
+        db_query("UNLOCK TABLES");
         return true;
     }
 
+    db_query("UNLOCK TABLES");
     return false;
 }
 

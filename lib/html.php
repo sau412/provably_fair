@@ -1101,8 +1101,8 @@ $currency_select
 <p>To currency: <select name='to_currency_uid' id='to_currency_uid' onChange='updateExchangeAmount();'>
 $currency_select
 </select></p>
-<p>Exchange fee: <input type=text id=exchange_fee_amount disabled></p>
 <p>Result (estimation): <input type=text id=to_amount disabled></p>
+<p>Exchange fee: <input type=text id=exchange_fee_amount disabled></p>
 <input type=submit value='Exchange'>
 </form>
 </p>
