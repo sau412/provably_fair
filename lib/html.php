@@ -1083,6 +1083,25 @@ $currency_select
 
 _END;
 
+        $result .= <<<_END
+<h2>Exchange</h2>
+<p>
+<form method=post>
+<input type=hidden name='action' value='exchange_exchange'>
+<input type=hidden name='token' value='$token'>
+<p>From currency: <select name='from_currency_uid'>
+$currency_select
+</select></p>
+<p>Amount: <input type=text name='from_amount' value='0.00000000'></p>
+<p>To currency: <select name='to_currency_uid'>
+$currency_select
+</select></p>
+<p>Result (estimation): <input type=text id=to_amount disabled></p>
+<input type=submit value='Exchange'>
+</form>
+</p>
+_END;
+
         return $result;
 }
 
