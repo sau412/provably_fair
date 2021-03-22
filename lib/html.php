@@ -1115,17 +1115,31 @@ _END;
 let currenciesData = JSON.parse('$currencies_data_json');
 let exchangeFee = parseInt("$exchange_fee");
 
+function getcurrencyDataByUid(currency_uid) {
+        let result = null;
+        currenciesData.forEach(function(currency) {
+                if(currency.uid == currency_uid) {
+                        result = currency;
+                }
+        })
+        return result;
+}
+
 function updateWithdrawFee() {
         let currency_uid = $("#withdraw_currency_uid").val();
-        $("#withdraw_fee").val(currenciesData[currency_uid].withdraw_fee);
-        $("#withdraw_total").val($("#withdraw_amount").val() + currenciesData[currency_uid].withdraw_fee);
+        let currency = getcurrencyDataByUid(currency_uid)
+        $("#withdraw_fee").val(currency.withdraw_fee);
+        $("#withdraw_total").val($("#withdraw_amount").val() + currency.withdraw_fee);
 }
 
 function updateExchangeAmount() {
         let from_currency_uid = $("#from_currency_uid").val();
         let to_currency_uid = $("#to_currency_uid").val();
+        let from_currency = getcurrencyDataByUid(from_currency_uid);
+        let to_currency = getcurrencyDataByUid(to_currency_uid);
+        
         let from_amount = $("#from_amount").val();
-        let rate = currenciesData[to_currency_uid].rate / currenciesData[from_currency_uid].rate;
+        let rate = to_currency.rate / from_currency.rate;
         
         $("#to_amount").val(from_amount * rate * (1 - exchangeFee));
         $("#exchange_fee_amount").val(from_amount * rate * exchangeFee);
