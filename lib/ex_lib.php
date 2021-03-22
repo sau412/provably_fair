@@ -198,6 +198,9 @@ function ex_exchange($user_uid, $from_currency_uid, $from_amount, $to_currency_u
     if($from_currency_uid == $to_currency_uid) {
         return false;
     }
+    if($from_amount <= 0) {
+        return false;
+    }
     
     $user_uid_escaped = db_escape($user_uid);
     $from_currency_uid_escaped = db_escape($from_currency_uid);
