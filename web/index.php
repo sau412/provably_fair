@@ -118,7 +118,8 @@ if(isset($action)) {
                 $result=user_withdraw($user_uid,$amount);
                 if($result) $message="send_successfull";
                 else $message="send_failed";
-        } else if($action=='user_change_settings') {
+        }
+        else if($action=='user_change_settings') {
                 $mail=stripslashes($_POST['mail']);
                 $withdraw_address=stripslashes($_POST['withdraw_address']);
                 $password=stripslashes($_POST['password']);
@@ -126,20 +127,34 @@ if(isset($action)) {
                 $new_password2=stripslashes($_POST['new_password2']);
 
                 $message=user_change_settings($user_uid,$mail,$withdraw_address,$password,$new_password1,$new_password2);
-        } else if($action=='exchange_request_address') {
+        }
+        else if($action == 'exchange_request_address') {
                 $currency_uid = stripslashes($_POST['currency_uid']);
                 $result = ex_user_request_address($user_uid, $currency_uid);
                 if($result) $message="request_successfull";
                 else $message="request_failed";
-        } else if($action=='exchange_withdraw') {
+        }
+        else if($action == 'exchange_withdraw') {
                 $currency_uid = stripslashes($_POST['currency_uid']);
                 $amount = stripslashes($_POST['amount']);
                 $address = stripslashes($_POST['address']);
+                $password = stripslashes($_POST['password']);
+                $message = "request_failed";
 
-                $result = ex_user_withdraw($user_uid, $currency_uid, $amount, $address);
-                if($result) $message="request_successfull";
-                else $message="request_failed";
-        } else if($action=='exchange_exchange') {
+                if(user_check_password($user_uid, $password)) {
+                        $result = ex_user_withdraw($user_uid, $currency_uid, $amount, $address);
+                        if($result) {
+                                $message = "request_successfull";
+                        }
+                        else {
+                                $message = "withdraw_failed";
+                        }
+                }
+                else {
+                        $message = "password_failed";
+                }
+        }
+        else if($action == 'exchange_exchange') {
                 $from_currency_uid = stripslashes($_POST['from_currency_uid']);
                 $from_amount = stripslashes($_POST['from_amount']);
                 $to_currency_uid = stripslashes($_POST['to_currency_uid']);
@@ -147,7 +162,8 @@ if(isset($action)) {
                 $result = ex_exchange($user_uid, $from_currency_uid, $from_amount, $to_currency_uid);
                 if($result) $message="request_successfull";
                 else $message="request_failed";
-        } else if($action=='admin_change_settings' && is_admin($user_uid)) {
+        }
+        else if($action=='admin_change_settings' && is_admin($user_uid)) {
                 $login_enabled=stripslashes($_POST['login_enabled']);
                 $payouts_enabled=stripslashes($_POST['payouts_enabled']);
                 $info=stripslashes($_POST['info']);

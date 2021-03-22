@@ -27,4 +27,3 @@ echo " lottery_tickets:$lottery_tickets";
 echo " lottery_funds:$lottery_funds";
 echo " bet_rolls:$bet_rolls";
 echo " pay_rolls:$pay_rolls";
-?>

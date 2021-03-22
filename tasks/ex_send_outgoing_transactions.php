@@ -26,19 +26,21 @@ foreach($currency_data as $currency_row) {
     // Get all unsent transactions
     $transactions_array = db_query_to_array("SELECT `uid`, `user_uid`, `wallet_uid`, `amount`, `address`, `status`
                                                 FROM `ex_transactions`
-                                                WHERE `tx_id` IS NULL");
-    foreach($transactions_array as $tranaction_row) {
-        $tx_uid = $tranaction_row['uid'];
-        $user_uid = $tranaction_row['user_uid'];
-        $wallet_uid = $tranaction_row['wallet_uid'];
-        $amount = $tranaction_row['amount'];
-        $address = $tranaction_row['address'];
-        $status = $tranaction_row['status'];
+                                                WHERE `tx_id` IS NULL AND `currency_uid` = '$currency_uid_escaped'");
+    
+    foreach($transactions_array as $transaction_row) {
+        $tx_uid = $transaction_row['uid'];
+        $user_uid = $transaction_row['user_uid'];
+        $wallet_uid = $transaction_row['wallet_uid'];
+        $amount = $transaction_row['amount'];
+        $address = $transaction_row['address'];
+        $status = $transaction_row['status'];
 
         if($wallet_uid) {
             $transaction_data = grc_web_get_tx_status($wallet_uid);
             $status = $transaction_data->status;
             $tx_id = $transaction_data->tx_id;
+
             if($tx_id) {
                 ex_update_transaction_tx_id($tx_uid, $tx_id);
                 ex_update_transaction_status($tx_uid, $status);

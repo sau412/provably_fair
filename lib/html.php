@@ -113,7 +113,7 @@ function html_tabs($user_uid) {
                 //$result.=html_menu_element("last_rolls","Last rolls");
                 $result.=html_menu_element("lottery","Lottery");
                 $result.=html_menu_element("earn","Earn $currency_short");
-                //$result.=html_menu_element("exchange","Exchange");
+                $result.=html_menu_element("exchange","Exchange");
                 $result.=html_menu_element("send_receive","Send and receive");
                 $result.=html_menu_element("settings","%tab_settings%");
                 if(is_admin($user_uid)) {
@@ -988,8 +988,12 @@ _END;
 }
 
 function html_exchange($user_uid, $token) {
+        global $exchange_fee;
         $result = "";
 
+        $currencies_data = ex_get_currencies_data();
+        
+        // Balances block
         $result .= <<<_END
 <h2>Balances</h2>
 <table class='table_horizontal'>
@@ -997,7 +1001,6 @@ function html_exchange($user_uid, $token) {
 
 _END;
 
-        $currencies_data = ex_get_currencies_data();
         foreach($currencies_data as $currency_row) {
                 $currency_uid = $currency_row['uid'];
                 $currency_name = $currency_row['name'];
@@ -1064,5 +1067,148 @@ _END;
         }
         $result .= "</table>\n";
         
+        $currency_select = html_currency_select_without_grc();
+
+        $result .= <<<_END
+<h2>Withdraw</h2>
+<p>
+<form method=post>
+<input type=hidden name='action' value='exchange_withdraw'>
+<input type=hidden name='token' value='$token'>
+<p>Currency: <select name='currency_uid' id='withdraw_currency_uid' onChange='updateWithdrawFee();'>
+$currency_select
+</select></p>
+<p>Address: <input type=text name='address' size=40></p>
+<p>Amount: <input type=text name='amount' id='withdraw_amount' value='0.00000000' onChange='updateWithdrawFee();'></p>
+<p>Fee: <input type=text name='withdraw_fee' id='withdraw_fee' value='0' disabled></p>
+<p>Total: <input type=text name='withdraw_total' id='withdraw_total' value='0' disabled></p>
+<p>Password: <input type=password name='password'></p>
+<input type=submit value='Withdraw'>
+</form>
+</p>
+
+_END;
+
+        $currency_select = html_currency_select();
+
+        $result .= <<<_END
+<h2>Exchange</h2>
+<p>
+<form method=post>
+<input type=hidden name='action' value='exchange_exchange'>
+<input type=hidden name='token' value='$token'>
+<p>From currency: <select name='from_currency_uid' id='from_currency_uid' onChange='updateExchangeAmount();'>
+$currency_select
+</select></p>
+<p>Amount: <input type=text name='from_amount' id='from_amount' value='0.00000000' onChange='updateExchangeAmount();'></p>
+<p>To currency: <select name='to_currency_uid' id='to_currency_uid' onChange='updateExchangeAmount();'>
+$currency_select
+</select></p>
+<p>Result (estimation): <input type=text id=to_amount disabled></p>
+<p>Exchange fee: <input type=text id=exchange_fee_amount disabled></p>
+<input type=submit value='Exchange'>
+</form>
+</p>
+_END;
+
+        // Exchanges history
+        $result .= <<<_END
+        <h2>Exchanges</h2>
+        <table class='table_horizontal'>
+        <tr><th>From Currency</th><th>From Amount</th><th>Rate</th><th>To Currency</th><th>To Amount</th><th>Timestamp</th></tr>
+        
+_END;
+        
+        $exchanges_data = ex_get_user_exchanges($user_uid);
+        foreach($exchanges_data as $ex_row) {
+                $from_name = $ex_row['from_name'];
+                $from_amount = $ex_row['from_amount'];
+                $rate = $ex_row['rate'];
+                $to_name = $ex_row['to_name'];
+                $to_amount = $ex_row['to_amount'];
+                $timestamp = $ex_row['timestamp'];
+
+                $result .= "<tr>\n";
+                $result .= "<td>$from_name</td>\n";
+                $result .= "<td>$from_amount</td>\n";
+                $result .= "<td>$rate</td>\n";
+                $result .= "<td>$to_name</td>\n";
+                $result .= "<td>$to_amount</td>\n";
+                $result .= "<td>$timestamp</td>\n";
+                $result .= "</tr>\n";
+        }
+        $result .= "</table>\n";
+                
+        // JS functions
+        $currencies_data_json = json_encode($currencies_data);
+        $result .= <<<_END
+<script>
+let currenciesData = JSON.parse('$currencies_data_json');
+let exchangeFee = parseFloat("$exchange_fee");
+
+function getcurrencyDataByUid(currency_uid) {
+        let result = null;
+        currenciesData.forEach(function(currency) {
+                if(currency.uid == currency_uid) {
+                        result = currency;
+                }
+        })
+        return result;
+}
+
+function updateWithdrawFee() {
+        let currency_uid = $("#withdraw_currency_uid").val();
+        let currency = getcurrencyDataByUid(currency_uid);
+
+        $("#withdraw_fee").val(currency.withdraw_fee);
+        $("#withdraw_total").val(parseFloat($("#withdraw_amount").val()) + parseFloat(currency.withdraw_fee));
+}
+
+function updateExchangeAmount() {
+        let from_currency_uid = $("#from_currency_uid").val();
+        let to_currency_uid = $("#to_currency_uid").val();
+        let from_currency = getcurrencyDataByUid(from_currency_uid);
+        let to_currency = getcurrencyDataByUid(to_currency_uid);
+        
+        let from_amount = parseFloat($("#from_amount").val());
+        let rate = from_currency.rate / to_currency.rate;
+        
+        $("#to_amount").val(from_amount * rate * (1 - exchangeFee));
+        $("#exchange_fee_amount").val(from_amount * rate * exchangeFee);
+}
+
+updateWithdrawFee();
+updateExchangeAmount();
+</script>
+
+_END;
+
+        return $result;
+}
+
+function html_currency_select() {
+        $result = '';
+
+        $currencies_data = ex_get_currencies_data();
+        foreach($currencies_data as $currency_row) {
+                $currency_uid = $currency_row['uid'];
+                $currency_name = $currency_row['name'];
+                $result .= "<option value='$currency_uid'>$currency_name</option>\n";
+        }
+
+        return $result;
+}
+
+function html_currency_select_without_grc() {
+        $result = '';
+
+        $currencies_data = ex_get_currencies_data();
+        foreach($currencies_data as $currency_row) {
+                $currency_uid = $currency_row['uid'];
+                $currency_name = $currency_row['name'];
+                if($currency_uid == 4) continue;
+                $result .= "<option value='$currency_uid'>$currency_name</option>\n";
+        }
+
         return $result;
 }
