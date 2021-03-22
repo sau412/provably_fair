@@ -245,7 +245,8 @@ function ex_get_user_transactions($user_uid) {
     return db_query_to_array("SELECT t.`uid`, t.`currency_uid`, t.`amount`, t.`address`, t.`status`, t.`tx_id`, t.`timestamp`, c.`name`
                                 FROM `ex_transactions` AS t
                                 JOIN `ex_currencies` AS c ON c.`uid` = t.`currency_uid`
-                                WHERE t.`user_uid` = '$user_uid_escaped'");
+                                WHERE t.`user_uid` = '$user_uid_escaped'
+                                ORDER BY t.`timestamp` DESC LIMIT 100");
 }
 
 function ex_get_user_exchanges($user_uid) {
@@ -258,5 +259,6 @@ function ex_get_user_exchanges($user_uid) {
                                 FROM `ex_exchanges` AS e
                                 JOIN `ex_currencies` AS fc ON fc.`uid` = e.`from_currency_uid`
                                 JOIN `ex_currencies` AS tc ON tc.`uid` = e.`to_currency_uid`
-                                WHERE e.`user_uid` = '$user_uid_escaped'");
+                                WHERE e.`user_uid` = '$user_uid_escaped'
+                                ORDER BY e.`timestamp` DESC LIMIT 100");
 }
