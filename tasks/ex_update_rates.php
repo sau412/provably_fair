@@ -41,8 +41,8 @@ function get_coingecko_rate($currency) {
             $btc_per_coin_price = $ticker['last'];
         }
     }
-    if(!$btc_per_coin_price) {
-        $btc_per_coin_price=$parsed_data['market_data']['current_price']['btc'];
+    if(!isset($btc_per_coin_price)) {
+        $btc_per_coin_price = $parsed_data['market_data']['current_price']['btc'];
     }
     return $btc_per_coin_price;
 }
@@ -54,7 +54,7 @@ foreach($currency_data as $currency_row) {
     $coingecko_name = $currency_row['coingecko_name'];
     $rate = get_coingecko_rate($coingecko_name);
     if(!$rate) {
-        log_write("Incorrect $currency price data", 4);
+        log_write("Incorrect $coingecko_name price data", 4);
         continue;
     }
 
