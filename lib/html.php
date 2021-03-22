@@ -1108,6 +1108,34 @@ $currency_select
 </p>
 _END;
 
+        // Exchanges history
+        $result .= <<<_END
+        <h2>Exchanges</h2>
+        <table class='table_horizontal'>
+        <tr><th>From Currency</th><th>From Amount</th><th>Rate</th><th>To Currency</th><th>To Amount</th><th>Timestamp</th></tr>
+        
+        _END;
+        
+                $exchanges_data = ex_get_user_exchanges($user_uid);
+                foreach($exchanges_data as $ex_row) {
+                        $from_name = $ex_row['from_name'];
+                        $from_amount = $ex_row['from_amount'];
+                        $rate = $ex_row['rate'];
+                        $to_name = $ex_row['to_name'];
+                        $to_amount = $ex_row['to_amount'];
+                        $timestamp = $ex_row['timestamp'];
+        
+                        $result .= "<tr>\n";
+                        $result .= "<td>$from_name</td>\n";
+                        $result .= "<td>$from_amount</td>\n";
+                        $result .= "<td>$rate</td>\n";
+                        $result .= "<td>$to_name</td>\n";
+                        $result .= "<td>$to_amount</td>\n";
+                        $result .= "<td>$timestamp</td>\n";
+                        $result .= "</tr>\n";
+                }
+                $result .= "</table>\n";
+                
         // JS functions
         $currencies_data_json = json_encode($currencies_data);
         $result .= <<<_END

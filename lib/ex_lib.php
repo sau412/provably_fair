@@ -175,7 +175,7 @@ function ex_user_withdraw($user_uid, $currency_uid, $amount, $address) {
     if($amount <= 0) {
         return false;
     }
-    
+
     // Locks
     db_query("LOCK TABLES `ex_transactions` WRITE, `ex_currencies` READ, `ex_wallets` WRITE, `ex_exchanges` READ");
     $withdraw_fee = ex_get_currency_withdraw_fee($currency_uid);
@@ -246,4 +246,17 @@ function ex_get_user_transactions($user_uid) {
                                 FROM `ex_transactions` AS t
                                 JOIN `ex_currencies` AS c ON c.`uid` = t.`currency_uid`
                                 WHERE t.`user_uid` = '$user_uid_escaped'");
+}
+
+function ex_get_user_exchanges($user_uid) {
+    $user_uid_escaped = db_escape($user_uid);
+
+    return db_query_to_array("SELECT e.`uid`,
+                                    e.`from_currency_uid`, fc.`name` AS 'from_name', e.`amount`, e.`rate`,
+                                    e.`to_currency_uid`, tc.`name` AS 'to_name',
+                                    t.`timestamp`
+                                FROM `ex_exchanges` AS e
+                                JOIN `ex_currencies` AS fc ON fc.`uid` = e.`from_currency_uid`
+                                JOIN `ex_currencies` AS tc ON tc.`uid` = e.`to_currency_uid`
+                                WHERE e.`user_uid` = '$user_uid_escaped'");
 }
