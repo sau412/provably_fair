@@ -996,7 +996,7 @@ function html_exchange($user_uid, $token) {
         $currencies_data_json = json_encode($currencies_data);
         $result .= <<<_END
 <script>
-let currencies_data = JSON.parse("$currencies_data_json");
+let currenciesData = JSON.parse('$currencies_data_json');
 </script>
 
 _END;
