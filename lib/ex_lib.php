@@ -195,6 +195,10 @@ function ex_user_withdraw($user_uid, $currency_uid, $amount, $address) {
 function ex_exchange($user_uid, $from_currency_uid, $from_amount, $to_currency_uid) {
     global $exchange_fee;
     
+    if($from_currency_uid == $to_currency_uid) {
+        return false;
+    }
+    
     $user_uid_escaped = db_escape($user_uid);
     $from_currency_uid_escaped = db_escape($from_currency_uid);
     $to_currency_uid_escaped = db_escape($to_currency_uid);
@@ -218,7 +222,8 @@ function ex_exchange($user_uid, $from_currency_uid, $from_amount, $to_currency_u
         db_query("INSERT INTO `ex_exchanges` (`user_uid`, `from_currency_uid`, `from_amount`, `rate`, `to_currency_uid`, `to_amount`)
                     VALUES ('$user_uid_escaped', '$from_currency_uid_escaped', '$from_amount_escaped', '$rate_escaped',
                         '$to_currency_uid_escaped', '$to_amount_escaped')");
-        ex_recalculate_balance($user_uid, $currency_uid);
+        ex_recalculate_balance($user_uid, $from_currency_uid);
+        ex_recalculate_balance($user_uid, $to_currency_uid);
         db_query("UNLOCK TABLES");
         return true;
     }
