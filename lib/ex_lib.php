@@ -252,8 +252,8 @@ function ex_get_user_exchanges($user_uid) {
     $user_uid_escaped = db_escape($user_uid);
 
     return db_query_to_array("SELECT e.`uid`,
-                                    e.`from_currency_uid`, fc.`name` AS 'from_name', e.`amount`, e.`rate`,
-                                    e.`to_currency_uid`, tc.`name` AS 'to_name',
+                                    e.`from_currency_uid`, fc.`name` AS 'from_name', e.`from_amount`, e.`rate`,
+                                    e.`to_currency_uid`, tc.`name` AS 'to_name', e.`to_amount`,
                                     t.`timestamp`
                                 FROM `ex_exchanges` AS e
                                 JOIN `ex_currencies` AS fc ON fc.`uid` = e.`from_currency_uid`
