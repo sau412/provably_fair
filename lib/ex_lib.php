@@ -180,8 +180,8 @@ function ex_user_withdraw($user_uid, $currency_uid, $amount, $address) {
     $address_escaped = db_escape($address);
 
     $withdraw_fee = ex_get_currency_withdraw_fee($currency_uid);
-    $amount_to_send = $amount - $fee;
-    
+    $amount_to_send = $amount - $withdraw_fee;
+
     if($amount_to_send <= 0) {
         return false;
     }
