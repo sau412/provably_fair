@@ -14,13 +14,13 @@ function ex_get_user_uid_by_currency_uid_and_address($currency_uid, $address) {
     return $user_uid;
 }
 
-function ex_get_tx_uid_by_currency_uid_and_tx_id($currency_uid, $tx_id) {
+function ex_get_incoming_tx_uid_by_currency_uid_and_tx_id($currency_uid, $tx_id) {
     $currency_uid_escaped = db_escape($currency_uid);
     $tx_id_escaped = db_escape($tx_id);
 
     $tx_uid = db_query_to_variable("SELECT `uid` FROM `ex_transactions`
                                         WHERE `currency_uid` = '$currency_uid_escaped' AND
-                                            `tx_id` = '$tx_id_escaped'");
+                                            `tx_id` = '$tx_id_escaped' AND `status` IN ('received')");
     return $tx_uid;
 }
 

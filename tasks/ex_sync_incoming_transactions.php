@@ -31,7 +31,7 @@ foreach($currency_data as $currency_row) {
         $status = $tranaction_row->status;
 
         // Check if transaction exists in table
-        $tx_uid = ex_get_tx_uid_by_currency_uid_and_tx_id($currency_uid, $tx_id);
+        $tx_uid = ex_get_incoming_tx_uid_by_currency_uid_and_tx_id($currency_uid, $tx_id);
         if($tx_uid) {
             // May be update status/amount
         }
