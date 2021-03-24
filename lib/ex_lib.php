@@ -179,14 +179,16 @@ function ex_user_withdraw($user_uid, $currency_uid, $amount, $address) {
     $amount_escaped = db_escape($amount);
     $address_escaped = db_escape($address);
 
-    if($amount <= 0) {
+    $withdraw_fee = ex_get_currency_withdraw_fee($currency_uid);
+    $amount_to_send = $amount - $fee;
+    
+    if($amount_to_send <= 0) {
         return false;
     }
 
     // Locks
     db_query("LOCK TABLES `ex_transactions` WRITE, `ex_currencies` READ, `ex_wallets` WRITE, `ex_exchanges` READ,
                 `transactions` READ, `rolls` READ, `minesweeper` READ, `lottery_tickets` READ, `users` WRITE");
-    $withdraw_fee = ex_get_currency_withdraw_fee($currency_uid);
     $withdraw_fee_escaped = db_escape($withdraw_fee);
 
     if($currency_uid == 4) {
@@ -197,9 +199,10 @@ function ex_user_withdraw($user_uid, $currency_uid, $amount, $address) {
         $user_balance = $user_data['balance'];
     }
 
-    if($user_balance >= ($amount + $withdraw_fee)) {
+    if($user_balance >= $amount_to_send) {
+        $amount_to_send_escaped = db_escape($amount_to_send);
         db_query("INSERT INTO `ex_transactions` (`user_uid`, `currency_uid`, `amount`, `fee`, `address`, `status`)
-                    VALUES ('$user_uid_escaped', '$currency_uid_escaped', '$amount_escaped',
+                    VALUES ('$user_uid_escaped', '$currency_uid_escaped', '$amount_to_send_escaped',
                         '$withdraw_fee_escaped', '$address_escaped', 'pending')");
         ex_recalculate_balance($user_uid, $currency_uid);
         db_query("UNLOCK TABLES");

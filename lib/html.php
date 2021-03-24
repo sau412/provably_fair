@@ -1080,8 +1080,8 @@ $currency_select
 </select></p>
 <p>Address: <input type=text name='address' size=40></p>
 <p>Amount: <input type=text name='amount' id='withdraw_amount' value='0.00000000' onChange='updateWithdrawFee();'></p>
-<p>Fee: <input type=text name='withdraw_fee' id='withdraw_fee' value='0' disabled></p>
-<p>Total: <input type=text name='withdraw_total' id='withdraw_total' value='0' disabled></p>
+<p>Fee: <input type=text id='withdraw_fee' value='0' disabled></p>
+<p>You receive: <input type=text id='withdraw_you_receive' value='0' disabled></p>
 <p>Password: <input type=password name='password'></p>
 <input type=submit value='Withdraw'>
 </form>
@@ -1161,7 +1161,11 @@ function updateWithdrawFee() {
         let currency = getcurrencyDataByUid(currency_uid);
 
         $("#withdraw_fee").val(currency.withdraw_fee);
-        $("#withdraw_total").val(parseFloat($("#withdraw_amount").val()) + parseFloat(currency.withdraw_fee));
+
+        // Update receive
+        let receive = parseFloat($("#withdraw_amount").val()) - parseFloat(currency.withdraw_fee);
+        if(receive < 0) receive = 0;
+        $("#withdraw_you_receive").val(receive);
 }
 
 function updateExchangeAmount() {
