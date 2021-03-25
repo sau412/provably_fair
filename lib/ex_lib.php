@@ -86,6 +86,11 @@ function ex_recalculate_balance($user_uid, $currency_uid) {
     }
     // For others
     else {
+        // Request address if not exists
+        // Because if address not exists, balance is lost
+        ex_user_request_address($user_uid, $currency_uid);
+
+        // Calculate sums
         $received_sum = db_query_to_variable("SELECT SUM(`amount`)
                                                 FROM `ex_transactions`
                                                 WHERE `user_uid` = '$user_uid_escaped' AND
