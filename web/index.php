@@ -72,12 +72,12 @@ if(isset($action)) {
 		//$recaptcha_response=stripslashes($_POST['g-recaptcha-response']);
 		if(TRUE || recaptcha_check($recaptcha_response)) {
 	                update_user_seed($user_uid,$user_seed);
-	                $result=do_free_roll($user_uid);
+	                $result = do_free_roll($user_uid);
 			// Free lottery tickets for each free roll
-			if(isset($result['result']) && $result['result']=="ok") {
-				$round_uid=lottery_get_actual_round();
+			if(isset($result['result']) && $result['result'] == "ok") {
+				$round_uid = lottery_get_actual_round();
 				if($round_uid) {
-					lottery_free_tickets($round_uid,$user_uid,1);
+					lottery_free_tickets($round_uid, $user_uid, 1);
 				}
 			}
 	                echo json_encode($result);

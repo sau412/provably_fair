@@ -107,7 +107,7 @@ function html_tabs($user_uid) {
         $result.="<ul class=horizontal_menu>\n";
         if($user_uid) {
                 $result.=html_menu_element("info","Info");
-                $result.=html_menu_element("request_free_roll","Free $currency_short");
+                $result.=html_menu_element("free_roll","Free $currency_short");
                 //$result.=html_menu_element("minesweeper","Minesweeper");
                 $result.=html_menu_element("dice_roll","Multiply $currency_short");
                 //$result.=html_menu_element("last_rolls","Last rolls");
@@ -320,9 +320,9 @@ _END;
 // Free coins
 function html_free_roll($user_uid, $token, $free_roll_token) {
         // Check token roll
-        if(!check_roll_token($user_uid, $free_roll_token)) {
+        /*if(!check_roll_token($user_uid, $free_roll_token)) {
                 return "<p>Use link from your email</p>\n";
-        }
+        }*/
         global $currency_short;
         global $free_roll_cooldown_interval;
         $server_seed_hash=get_server_seed_hash($user_uid);
