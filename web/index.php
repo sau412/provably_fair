@@ -188,10 +188,10 @@ if(isset($_GET['ajax']) && isset($_GET['block'])) {
                                         echo html_admin_settings($user_uid,$token);
                                 }
                                 break;
-                        default:
                         case 'request_free_roll':
                                 echo html_request_free_roll($user_uid, $token);
                                 break;
+                                default:
                         case 'free_roll':
                                 $free_roll_token = stripslashes($_GET['roll_token']);
                                 echo html_free_roll($user_uid, $token, $free_roll_token);
