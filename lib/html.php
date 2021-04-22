@@ -1161,14 +1161,17 @@ function updateWithdrawFee() {
         let currency_uid = $("#withdraw_currency_uid").val();
         let currency = getcurrencyDataByUid(currency_uid);
 
-        $("#withdraw_fee").val(currency.withdraw_fee);
+        $("#withdraw_fee").val(withdraw_fee);
+
+        let withdraw_fee = parseFloat(currency.withdraw_fee);
+        let min_send_amount = parseFloat(currency.min_send_amount);
 
         // Update receive
-        let receive = parseFloat($("#withdraw_amount").val()) - parseFloat(currency.withdraw_fee);
+        let receive = parseFloat($("#withdraw_amount").val()) - withdraw_fee;
         // Check min amount
-        if(receive < 0 || receive < currency.min_send_amount) {
+        if(receive < 0 || receive < min_send_amount) {
                 receive = 0;
-                $("#withdraw_message").text('Min amount is ' + (currency.min_send_amount + currency.withdraw_fee));
+                $("#withdraw_message").text('Min amount is ' + (min_send_amount + withdraw_fee) + currency.symbol);
         }
         else {
                 $("#withdraw_you_receive").val(receive);
