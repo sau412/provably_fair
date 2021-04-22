@@ -128,12 +128,18 @@ function ex_recalculate_balance($user_uid, $currency_uid) {
 }
 
 function ex_get_currencies_data() {
-    return db_query_to_array("SELECT `uid`, `name`, `symbol`, `rate`, `balance`, `withdraw_fee` FROM `ex_currencies`");
+    return db_query_to_array("SELECT `uid`, `name`, `symbol`, `rate`, `balance`, `withdraw_fee`, `min_send_amount` FROM `ex_currencies`");
 }
 
 function ex_get_currency_withdraw_fee($currency_uid) {
     $currency_uid_escaped = db_escape($currency_uid);
     return db_query_to_variable("SELECT `withdraw_fee`
+                                FROM `ex_currencies` WHERE `uid` = '$currency_uid_escaped'");
+}
+
+function ex_get_currency_min_send_amount($currency_uid) {
+    $currency_uid_escaped = db_escape($currency_uid);
+    return db_query_to_variable("SELECT `min_send_amount`
                                 FROM `ex_currencies` WHERE `uid` = '$currency_uid_escaped'");
 }
 
@@ -185,9 +191,11 @@ function ex_user_withdraw($user_uid, $currency_uid, $amount, $address) {
     $address_escaped = db_escape($address);
 
     $withdraw_fee = ex_get_currency_withdraw_fee($currency_uid);
+    $min_send_amount = ex_get_currency_min_send_amount($currency_uid);
+    
     $amount_to_send = $amount - $withdraw_fee;
 
-    if($amount_to_send <= 0) {
+    if($amount_to_send <= 0 || $amount_to_send < $min_send_amount) {
         return false;
     }
 

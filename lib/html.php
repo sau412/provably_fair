@@ -1106,6 +1106,7 @@ $currency_select
 </select></p>
 <p>Result (estimation): <input type=text id=to_amount disabled></p>
 <p>Exchange fee: <input type=text id=exchange_fee_amount disabled></p>
+<p><span id=withdraw_message></span></p>
 <input type=submit value='Exchange'>
 </form>
 </p>
@@ -1164,8 +1165,15 @@ function updateWithdrawFee() {
 
         // Update receive
         let receive = parseFloat($("#withdraw_amount").val()) - parseFloat(currency.withdraw_fee);
-        if(receive < 0) receive = 0;
-        $("#withdraw_you_receive").val(receive);
+        // Check min amount
+        if(receive < 0 || receive < currency.min_send_amount) {
+                receive = 0;
+                $("#withdraw_message").text('Min amount is ' + (currency.min_send_amount + currency.withdraw_fee));
+        }
+        else {
+                $("#withdraw_you_receive").val(receive);
+                $("#withdraw_message").text('');
+        }
 }
 
 function updateExchangeAmount() {
