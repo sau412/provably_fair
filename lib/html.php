@@ -1082,6 +1082,7 @@ $currency_select
 <p>Amount: <input type=text name='amount' id='withdraw_amount' value='0.00000000' onChange='updateWithdrawFee();'></p>
 <p>Fee: <input type=text id='withdraw_fee' value='0' disabled></p>
 <p>You receive: <input type=text id='withdraw_you_receive' value='0' disabled></p>
+<p><span id=withdraw_message></span></p>
 <p>Password: <input type=password name='password'></p>
 <input type=submit value='Withdraw'>
 </form>
@@ -1106,7 +1107,6 @@ $currency_select
 </select></p>
 <p>Result (estimation): <input type=text id=to_amount disabled></p>
 <p>Exchange fee: <input type=text id=exchange_fee_amount disabled></p>
-<p><span id=withdraw_message></span></p>
 <input type=submit value='Exchange'>
 </form>
 </p>
