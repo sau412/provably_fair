@@ -1171,7 +1171,7 @@ function updateWithdrawFee() {
         // Check min amount
         if(receive < 0 || receive < min_send_amount) {
                 receive = 0;
-                $("#withdraw_message").text('Min amount is ' + (min_send_amount + withdraw_fee) + currency.symbol);
+                $("#withdraw_message").text('Min amount is ' + (min_send_amount + withdraw_fee) + ' ' + currency.symbol);
         }
         else {
                 receive = 0;
