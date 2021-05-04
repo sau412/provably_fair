@@ -1095,7 +1095,7 @@ _END;
         $result .= <<<_END
 <h2>Exchange</h2>
 <p>
-<form method=post>
+<form method=post onSubmit='return exchangeFinalCheck();'>
 <input type=hidden name='action' value='exchange_exchange'>
 <input type=hidden name='token' value='$token'>
 <p>From currency: <select name='from_currency_uid' id='from_currency_uid' onChange='updateExchangeAmount();'>
