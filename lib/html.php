@@ -1107,6 +1107,7 @@ $currency_select
 </select></p>
 <p>Result (estimation): <input type=text id=to_amount disabled></p>
 <p>Exchange fee: <input type=text id=exchange_fee_amount disabled></p>
+<p><span id=exchange_message></span></p>
 <input type=submit value='Exchange'>
 </form>
 </p>
@@ -1189,8 +1190,19 @@ function updateExchangeAmount() {
         let from_amount = parseFloat($("#from_amount").val());
         let rate = from_currency.rate / to_currency.rate;
         
+        if(from_currency_uid == to_currency_uid) {
+                $("#exchange_message").text('You should not exchange currency to itself');
+        }
+        else {
+                $("#exchange_message").text('');
+        }
         $("#to_amount").val(from_amount * rate * (1 - exchangeFee));
         $("#exchange_fee_amount").val(from_amount * rate * exchangeFee);
+}
+
+function exchangeFinalCheck() {
+        let sure = confirm("Are you sure to exchange?");
+        return sure;
 }
 
 updateWithdrawFee();
