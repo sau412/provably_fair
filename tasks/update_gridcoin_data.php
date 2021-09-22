@@ -131,10 +131,12 @@ foreach($payout_data_array as $payout_data) {
 echo "Syncing transactions...\n";
 
 // Cache all received tx
-$tx_received_array = db_query_to_array("SELECT `tx_id` FROM `transactions` WHERE `status`='received'");
+$tx_received_array = db_query_to_array("SELECT DISTINCT `address`, `tx_id` FROM `transactions` WHERE `status`='received'");
 $tx_received_index_array = array();
 foreach($tx_received_array as $received_tx_data) {
-	$tx_received_index_array[] = $received_tx_data['tx_id'];
+        $tx_id = $received_tx_data['tx_id'];
+        $address = $received_tx_data['address'];
+        $tx_received_index_array[] = hash("sha256", "$address $tx_id");
 }
 
 $transactions_data=grc_web_get_all_tx();
@@ -157,7 +159,8 @@ foreach($transactions_data as $tx_row) {
                 continue;
         }
         // Skip transactions that was received already
-        if(in_array($tx_id,$tx_received_index_array)) {
+        $hash = hash("sha256", "$address $tx_id");
+        if(in_array($hash ,$tx_received_index_array)) {
                 echo "Skipping already received transaction $tx_id\n";
                 continue;
         }
