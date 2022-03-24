@@ -666,9 +666,9 @@ function set_user_variable($user_uid, $name, $value) {
         $user_uid_escaped = db_escape($user_uid);
         $name_escaped = db_escape($name);
         $value_escaped = db_escape($value);
-        db_query_to_variable("INSERT INTO `user_variables` (`user_uid`, `name`, `value`)
-                                VALUES ('$user_uid_escaped', '$name_escaped', '$value_escaped')
-                                ON DUPLICATE KEY UPDATE `value` = VALUES(`value`)");
+        db_query("INSERT INTO `user_variables` (`user_uid`, `name`, `value`)
+                VALUES ('$user_uid_escaped', '$name_escaped', '$value_escaped')
+                ON DUPLICATE KEY UPDATE `value` = VALUES(`value`)");
 }
 
 // Generate roll token

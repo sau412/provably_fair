@@ -11,7 +11,7 @@ function db_connect() {
 
 // Query
 function db_query($query) {
-		global $project_log_name;
+	global $project_log_name;
         $result=mysql_query($query);
         if($result===FALSE) {
                 $message["mysql_error"] = mysql_error();

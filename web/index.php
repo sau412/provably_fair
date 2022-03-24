@@ -193,6 +193,10 @@ if(isset($_GET['ajax']) && isset($_GET['block'])) {
                                 break;
                                 default:
                         case 'free_roll':
+                                $roll_token = '';
+                                if(isset($_GET['roll_token'])) {
+                                        $roll_token = $_GET['roll_token'];
+                                }
                                 $free_roll_token = stripslashes($_GET['roll_token']);
                                 echo html_free_roll($user_uid, $token, $free_roll_token);
                                 break;
