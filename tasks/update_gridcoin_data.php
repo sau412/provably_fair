@@ -130,7 +130,7 @@ foreach($payout_data_array as $payout_data) {
 // Sync transactions
 echo "Syncing incoming transactions...\n";
 
-$max_wallet_uid = db_qury_to_variable("SELECT MAX(`wallet_uid`) FROM `transactions`");
+$max_wallet_uid = db_query_to_variable("SELECT MAX(`wallet_uid`) FROM `transactions`");
 
 $transactions_data=grc_web_get_all_tx($max_wallet_uid);
 
