@@ -151,13 +151,7 @@ foreach($transactions_data as $tx_row) {
                 echo "Skipping non-incoming transaction $tx_id\n";
                 continue;
         }
-        // Skip transactions that was received already
-        $hash = hash("sha256", "$address $tx_id");
-        if(in_array($hash ,$tx_received_index_array)) {
-                echo "Skipping already received transaction $tx_id\n";
-                continue;
-        }
-		
+
         $address_escaped = db_escape($address);
         $user_uid = db_query_to_variable("SELECT `uid` FROM `users` WHERE `deposit_address`='$address_escaped'");
 
