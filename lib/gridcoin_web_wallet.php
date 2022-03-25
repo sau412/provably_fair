@@ -61,8 +61,8 @@ function grc_web_get_tx_status($tx_uid) {
 }
 
 // Get all transactions
-function grc_web_get_all_tx() {
-        $query="method=get_all_transactions";
+function grc_web_get_all_tx($from_uid) {
+        $query="method=get_all_transactions&from_uid=$from_uid";
         $result=grc_web_send_query($query);
 //var_dump($result);
         $data=json_decode($result);

@@ -128,18 +128,11 @@ foreach($payout_data_array as $payout_data) {
 }
 
 // Sync transactions
-echo "Syncing transactions...\n";
+echo "Syncing incoming transactions...\n";
 
-// Cache all received tx
-$tx_received_array = db_query_to_array("SELECT DISTINCT `address`, `tx_id` FROM `transactions` WHERE `status`='received'");
-$tx_received_index_array = array();
-foreach($tx_received_array as $received_tx_data) {
-        $tx_id = $received_tx_data['tx_id'];
-        $address = $received_tx_data['address'];
-        $tx_received_index_array[] = hash("sha256", "$address $tx_id");
-}
+$max_wallet_uid = db_qury_to_variable("SELECT MAX(`wallet_uid`) FROM `transactions`");
 
-$transactions_data=grc_web_get_all_tx();
+$transactions_data=grc_web_get_all_tx($max_wallet_uid);
 
 foreach($transactions_data as $tx_row) {
         $uid = $tx_row->uid;
