@@ -22,7 +22,7 @@ foreach($currency_data as $currency_row) {
     $grc_api_key = $currency_row['wallet_key'];
 
     // Check for new receiving transactions
-    $transactions_array = grc_web_get_all_tx();
+    $transactions_array = grc_web_get_all_tx(0);
     foreach($transactions_array as $tranaction_row) {
         $wallet_uid = $tranaction_row->uid;
         $tx_id = $tranaction_row->tx_id;
