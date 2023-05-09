@@ -6,7 +6,6 @@ if(!isset($argc)) die();
 require_once("../lib/settings.php");
 require_once("../lib/db.php");
 require_once("../lib/core.php");
-require_once("../lib/broker.php");
 require_once("../lib/logger.php");
 
 // Check if unsent rewards exists

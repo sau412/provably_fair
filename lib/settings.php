@@ -52,8 +52,3 @@ $recaptcha_private_key="";
 // Gridcoin online wallet API key
 $grc_api_url="https://wallet.arikado.ru/api.php";
 $grc_api_key="";
-
-// Broker settings
-$broker_url = "";
-$broker_key = "";
-$broker_project_name = $project_internal_name;
