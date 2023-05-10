@@ -1,7 +1,7 @@
 <?php
 // Email sending functions
 
-// Send email via broker
+// Send email
 function email_add($to, $subject, $body) {
 	global $email_sender;
 	global $email_reply_to;
