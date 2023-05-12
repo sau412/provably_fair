@@ -5,6 +5,6 @@ function log_write($message, $severity = 7) {
         global $project_log_name;
 
         openlog('php', LOG_ODELAY, LOG_USER);
-	syslog($severity, $message);
+	syslog($severity, $project_log_name . " " . $message);
 	closelog();
 }
