@@ -151,13 +151,11 @@ function user_login($session,$login,$password) {
 
                 if($password_hash==$exists_hash) {
                         log_write("Logged in user '$login'");
-                        //notify_user($user_uid,"Logged in $login","IP: ".$_SERVER['REMOTE_ADDR']);
                         db_query("UPDATE `sessions` SET `user_uid`='$user_uid' WHERE `session`='$session_escaped'");
                         db_query("UPDATE `users` SET `login_time`=NOW() WHERE `uid`='$user_uid_escaped'");
                         return "login_successfull";
                 } else {
-                        log_write("Invalid password for '$login'");
-                        //notify_user($user_uid,"Log in failed","IP: ".$_SERVER['REMOTE_ADDR']);
+                        log_write("Invalid password from " . $_SERVER['REMOTE_ADDR'] . " for '$login'");
                         return "login_failed_invalid_password";
                 }
         } else {
