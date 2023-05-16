@@ -67,7 +67,7 @@ if(isset($action)) {
                 $message = "roll_requested";
         }
         else if($action == 'free_roll') {
-                $user_seed=stripslashes($_POST['user_seed']);
+                $user_seed=stripslashes($_REQUEST['user_seed']);
 		//$recaptcha_response=stripslashes($_POST['g-recaptcha-response']);
 		if(TRUE || recaptcha_check($recaptcha_response)) {
 	                update_user_seed($user_uid,$user_seed);
