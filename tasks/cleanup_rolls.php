@@ -10,9 +10,10 @@ require_once("../lib/logger.php");
 db_connect();
 
 $user_uids_array = db_query_to_array("
-    SELECT `user_uid`, YEAR(`timestamp`) as y, MONTH(`timestamp`) as m
+    SELECT `user_uid`, YEAR(`timestamp`) as y, MONTH(`timestamp`) as m, count(*) as c
     FROM `rolls`
     WHERE `timestamp` < DATE_SUB(DATE_SUB(CURRENT_DATE, INTERVAL 2 MONTH), INTERVAL DAYOFMONTH(CURRENT_DATE) - 1 DAY)
+        AND `user_uid` = 1
     GROUP BY `user_uid`, YEAR(`timestamp`), MONTH(`timestamp`)
 ");
 
@@ -20,6 +21,10 @@ foreach($user_uids_array as $row) {
     $user_uid = $row['user_uid'];
     $year = $row['y'];
     $month = $row['m'];
+    $count = $row['c'];
+
+    // Skip single records
+    if($count <= 1) continue;
 
     $user_data_array = db_query_to_array("
         SELECT SUM(`bet`) as total_bet, SUM(`profit`) as total_profit
@@ -37,13 +42,13 @@ foreach($user_uids_array as $row) {
     
     echo "Cleanup for user uid $user_uid year $year month $month\n";
     db_query("START TRANSACTION");
-    echo ("
+    db_query("
         DELETE FROM `rolls`
         WHERE `user_uid` = '$user_uid'
             AND YEAR(`timestamp`) = '$year'
             AND MONTH(`timestamp`) = '$month'
     ");
-    echo ("
+    db_query("
         INSERT INTO `rolls` (`user_uid`, `roll_type`, `server_seed`,
             `user_seed`, `roll_result`, `bet`, `profit`, `timestamp`)
         VALUES ('$user_uid', 'total', '',
