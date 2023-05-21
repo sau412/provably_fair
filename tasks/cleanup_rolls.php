@@ -13,7 +13,6 @@ $user_uids_array = db_query_to_array("
     SELECT `user_uid`, YEAR(`timestamp`) as y, MONTH(`timestamp`) as m, count(*) as c
     FROM `rolls`
     WHERE `timestamp` < DATE_SUB(DATE_SUB(CURRENT_DATE, INTERVAL 2 MONTH), INTERVAL DAYOFMONTH(CURRENT_DATE) - 1 DAY)
-        AND `user_uid` = 1
     GROUP BY `user_uid`, YEAR(`timestamp`), MONTH(`timestamp`)
 ");
 
@@ -52,7 +51,7 @@ foreach($user_uids_array as $row) {
         INSERT INTO `rolls` (`user_uid`, `roll_type`, `server_seed`,
             `user_seed`, `roll_result`, `bet`, `profit`, `timestamp`)
         VALUES ('$user_uid', 'total', '',
-            '', '0', '0', '$total_result', '$timestamp')
+            '', '0', '$total_bet', '$total_profit', '$timestamp')
     ");
 
     db_query("COMMIT");
