@@ -201,7 +201,7 @@ function ex_user_withdraw($user_uid, $currency_uid, $amount, $address) {
 
     // Locks
     db_query("LOCK TABLES `ex_transactions` WRITE, `ex_currencies` READ, `ex_wallets` WRITE, `ex_exchanges` READ,
-                `transactions` READ, `rolls` READ, `minesweeper` READ, `lottery_tickets` READ, `users` WRITE");
+                `transactions` READ, `rolls` READ, `lottery_tickets` READ, `users` WRITE");
     $withdraw_fee_escaped = db_escape($withdraw_fee);
 
     if($currency_uid == 4) {
@@ -242,7 +242,7 @@ function ex_exchange($user_uid, $from_currency_uid, $from_amount, $to_currency_u
 
     // Locks required
     db_query("LOCK TABLES `ex_transactions` READ, `ex_currencies` READ, `ex_wallets` WRITE, `ex_exchanges` WRITE,
-                `transactions` READ, `rolls` READ, `minesweeper` READ, `lottery_tickets` READ, `users` WRITE");
+                `transactions` READ, `rolls` READ, `lottery_tickets` READ, `users` WRITE");
     
     if($from_currency_uid == 4) {
         $user_balance = get_user_balance($user_uid);

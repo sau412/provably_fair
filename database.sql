@@ -92,19 +92,6 @@ CREATE TABLE `lottery_tickets` (
   `reward` decimal(16,8) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-CREATE TABLE `minesweeper` (
-  `uid` int(11) NOT NULL,
-  `user_uid` int(11) NOT NULL,
-  `server_seed` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
-  `user_seed` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
-  `state` text COLLATE utf8_unicode_ci,
-  `actions` text COLLATE utf8_unicode_ci NOT NULL,
-  `is_finished` tinyint(4) NOT NULL DEFAULT '0',
-  `bet` decimal(16,8) DEFAULT NULL,
-  `profit` decimal(16,8) DEFAULT NULL,
-  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
 CREATE TABLE `rewards` (
   `uid` int(11) NOT NULL,
   `roll_min` int(11) NOT NULL,
@@ -242,10 +229,6 @@ ALTER TABLE `lottery_tickets`
   ADD KEY `best_hash` (`best_hash`),
   ADD KEY `user_uid` (`user_uid`,`reward`);
 
-ALTER TABLE `minesweeper`
-  ADD PRIMARY KEY (`uid`),
-  ADD KEY `user_uid` (`user_uid`);
-
 ALTER TABLE `rewards`
   ADD PRIMARY KEY (`uid`),
   ADD UNIQUE KEY `roll_min` (`roll_min`);
@@ -300,8 +283,6 @@ ALTER TABLE `lottery_rewards`
 ALTER TABLE `lottery_rounds`
   MODIFY `uid` int(11) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `lottery_tickets`
-  MODIFY `uid` int(11) NOT NULL AUTO_INCREMENT;
-ALTER TABLE `minesweeper`
   MODIFY `uid` int(11) NOT NULL AUTO_INCREMENT;
 ALTER TABLE `rewards`
   MODIFY `uid` int(11) NOT NULL AUTO_INCREMENT;

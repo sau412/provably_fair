@@ -5,7 +5,6 @@ require_once("../lib/db.php");
 require_once("../lib/core.php");
 require_once("../lib/html.php");
 require_once("../lib/captcha.php");
-require_once("../lib/minesweeper.php");
 require_once("../lib/lottery.php");
 require_once("../lib/logger.php");
 require_once("../lib/ex_lib.php");
@@ -96,22 +95,6 @@ if(isset($action)) {
                 $amount=stripslashes($_POST['amount']);
 		$round_uid=lottery_get_actual_round();
 		lottery_buy_tickets($round_uid,$user_uid,$amount);
-        } else if($action=='minesweeper') {
-                $x=stripslashes($_POST['x']);
-                $y=stripslashes($_POST['y']);
-                $game_uid=new_game($user_uid);
-                $field=load_field($game_uid);
-                $action=array("x"=>$x,"y"=>$y,"action"=>"open");
-                $result_data=apply_action($field,$action);
-                save_field($game_uid,$result_data['field'],$action);
-                if($result_data['result'] != 'continue') {
-                        echo json_encode($result_data);
-                        finish($game_uid, $result_data['result']);
-                } else {
-                        $result_data['field']=to_user_field($result_data['field']);
-                        echo json_encode($result_data);
-                }
-                die();
         } else if($action=='withdraw') {
                 $amount=stripslashes($_POST['amount']);
                 $result=user_withdraw($user_uid,$amount);
@@ -198,9 +181,6 @@ if(isset($_GET['ajax']) && isset($_GET['block'])) {
                                 }
                                 $free_roll_token = stripslashes($roll_token);
                                 echo html_free_roll($user_uid, $token, $free_roll_token);
-                                break;
-                        case 'minesweeper':
-                                echo html_minesweeper($user_uid,$token);
                                 break;
                         case 'dice_roll':
                                 echo html_dice_game($user_uid,$token);

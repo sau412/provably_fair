@@ -46,12 +46,6 @@ function get_user_balance_detailed($user_uid) {
 	$balance-=$amount_bets;
 	$balance+=$amount_profits;
 
-	// Minesweeper data
-	$amount_profits_m=db_query_to_variable("SELECT SUM(`profit`) FROM `minesweeper` WHERE `user_uid`='$user_uid_escaped'");
-	$result['amount_profits_m'] = $amount_profits_m;
-
-	$balance+=$amount_profits_m;
-
 	// Lottery data
 	$amount_spent_l=db_query_to_variable("SELECT SUM(`spent`) FROM `lottery_tickets` WHERE `user_uid`='$user_uid_escaped'");
 	$amount_profits_l=db_query_to_variable("SELECT SUM(`reward`) FROM `lottery_tickets` WHERE `user_uid`='$user_uid_escaped' AND `reward` IS NOT NULL");

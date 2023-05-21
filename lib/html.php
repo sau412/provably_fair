@@ -108,7 +108,6 @@ function html_tabs($user_uid) {
         if($user_uid) {
                 $result.=html_menu_element("info","Info");
                 $result.=html_menu_element("free_roll","Free $currency_short");
-                //$result.=html_menu_element("minesweeper","Minesweeper");
                 $result.=html_menu_element("dice_roll","Multiply $currency_short");
                 //$result.=html_menu_element("last_rolls","Last rolls");
                 $result.=html_menu_element("lottery","Lottery");
@@ -671,83 +670,6 @@ function html_transactions($user_uid,$token) {
         $result.="</table>\n";
         $result.="</p>\n";
 
-        return $result;
-}
-
-// Minesweeper
-function html_minesweeper($user_uid,$token) {
-        $game_uid=new_game($user_uid);
-
-        $field=load_field($game_uid);
-        $user_field=to_user_field($field);
-        $server_seed_hash=get_current_game_hash($game_uid);
-//get_server_seed_hash($user_uid);
-
-        $result="";
-        $result.="<p>Server seed hash: <b>$server_seed_hash</b></p>\n";
-        $result.="<h2>Minesweeper</h2>";
-        $result.="<p id=result></p>";
-        $result.="<table class=horizontal_table>";
-
-        for($y=0;$y!=16;$y++) {
-                $result.="<tr>";
-                for($x=0;$x!=16;$x++) {
-                        $result.="<td><input id='cell_${x}_${y}' type=button value='&nbsp;' onClick='do_move($x,$y);'></td>";
-                }
-                $result.="</tr>";
-        }
-
-        $result.="</table>";
-        $result.=<<<_END
-<script>
-
-function do_move(x,y) {
-//      alert("y " + y + " x " + x);
-        var query={
-                token:"$token",
-                action:"minesweeper",
-                x:x,
-                y:y
-        };
-        $.post("./",query,function(result){
-                result_json=JSON.parse(result);
-                if(result_json.result=="win") {
-                        document.getElementById("result").innerHTML="You win!";
-                } else if(result_json.result=="lose") {
-                        document.getElementById("result").innerHTML="You lose!";
-                }
-                update_field(result_json.field,result_json.result);
-        })
-}
-
-function update_field(field,result) {
-        var ch;
-        for(var y=0;y!=16;y++) {
-                for(var x=0;x!=16;x++) {
-                        var button=document.getElementById("cell_"+x+"_"+y);
-                        button.style.fontWeight=900;
-                        ch=field.charAt(x+y*16);
-                        if(ch=='c') ch=' ';
-                        if(ch=='0') button.style.color='gray';
-                        if(ch=='1') button.style.color='blue';
-                        if(ch=='2') button.style.color='green';
-                        if(ch=='3') button.style.color='red';
-                        if(ch=='4') button.style.color='black';
-                        if(ch=='5') button.style.color='black';
-                        if(ch=='6') button.style.color='black';
-                        if(ch=='7') button.style.color='black';
-                        if(ch=='8') button.style.color='black';
-                        if(ch=='b' && result=="lose") button.style.background='red';
-                        if(ch=='b' && result=="win") button.style.background='green';
-                        button.value=ch;
-                }
-        }
-}
-
-update_field("$user_field","continue");
-</script>
-
-_END;
         return $result;
 }
 
