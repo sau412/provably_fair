@@ -18,6 +18,7 @@ $user_uids_array = db_query_to_array("
 foreach($user_uids_array as $row) {
     $user_uid = $row['user_uid'];
     $total_profit = $row['total_profit'];
+    if($total_profit <= 0) continue;
     echo "Cleanup for user uid $user_uid\n";
     db_query("START TRANSACTION");
     db_query("
