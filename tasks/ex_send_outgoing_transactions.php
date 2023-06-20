@@ -10,15 +10,18 @@ require_once("../lib/ex_lib.php");
 
 db_connect();
 
-$currency_data = db_query_to_array("SELECT `uid`, `wallet_api`, `wallet_key`
+$currency_data = db_query_to_array("SELECT `uid`, `name`, `wallet_api`, `wallet_key`
                                     FROM `ex_currencies`
                                     WHERE `wallet_api` != ''");
 
 foreach($currency_data as $currency_row) {
     $currency_uid = $currency_row['uid'];
+    $currency_name = $currency_row['name'];
 
     $grc_api_url = $currency_row['wallet_api'];
     $grc_api_key = $currency_row['wallet_key'];
+
+    echo "Sending transactions for $currency_name\n";
 
     $currency_uid_escaped = db_escape($currency_uid);
 
