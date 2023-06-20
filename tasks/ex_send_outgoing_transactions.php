@@ -44,7 +44,6 @@ foreach($currency_data as $currency_row) {
 
         if(!$address) {
             $status = "error";
-            ex_update_transaction_wallet_uid($tx_uid, $wallet_uid);
             ex_update_transaction_status($tx_uid, $status);
             ex_recalculate_balance($user_uid, $currency_uid);
         }
