@@ -42,6 +42,12 @@ foreach($currency_data as $currency_row) {
         $address = $transaction_row['address'];
         $status = $transaction_row['status'];
 
+        if(!$address) {
+            $status = "error";
+            ex_update_transaction_wallet_uid($tx_uid, $wallet_uid);
+            ex_update_transaction_status($tx_uid, $status);
+            ex_recalculate_balance($user_uid, $currency_uid);
+        }
         if($wallet_uid) {
             $transaction_data = grc_web_get_tx_status($wallet_uid);
             $status = $transaction_data->status;
