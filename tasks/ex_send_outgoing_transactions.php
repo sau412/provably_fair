@@ -26,9 +26,13 @@ foreach($currency_data as $currency_row) {
     $currency_uid_escaped = db_escape($currency_uid);
 
     // Get all unsent transactions
-    $transactions_array = db_query_to_array("SELECT `uid`, `user_uid`, `wallet_uid`, `amount`, `address`, `status`
-                                                FROM `ex_transactions`
-                                                WHERE `tx_id` IS NULL AND `currency_uid` = '$currency_uid_escaped'");
+    $transactions_array = db_query_to_array("
+        SELECT `uid`, `user_uid`, `wallet_uid`, `amount`, `address`, `status`
+            FROM `ex_transactions`
+            WHERE `tx_id` IS NULL
+                AND `status` <> 'error'
+                AND `currency_uid` = '$currency_uid_escaped'
+    ");
     
     foreach($transactions_array as $transaction_row) {
         $tx_uid = $transaction_row['uid'];
