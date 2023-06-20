@@ -44,7 +44,10 @@ function grc_web_send($grc_address, $amount) {
 //var_dump($result);
         $data=json_decode($result);
 //var_dump($data);
-        if(!$data) throw new Exception("No result on send");
+        if(!$data) {
+                var_dump($result);
+                throw new Exception("No result on send");
+        }
         if(property_exists($data, "error")) return $data->error;
         return $data->uid;
 }
