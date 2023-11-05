@@ -199,9 +199,8 @@ function ex_user_withdraw($user_uid, $currency_uid, $amount, $address) {
         return false;
     }
 
-    // Locks
-    db_query("LOCK TABLES `ex_transactions` WRITE, `ex_currencies` READ, `ex_wallets` WRITE, `ex_exchanges` READ,
-                `transactions` READ, `rolls` READ, `lottery_tickets` READ, `users` WRITE");
+    // Transaction
+    db_query("START TRANSACTION");
     $withdraw_fee_escaped = db_escape($withdraw_fee);
 
     if($currency_uid == 4) {
@@ -218,10 +217,10 @@ function ex_user_withdraw($user_uid, $currency_uid, $amount, $address) {
                     VALUES ('$user_uid_escaped', '$currency_uid_escaped', '$amount_to_send_escaped',
                         '$withdraw_fee_escaped', '$address_escaped', 'pending')");
         ex_recalculate_balance($user_uid, $currency_uid);
-        db_query("UNLOCK TABLES");
+        db_query("COMMIT");
         return true;
     }
-    db_query("UNLOCK TABLES");
+    db_query("COMMIT");
     return false;
 }
 
@@ -240,9 +239,8 @@ function ex_exchange($user_uid, $from_currency_uid, $from_amount, $to_currency_u
     $to_currency_uid_escaped = db_escape($to_currency_uid);
     $from_amount_escaped = db_escape($from_amount);
 
-    // Locks required
-    db_query("LOCK TABLES `ex_transactions` READ, `ex_currencies` READ, `ex_wallets` WRITE, `ex_exchanges` WRITE,
-                `transactions` READ, `rolls` READ, `lottery_tickets` READ, `users` WRITE");
+    // Transaction
+    db_query("START TRANSACTION");
     
     if($from_currency_uid == 4) {
         $user_balance = get_user_balance($user_uid);
@@ -266,11 +264,11 @@ function ex_exchange($user_uid, $from_currency_uid, $from_amount, $to_currency_u
                         '$to_currency_uid_escaped', '$to_amount_escaped')");
         ex_recalculate_balance($user_uid, $from_currency_uid);
         ex_recalculate_balance($user_uid, $to_currency_uid);
-        db_query("UNLOCK TABLES");
+        db_query("COMMIT");
         return true;
     }
 
-    db_query("UNLOCK TABLES");
+    db_query("COMMIT");
     return false;
 }
 

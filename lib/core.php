@@ -364,9 +364,8 @@ function user_withdraw($user_uid, $amount) {
 
         if($address=="") return FALSE;
 
-	// Lock tables
-	db_query("LOCK TABLES `users` WRITE, `transactions` WRITE, `rolls` WRITE, `lottery_tickets` WRITE,
-                `ex_transactions` READ, `ex_exchanges` READ");
+	// Transaction
+        db_query("START TRANSACTION");
 
         // Check user balance
         $balance=get_user_balance($user_uid);
@@ -382,8 +381,8 @@ function user_withdraw($user_uid, $amount) {
         // Adjust user balance
         update_user_balance($user_uid);
 
-	// Unlock tables
-	db_query("UNLOCK TABLES");
+	// Commit
+	db_query("COMMIT");
 
         // Send notifications
         $username=get_username_by_uid($user_uid);
@@ -509,7 +508,7 @@ function free_roll_cooldown_active($user_uid) {
 function do_free_roll($user_uid) {
         global $free_roll_cooldown_interval;
 
-        db_query("LOCK TABLES `ip_rolls` WRITE, `users` WRITE");
+        db_query("START TRANSACTION");
 
         $wait_interval=free_roll_cooldown_active($user_uid);
         if($wait_interval>0) {
@@ -525,7 +524,7 @@ function do_free_roll($user_uid) {
         $user_ip_escaped=db_escape($user_ip);
         db_query("INSERT INTO `ip_rolls` (`ip`) VALUES ('$user_ip_escaped') ON DUPLICATE KEY UPDATE `timestamp`=NOW()");
 
-        db_query("UNLOCK TABLES");
+        db_query("COMMIT");
 
         $user_seed=get_user_seed($user_uid);
         $server_seed=get_server_seed($user_uid);
