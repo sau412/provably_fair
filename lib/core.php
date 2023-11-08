@@ -714,7 +714,7 @@ function get_balance_detailed($user_uid) {
         union all
         SELECT case
         when roll_type in ('high', 'low') then 'roll bet'
-        when roll_type in ('total') then 'total bet month'
+        when roll_type in ('total') then 'sum bet month'
         else 'unknown' end, -`bet`, `timestamp`
         FROM `rolls` WHERE `user_uid`='$user_uid_escaped' and `bet` > 0
         union all
@@ -722,7 +722,7 @@ function get_balance_detailed($user_uid) {
         when roll_type in ('free') then 'free roll'
         when roll_type in ('high', 'low') then 'bet roll'
         when roll_type in ('pay') then 'interest'
-        when roll_type in ('total') then 'total profit month'
+        when roll_type in ('total') then 'sum profit month'
         else 'unknown' end, `profit`, `timestamp`
         FROM `rolls` WHERE `user_uid`='$user_uid_escaped'
         union all
