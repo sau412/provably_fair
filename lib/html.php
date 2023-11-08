@@ -112,6 +112,7 @@ function html_tabs($user_uid) {
                 //$result.=html_menu_element("last_rolls","Last rolls");
                 $result.=html_menu_element("lottery","Lottery");
                 $result.=html_menu_element("earn","Earn $currency_short");
+                $result.=html_menu_element("balance","Balance details");
                 $result.=html_menu_element("exchange","Exchange");
                 $result.=html_menu_element("send_receive","Send and receive");
                 $result.=html_menu_element("settings","%tab_settings%");
@@ -1166,6 +1167,7 @@ function html_currency_select_without_grc() {
 function html_balance_detailed($user_uid, $token) {
         $details = get_balance_detailed($user_uid);
 
+        echo "<h2>Balance details</h2>\n";
         $balance = 0;
         echo "<table class='table_horizontal'>\n";
         echo "<tr><td>Timestamp</td><td>Type</td><td>Balance before</td><td>Delta</td><td>Balance after</td></tr>\n";
