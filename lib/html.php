@@ -1162,3 +1162,21 @@ function html_currency_select_without_grc() {
 
         return $result;
 }
+
+function html_balance_detailed($user_uid, $token) {
+        $details = get_balance_detailed($user_uid);
+
+        $balance = 0;
+        echo "<table class='table_horizontal'>\n";
+        echo "<tr><td>Timestamp</td><td>Type</td><td>Balance before</td><td>Delta</td><td>Balance after</td></tr>\n";
+        foreach($details as $row) {
+                $timestamp = $row['timestamp'];
+                $type = $row['type'];
+                $amount = $row['amount'];
+                $balance_before = $balance;
+                $balance += $amount;
+                $balance_after = $balance;
+                echo "<tr><td>$timestamp</td><td>$type</td><td>$balance_before</td><td>$amount</td><td>$balance_after</td></tr>\n";
+        }
+        echo "</tr>\n</table>\n";
+}

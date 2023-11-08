@@ -209,6 +209,9 @@ if(isset($_GET['ajax']) && isset($_GET['block'])) {
                         case 'exchange':
                                 echo html_exchange($user_uid, $token);
                                 break;
+                        case 'balance':
+                                echo html_balance_detailed($user_uid, $token);
+                                break;
                         case 'log':
                                 if(is_admin($user_uid)) {
                                         echo html_log_section_admin();
