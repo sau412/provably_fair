@@ -24,6 +24,7 @@ foreach($details as $row) {
     $type = $row['type'];
     $amount = $row['amount'];
     $balance_before = $balance;
-    $balance_after = $balance + $amount;
+    $balance += $amount;
+    $balance_after = $balance;
     echo "$timestamp;$type;$balance_before;$amount;$balance_after\n";
 }
