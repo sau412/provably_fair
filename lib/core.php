@@ -701,3 +701,68 @@ if(!function_exists("random_bytes")) {
                 return openssl_random_pseudo_bytes($n);
         }
 }
+
+function get_balance_detailed($user_uid) {
+        $user_uid_escaped = db_escape($user_uid);
+        $currency_uid_escaped = 4; // Gridcoin
+        $query = "
+        SELECT 'received' as type,`amount`, `timestamp`
+        FROM `transactions` WHERE `user_uid`='$user_uid_escaped' AND `status` IN ('received')
+        union all
+        SELECT 'sent', -`amount`, `timestamp`
+        FROM `transactions` WHERE `user_uid`='$user_uid_escaped' AND `status` IN ('processing','sent')
+        union all
+        SELECT case
+        when roll_type in ('high', 'low') then 'roll bet'
+        when roll_type in ('total') then 'total bet'
+        else 'unknown' end, -`bet`, `timestamp`
+        FROM `rolls` WHERE `user_uid`='$user_uid_escaped' and `bet` > 0
+        union all
+        SELECT case
+        when roll_type in ('free') then 'free roll'
+        when roll_type in ('high', 'low') then 'bet roll'
+        when roll_type in ('pay') then 'interest'
+        when roll_type in ('total') then 'total profit'
+        else 'unknown' end, `profit`, `timestamp`
+        FROM `rolls` WHERE `user_uid`='$user_uid_escaped'
+        union all
+        SELECT 'lottery spent', -lt.`spent`, lr.`stop` FROM `lottery_tickets` lt
+        join `lottery_rounds` lr ON lr.uid = lt.round_uid
+        WHERE `user_uid`='$user_uid_escaped' and `spent` > 0
+        union all
+        SELECT 'lottery reward', lt.`reward`, lr.`stop` FROM `lottery_tickets` lt
+        join `lottery_rounds` lr ON lr.uid = lt.round_uid
+        WHERE `user_uid`='$user_uid_escaped' and `reward` > 0
+        union all
+        SELECT 'received from exchange', `amount`, `timestamp`
+        FROM `ex_transactions`
+        WHERE `user_uid` = '$user_uid_escaped' AND
+        `currency_uid` = '$currency_uid_escaped' AND
+        `status` IN ('received')
+        union all
+        SELECT 'sent from excahnge', -`amount`, `timestamp`
+        FROM `ex_transactions`
+        WHERE `user_uid` = '$user_uid_escaped' AND
+        `currency_uid` = '$currency_uid_escaped' AND
+        `status` IN ('pending', 'processing', 'sent')
+        union all
+        SELECT 'exchange fee', -`fee`, `timestamp`
+        FROM `ex_transactions`
+        WHERE `user_uid` = '$user_uid_escaped' AND
+        `currency_uid` = '$currency_uid_escaped' AND
+        `status` IN ('pending', 'processing', 'sent')
+        union all
+        SELECT 'exchange from', -`from_amount`, `timestamp`
+        FROM `ex_exchanges`
+        WHERE `user_uid` = '$user_uid_escaped' AND
+        `from_currency_uid` = '$currency_uid_escaped'
+        union all
+        SELECT 'exchange_to', `to_amount`, `timestamp`
+        FROM `ex_exchanges`
+        WHERE `user_uid` = '$user_uid_escaped' AND
+        `to_currency_uid` = '$currency_uid_escaped'
+        ORDER BY `timestamp` ASC
+        ";
+        $result = db_query_to_array($query);
+        return $result;
+}
