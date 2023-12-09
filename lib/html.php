@@ -774,29 +774,29 @@ function html_lottery($user_uid,$token) {
 
 	$result.="<h2>Lottery</h2>";
 
-	$round_uid=lottery_get_actual_round();
-	$total_tickets=lottery_get_round_tickets($round_uid);
-	$user_tickets=lottery_get_round_user_tickets($round_uid,$user_uid);
-	$prize_fund=lottery_get_round_prize_fund($round_uid);
-	$round_start=lottery_get_round_start($round_uid);
-	$round_stop=lottery_get_round_stop($round_uid);
-	$round_stop_interval=lottery_get_round_stop_interval($round_uid);
-	$server_seed_hash=lottery_get_server_seed_hash($round_uid);
+	$round_uid = lottery_get_actual_round();
+	$total_tickets = lottery_get_round_tickets($round_uid);
+	$user_tickets = lottery_get_round_user_tickets($round_uid,$user_uid);
+	$prize_fund = lottery_get_round_prize_fund($round_uid);
+	$round_start = lottery_get_round_start($round_uid);
+	$round_stop = lottery_get_round_stop($round_uid);
+	$round_stop_interval = lottery_get_round_stop_interval($round_uid);
+	$server_seed_hash = lottery_get_server_seed_hash($round_uid);
 
-	$round_stop_hours=floor($round_stop_interval/3600);
-	$round_stop_minutes=floor(($round_stop_interval%3600)/60);
-	$round_stop_seconds=floor($round_stop_interval%60);
+	$round_stop_hours = floor(floatval($round_stop_interval / 3600));
+	$round_stop_minutes = floor((floatval($round_stop_interval % 3600) / 60));
+	$round_stop_seconds = floor(floatval($round_stop_interval % 60));
 
-	if($user_tickets>0 && $total_tickets>0) {
-		$probability=$user_tickets/$total_tickets;
-		$probability=sprintf("%0.6f",$probability*100);
+	if($user_tickets > 0 && $total_tickets > 0) {
+		$probability = $user_tickets / $total_tickets;
+		$probability = sprintf("%0.6f", $probability * 100);
 	} else {
-		$probability=0;
+		$probability = 0;
 	}
 
-	$prize_fund=sprintf("%0.8f",$prize_fund);
+	$prize_fund = sprintf("%0.8f", $prize_fund);
 
-	$result.=<<<_END
+	$result .= <<<_END
 <h3>Current round</h3>
 <p>Server seed hash: <strong>$server_seed_hash</strong></p>
 
