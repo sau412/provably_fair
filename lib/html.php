@@ -1136,7 +1136,7 @@ async function exchangeUpdateLimits() {
 
 if(typeof updateLimitsTimer === "undefined") {
         exchangeUpdateLimits();
-        updateLimitsTimer = setInterval("exchangeUpdateLimits", 5000);
+        updateLimitsTimer = setInterval("exchangeUpdateLimits()", 5000);
 }
 
 updateWithdrawFee();
