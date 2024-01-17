@@ -52,3 +52,6 @@ $recaptcha_private_key="";
 // Gridcoin online wallet API key
 $grc_api_url="https://wallet.arikado.ru/api.php";
 $grc_api_key="";
+
+// Exchange fee
+$exchange_fee = 0;

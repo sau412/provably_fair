@@ -149,6 +149,37 @@ function ex_get_currency_rate($currency_uid) {
                                 FROM `ex_currencies` WHERE `uid` = '$currency_uid_escaped'");
 }
 
+function ex_get_exchange_limits() {
+    $currency_uid_escaped = db_escape($currency_uid);
+    return db_query_to_array("SELECT `uid`, `symbol`, `name`, `exchange_limit`
+                                FROM `ex_currencies`");
+}
+
+function ex_get_currency_exchange_limit($currency_uid) {
+    $currency_uid_escaped = db_escape($currency_uid);
+    return db_query_to_variable("SELECT `exchange_limit`
+                                FROM `ex_currencies` WHERE `uid` = '$currency_uid_escaped'");
+}
+
+function ex_get_exchange_params($currency_uid_from, $currency_uid_to, $amount_from) {
+    global $exchange_fee;
+
+    $limit_from = ex_get_currency_exchange_limit($currency_uid_from);
+    $limit_to = ex_get_currency_exchange_limit($currency_uid_to);
+    $rate = $limit_to / ($limit_from + $amount_from);
+    $amount_to = $amount_from * $rate;
+    $rate = sprintf("%0.12d", $rate);
+    return [
+        "rate" => $rate,
+        "amount_from" => $amount_from,
+        "amount_to" => $amount_to,
+        "limit_from" => $limit_from,
+        "limit_to" => $limit_to,
+        "exchange_fee" => $exchange_fee,
+        "exchange_fee_amount" => $exchange_fee,
+    ];
+}
+
 function ex_get_wallet_data_by_user_uid_currency_uid($user_uid, $currency_uid) {
     $user_uid_escaped = db_escape($user_uid);
     $currency_uid_escaped = db_escape($currency_uid);

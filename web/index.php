@@ -233,6 +233,11 @@ if(isset($_GET['ajax']) && isset($_GET['block'])) {
                         case 'login':
                                 echo html_login_form($token);
                                 break;
+                        case 'exchange_limits':
+                                $exchange_limits = ex_get_exchange_limits();
+                                header("Content-type: application/json");
+                                echo json_encode($exchange_limits);
+                                break;
                         case 'register':
                                 echo html_register_form($token);
                                 break;
