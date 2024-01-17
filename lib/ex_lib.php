@@ -149,12 +149,6 @@ function ex_get_currency_rate($currency_uid) {
                                 FROM `ex_currencies` WHERE `uid` = '$currency_uid_escaped'");
 }
 
-function ex_get_exchange_limits() {
-    $currency_uid_escaped = db_escape($currency_uid);
-    return db_query_to_array("SELECT `uid`, `symbol`, `name`, `exchange_limit`
-                                FROM `ex_currencies`");
-}
-
 function ex_get_currency_exchange_limit($currency_uid) {
     $currency_uid_escaped = db_escape($currency_uid);
     return db_query_to_variable("SELECT `exchange_limit`

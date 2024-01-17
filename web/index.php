@@ -212,10 +212,10 @@ if(isset($_GET['ajax']) && isset($_GET['block'])) {
                         case 'exchange':
                                 echo html_exchange($user_uid, $token);
                                 break;
-                        case 'exchange_limits':
-                                $exchange_limits = ex_get_exchange_limits();
+                        case 'currencies_data':
+                                $currencies_data = ex_get_currencies_data();
                                 header("Content-type: application/json");
-                                echo json_encode($exchange_limits);
+                                echo json_encode($currencies_data);
                                 break;
                         case 'balance':
                                 echo html_balance_detailed($user_uid, $token);

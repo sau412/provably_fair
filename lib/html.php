@@ -1128,15 +1128,14 @@ function exchangeFinalCheck() {
         return sure;
 }
 
-async function exchangeUpdateLimits() {
-        let response = await fetch("?ajax=1&block=exchange_limits");
-        let limits_data = await response.json();
-        console.log(limits_data);
+async function exchangeUpdateCurrenciesData() {
+        let response = await fetch("?ajax=1&block=currencies_data");
+        currenciesData = await response.json();
 }
 
 if(typeof updateLimitsTimer === "undefined") {
-        exchangeUpdateLimits();
-        updateLimitsTimer = setInterval("exchangeUpdateLimits()", 5000);
+        exchangeUpdateCurrenciesData();
+        updateLimitsTimer = setInterval("exchangeUpdateCurrenciesData()", 5000);
 }
 
 updateWithdrawFee();
