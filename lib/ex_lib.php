@@ -128,7 +128,7 @@ function ex_recalculate_balance($user_uid, $currency_uid) {
 }
 
 function ex_get_currencies_data() {
-    return db_query_to_array("SELECT `uid`, `name`, `symbol`, `rate`, `balance`, `withdraw_fee`, `min_send_amount` FROM `ex_currencies`");
+    return db_query_to_array("SELECT `uid`, `name`, `symbol`, `rate`, `exchange_limit`, `withdraw_fee`, `min_send_amount` FROM `ex_currencies`");
 }
 
 function ex_get_currency_withdraw_fee($currency_uid) {
