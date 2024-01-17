@@ -1128,6 +1128,17 @@ function exchangeFinalCheck() {
         return sure;
 }
 
+async function exchangeUpdateLimits() {
+        let response = await fetch("?ajax=1&block=exchange_limits");
+        let limits_data = await response.json();
+        console.log(limits.data);
+}
+
+if(typeof updateLimitsTimer === "undefined") {
+        exchangeUpdateLimits();
+        updateLimitsTimer = setInterval("exchangeUpdateLimits", 5000);
+}
+
 updateWithdrawFee();
 updateExchangeAmount();
 </script>
