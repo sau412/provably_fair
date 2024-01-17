@@ -1111,10 +1111,13 @@ function updateExchangeAmount() {
         let to_currency = getcurrencyDataByUid(to_currency_uid);
         
         let from_amount = parseFloat($("#from_amount").val());
-        let rate = from_currency.rate / to_currency.rate;
+        let rate = (from_currency.exchange_limit + from_amount) / to_currency.exchange_limit;
         
         if(from_currency_uid == to_currency_uid) {
                 $("#exchange_message").text('You should not exchange currency to itself');
+        }
+        else if(from_amount * 5 > from_currency.exchange_limit) {
+                $("#exchange_message").text('You are too close to exchange limit');
         }
         else {
                 $("#exchange_message").text('');
