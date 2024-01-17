@@ -1024,7 +1024,7 @@ _END;
 <p>From currency: <select name='from_currency_uid' id='from_currency_uid' onChange='updateExchangeAmount();'>
 $currency_select
 </select></p>
-<p>Amount: <input type=text name='from_amount' id='from_amount' value='0.00000000' onChange='updateExchangeAmount();'></p>
+<p>Amount: <input type=text name='from_amount' id='from_amount' value='0.00000000' onChange='updateExchangeAmount();' onKeyUp='updateExchangeAmount();'></p>
 <p>To currency: <select name='to_currency_uid' id='to_currency_uid' onChange='updateExchangeAmount();'>
 $currency_select
 </select></p>
