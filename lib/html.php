@@ -1131,7 +1131,7 @@ function exchangeFinalCheck() {
 async function exchangeUpdateLimits() {
         let response = await fetch("?ajax=1&block=exchange_limits");
         let limits_data = await response.json();
-        console.log(limits.data);
+        console.log(limits_data);
 }
 
 if(typeof updateLimitsTimer === "undefined") {
