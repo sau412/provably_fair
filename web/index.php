@@ -212,6 +212,11 @@ if(isset($_GET['ajax']) && isset($_GET['block'])) {
                         case 'exchange':
                                 echo html_exchange($user_uid, $token);
                                 break;
+                        case 'exchange_limits':
+                                $exchange_limits = ex_get_exchange_limits();
+                                header("Content-type: application/json");
+                                echo json_encode($exchange_limits);
+                                break;
                         case 'balance':
                                 echo html_balance_detailed($user_uid, $token);
                                 break;
@@ -223,7 +228,7 @@ if(isset($_GET['ajax']) && isset($_GET['block'])) {
                         case 'settings':
                                 echo html_user_settings($user_uid,$token);
                                 break;
-                }
+                        }
         } else {
                 switch($_GET['block']) {
                         default:
@@ -232,11 +237,6 @@ if(isset($_GET['ajax']) && isset($_GET['block'])) {
                                 break;
                         case 'login':
                                 echo html_login_form($token);
-                                break;
-                        case 'exchange_limits':
-                                $exchange_limits = ex_get_exchange_limits();
-                                header("Content-type: application/json");
-                                echo json_encode($exchange_limits);
                                 break;
                         case 'register':
                                 echo html_register_form($token);
