@@ -278,8 +278,11 @@ function ex_exchange($user_uid, $from_currency_uid, $from_amount, $to_currency_u
 
         if($to_amount_calculated < $to_amount || $exchange_fee_amount < $exchange_fee_calculated) {
             db_query("ROLLBACK");
-            throw new Exception("Exchange rates changed: to_amount = $to_amount, to_amount_calculated = $to_amount_calculated ");
+            log_write("Exchange error: to_amount_calculated = $to_amount_calculated < to_amount = $to_amount and exchange_fee_amount = $exchange_fee_amount < exchange_fee_calculated = $exchange_fee_calculated");
+            throw new Exception("Unable to exchange: exchange rates changed, try again");
         }
+
+        log_write("Exchange ok: to_amount_calculated = $to_amount_calculated < to_amount = $to_amount and exchange_fee_amount = $exchange_fee_amount < exchange_fee_calculated = $exchange_fee_calculated");
 
         $rate_escaped = db_escape($rate);
         $to_amount_escaped = db_escape($to_amount);
