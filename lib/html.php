@@ -1131,7 +1131,36 @@ function updateExchangeAmount() {
 }
 
 function exchangeFinalCheck() {
-        let sure = confirm("Are you sure to exchange?");
+        let from_currency_uid = $("#from_currency_uid").val();
+        let to_currency_uid = $("#to_currency_uid").val();
+        let from_currency = getcurrencyDataByUid(from_currency_uid);
+        let to_currency = getcurrencyDataByUid(to_currency_uid);
+        let from_currency_name = from_currency.name;
+        let to_currency_name = to_currency.name;
+
+        let from_amount_text = $("#from_amount").val();
+        let from_amount = 0;
+        if(from_amount_text !== '') {
+                from_amount = parseFloat(from_amount_text);
+        }
+        let rate = parseFloat(to_currency.exchange_limit) / (parseFloat(from_currency.exchange_limit) + from_amount);
+
+        let to_amount = from_amount * rate * (1 - exchangeFee);
+        let fee_amount = from_amount * rate * exchangeFee;
+
+        let sure = confirm("Are you sure to exchange "
+                + from_amount.toString()
+                + " "
+                + from_currency_name
+                + " to "
+                + to_amount.toString()
+                + " "
+                + to_currency_name
+                + " with "
+                + fee_amount
+                + " "
+                + to_currency_name
+                + " fee?");
         return sure;
 }
 
