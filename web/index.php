@@ -143,19 +143,33 @@ if(isset($action)) {
                 $from_currency_uid = stripslashes($_POST['from_currency_uid']);
                 $from_amount = stripslashes($_POST['from_amount']);
                 $to_currency_uid = stripslashes($_POST['to_currency_uid']);
+                $to_amount = stripslashes($_POST['to_amount']);
+                $exchange_fee_amount = stripslashes($_POST['exchange_fee_amount']);
 
-                $result = ex_exchange($user_uid, $from_currency_uid, $from_amount, $to_currency_uid);
-                if($result) $message="request_successfull";
-                else $message="request_failed";
+                try {
+                        $result = ex_exchange(
+                                $user_uid,
+                                $from_currency_uid,
+                                $from_amount,
+                                $to_currency_uid,
+                                $to_amount,
+                                $exchange_fee_amount
+                        );
+                        if($result) $message = "Exchange successfull";
+                        else $message = "Exchange failed";
+                }
+                catch(Exception $e) {
+                        $message = $e->getMessage();
+                }
         }
-        else if($action=='admin_change_settings' && is_admin($user_uid)) {
-                $login_enabled=stripslashes($_POST['login_enabled']);
-                $payouts_enabled=stripslashes($_POST['payouts_enabled']);
-                $info=stripslashes($_POST['info']);
-                $global_message=stripslashes($_POST['global_message']);
-                $message=admin_change_settings($login_enabled,$payouts_enabled,$info,$global_message);
+        else if($action == 'admin_change_settings' && is_admin($user_uid)) {
+                $login_enabled = stripslashes($_POST['login_enabled']);
+                $payouts_enabled = stripslashes($_POST['payouts_enabled']);
+                $info = stripslashes($_POST['info']);
+                $global_message = stripslashes($_POST['global_message']);
+                $message = admin_change_settings($login_enabled, $payouts_enabled, $info, $global_message);
         }
-        if(isset($message) && $message!='') setcookie("message",$message);
+        if(isset($message) && $message != '') setcookie("message", $message);
         header("Location: ./");
         die();
 }

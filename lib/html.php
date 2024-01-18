@@ -1156,11 +1156,7 @@ function exchangeFinalCheck() {
                 + to_amount.toString()
                 + " "
                 + to_currency_name
-                + " with "
-                + fee_amount
-                + " "
-                + to_currency_name
-                + " fee?");
+                + "?");
         return sure;
 }
 
@@ -1171,7 +1167,7 @@ async function exchangeUpdateCurrenciesData() {
 
 if(typeof updateLimitsTimer === "undefined") {
         exchangeUpdateCurrenciesData();
-        updateLimitsTimer = setInterval("exchangeUpdateCurrenciesData()", 5000);
+        updateLimitsTimer = setInterval("exchangeUpdateCurrenciesData()", 60000);
 }
 
 updateWithdrawFee();

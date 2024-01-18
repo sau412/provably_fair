@@ -143,12 +143,6 @@ function ex_get_currency_min_send_amount($currency_uid) {
                                 FROM `ex_currencies` WHERE `uid` = '$currency_uid_escaped'");
 }
 
-function ex_get_currency_rate($currency_uid) {
-    $currency_uid_escaped = db_escape($currency_uid);
-    return db_query_to_variable("SELECT `rate`
-                                FROM `ex_currencies` WHERE `uid` = '$currency_uid_escaped'");
-}
-
 function ex_get_currency_exchange_limit($currency_uid) {
     $currency_uid_escaped = db_escape($currency_uid);
     return db_query_to_variable("SELECT `exchange_limit`
@@ -249,14 +243,14 @@ function ex_user_withdraw($user_uid, $currency_uid, $amount, $address) {
     return false;
 }
 
-function ex_exchange($user_uid, $from_currency_uid, $from_amount, $to_currency_uid) {
+function ex_exchange($user_uid, $from_currency_uid, $from_amount, $to_currency_uid, $to_amount, $exchange_fee_amount) {
     global $exchange_fee;
     
     if($from_currency_uid == $to_currency_uid) {
-        return false;
+        throw new Exception("Cannot convert currency to itself");
     }
     if($from_amount <= 0) {
-        return false;
+        throw new Exception("Negative amount");
     }
 
     $user_uid_escaped = db_escape($user_uid);
@@ -274,19 +268,39 @@ function ex_exchange($user_uid, $from_currency_uid, $from_amount, $to_currency_u
         $user_data = ex_get_wallet_data_by_user_uid_currency_uid($user_uid, $from_currency_uid);
         $user_balance = $user_data['balance'];
     }
-            
+    
     if($user_balance >= $from_amount) {
-        $from_rate = ex_get_currency_rate($from_currency_uid);
-        $to_rate = ex_get_currency_rate($to_currency_uid);
-        $rate = $from_rate / $to_rate;
-        $to_amount = $from_amount * $rate;
-        $to_amount *= (1 - $exchange_fee);
+        $from_limit = ex_get_currency_exchange_limit($from_currency_uid);
+        $to_limit = ex_get_currency_exchange_limit($to_currency_uid);
+        $rate = $to_limit / ($from_limit + $from_amount);
+        $to_amount_calculated = $from_amount * $rate * (1 - $exchange_fee);
+        $exchange_fee_calculated = $from_amount * $rate * $exchange_fee;
+
+        if($to_amount_calculated < $to_amount || $exchange_fee_amount < $exchange_fee_calculated) {
+            db_query("ROLLBACK");
+            throw new Exception("Exchange rates changed: to_amount = $to_amount, to_amount_calculated = $to_amount_calculated ");
+        }
+
         $rate_escaped = db_escape($rate);
         $to_amount_escaped = db_escape($to_amount);
 
+        // Add exchange record
         db_query("INSERT INTO `ex_exchanges` (`user_uid`, `from_currency_uid`, `from_amount`, `rate`, `to_currency_uid`, `to_amount`)
                     VALUES ('$user_uid_escaped', '$from_currency_uid_escaped', '$from_amount_escaped', '$rate_escaped',
                         '$to_currency_uid_escaped', '$to_amount_escaped')");
+        
+        // Modify currency exchange limits
+        // Increase from
+        $from_currency_uid_escaped = db_escape($from_currency_uid);
+        db_query("UPDATE `ex_currencies`
+            SET `exchange_limit` = `exchange_limit` + '$from_amount_escaped'
+            WHERE `uid` = '$from_currency_uid_escaped'");
+        // Decrease to
+        $to_currency_uid_escaped = db_escape($to_currency_uid);
+        db_query("UPDATE `ex_currencies`
+            SET `exchange_limit` = `exchange_limit` - '$to_amount_escaped'
+            WHERE `uid` = '$to_currency_uid_escaped'");
+
         ex_recalculate_balance($user_uid, $from_currency_uid);
         ex_recalculate_balance($user_uid, $to_currency_uid);
         db_query("COMMIT");
