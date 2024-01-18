@@ -7,7 +7,7 @@ CREATE TABLE `ex_currencies` (
   `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `coingecko_name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `rate` double NOT NULL,
-  `balance` decimal(16,8) NOT NULL,
+  `exchange_limit` decimal(16,8) NOT NULL,
   `withdraw_fee` decimal(16,8) NOT NULL,
   `min_send_amount` decimal(16,8) NOT NULL,
   `wallet_api` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
