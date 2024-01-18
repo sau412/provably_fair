@@ -1109,10 +1109,14 @@ function updateExchangeAmount() {
         let to_currency_uid = $("#to_currency_uid").val();
         let from_currency = getcurrencyDataByUid(from_currency_uid);
         let to_currency = getcurrencyDataByUid(to_currency_uid);
-        
-        let from_amount = parseFloat($("#from_amount").val());
+
+        let from_amount_text = $("#from_amount").val();
+        let from_amount = 0;
+        if(from_amount_text !== '') {
+                from_amount = parseFloat(from_amount_text);
+        }
         let rate = parseFloat(to_currency.exchange_limit) / (parseFloat(from_currency.exchange_limit) + from_amount);
-        console.log(rate, to_currency.exchange_limit, from_currency.exchange_limit, from_amount);
+        
         if(from_currency_uid == to_currency_uid) {
                 $("#exchange_message").text('You should not exchange currency to itself');
         }
