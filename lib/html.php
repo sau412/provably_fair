@@ -1112,7 +1112,7 @@ function updateExchangeAmount() {
         
         let from_amount = parseFloat($("#from_amount").val());
         let rate = to_currency.exchange_limit / (from_currency.exchange_limit + from_amount);
-        
+        console.log(rate, to_currency.exchange_limit, from_currency.exchange_limit, from_amount);
         if(from_currency_uid == to_currency_uid) {
                 $("#exchange_message").text('You should not exchange currency to itself');
         }
