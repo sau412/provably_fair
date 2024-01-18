@@ -1028,8 +1028,8 @@ $currency_select
 <p>To currency: <select name='to_currency_uid' id='to_currency_uid' onChange='updateExchangeAmount();'>
 $currency_select
 </select></p>
-<p>Result (estimation): <input type=text id=to_amount disabled></p>
-<p>Exchange fee: <input type=text id=exchange_fee_amount disabled></p>
+<p>Result (estimation): <input type=text id=to_amount readonly></p>
+<p>Exchange fee: <input type=text id=exchange_fee_amount readonly></p>
 <p><span id=exchange_message></span></p>
 <input type=submit value='Exchange'>
 </form>
@@ -1116,8 +1116,8 @@ function updateExchangeAmount() {
         if(from_currency_uid == to_currency_uid) {
                 $("#exchange_message").text('You should not exchange currency to itself');
         }
-        else if(from_amount * 5 > from_currency.exchange_limit) {
-                $("#exchange_message").text('You are too close to exchange limit');
+        else if(from_amount * 20 > from_currency.exchange_limit) {
+                $("#exchange_message").text('You are trying to exchange more than 5 % of exchange limit, check exchange rate carefully.');
         }
         else {
                 $("#exchange_message").text('');
