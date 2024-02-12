@@ -1015,8 +1015,24 @@ _END;
 
         $currency_select = html_currency_select();
 
+        $exchange_rates = "<table class='table_horizontal'>\n";
+        $exchange_rates .= "<tr><td>Currency</td><td>BTC per coin buy</td><td>BTC per coin sell</td></tr>";
+        $bitcoin_amount = $currencies_data[0]['exchange_limit'];
+        foreach($currencies_data as $currency_row) {
+                $exchange_rates .= "<tr>\n";
+                $exchange_rates .= "<td>" . $currency_row['Name'] . "</td>\n";
+                $exchange_rates .= "<td>" . ((1 + $exchange_fee) * $bitcoin_amount / $currency_row['exchange_limit']) . "</td>\n";
+                $exchange_rates .= "<td>" . ((1 - $exchange_fee) * $bitcoin_amount / $currency_row['exchange_limit']) . "</td>\n";
+                $exchange_rates .= "</tr>\n";
+        }
+        $exchange_rates .= "</table>\n";
+
         $result .= <<<_END
 <h2>Exchange</h2>
+<p>
+Exchange rates for small amounts of currency:<br>
+$exchange_rates
+</p>
 <p>
 <form method=post onSubmit='return exchangeFinalCheck();'>
 <input type=hidden name='action' value='exchange_exchange'>
