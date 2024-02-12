@@ -1016,13 +1016,13 @@ _END;
         $currency_select = html_currency_select();
 
         $exchange_rates = "<table class='table_horizontal'>\n";
-        $exchange_rates .= "<tr><td>Currency</td><td>BTC per coin buy</td><td>BTC per coin sell</td></tr>";
+        $exchange_rates .= "<tr><td>Currency</td><td>BTC/coin buy</td><td>BTC/coin sell</td></tr>";
         $bitcoin_amount = $currencies_data[0]['exchange_limit'];
         foreach($currencies_data as $currency_row) {
                 $exchange_rates .= "<tr>\n";
                 $exchange_rates .= "<td>" . $currency_row['name'] . "</td>\n";
-                $exchange_rates .= "<td>" . sprintf("%0.12f",((1 + $exchange_fee) * $bitcoin_amount / $currency_row['exchange_limit'])) . "</td>\n";
                 $exchange_rates .= "<td>" . sprintf("%0.12f",((1 - $exchange_fee) * $bitcoin_amount / $currency_row['exchange_limit'])) . "</td>\n";
+                $exchange_rates .= "<td>" . sprintf("%0.12f",((1 + $exchange_fee) * $bitcoin_amount / $currency_row['exchange_limit'])) . "</td>\n";
                 $exchange_rates .= "</tr>\n";
         }
         $exchange_rates .= "</table>\n";
