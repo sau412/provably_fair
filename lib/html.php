@@ -1021,8 +1021,8 @@ _END;
         foreach($currencies_data as $currency_row) {
                 $exchange_rates .= "<tr>\n";
                 $exchange_rates .= "<td>" . $currency_row['name'] . "</td>\n";
-                $exchange_rates .= "<td>" . sprintf("%0.8d",((1 + $exchange_fee) * $bitcoin_amount / $currency_row['exchange_limit'])) . "</td>\n";
-                $exchange_rates .= "<td>" . sprintf("%0.8d",((1 - $exchange_fee) * $bitcoin_amount / $currency_row['exchange_limit'])) . "</td>\n";
+                $exchange_rates .= "<td>" . sprintf("%0.8f",((1 + $exchange_fee) * $bitcoin_amount / $currency_row['exchange_limit'])) . "</td>\n";
+                $exchange_rates .= "<td>" . sprintf("%0.8f",((1 - $exchange_fee) * $bitcoin_amount / $currency_row['exchange_limit'])) . "</td>\n";
                 $exchange_rates .= "</tr>\n";
         }
         $exchange_rates .= "</table>\n";
