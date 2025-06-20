@@ -87,6 +87,7 @@ if(isset($action)) {
 		}
                 die();
         } else if($action=='dice_roll') {
+                die();
                 $user_seed=stripslashes($_POST['user_seed']);
                 $bet=stripslashes($_POST['bet']);
                 $type=stripslashes($_POST['type']);
@@ -95,6 +96,7 @@ if(isset($action)) {
                 echo json_encode($result);
                 die();
         } else if($action=='lottery_buy') {
+                die();
                 $amount=stripslashes($_POST['amount']);
 		$round_uid=lottery_get_actual_round();
 		lottery_buy_tickets($round_uid,$user_uid,$amount);
@@ -140,6 +142,7 @@ if(isset($action)) {
                 }
         }
         else if($action == 'exchange_exchange') {
+                die();
                 $from_currency_uid = stripslashes($_POST['from_currency_uid']);
                 $from_amount = stripslashes($_POST['from_amount']);
                 $to_currency_uid = stripslashes($_POST['to_currency_uid']);

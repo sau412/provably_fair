@@ -443,6 +443,7 @@ _END;
 // Dice game
 function html_dice_game($user_uid,$token) {
         global $currency_short;
+        return "<p>Closed from 2025-06-20</p>\n";
         $server_seed_hash=get_server_seed_hash($user_uid);
         $user_seed=get_user_seed($user_uid);
         $user_seed_html=html_escape($user_seed);
@@ -702,7 +703,9 @@ function html_earn($user_uid,$token) {
 	$result="";
 	$result.=<<<_END
 <h2>Earn $currency_short</h2>
-<p>We add $daily_percentage % to user balance daily as compound interest.</p>
+<p>Closed from 2025-06-20</p>
+
+<!--<p>We add $daily_percentage % to user balance daily as compound interest.</p>-->
 
 <table class='table_horizontal'>
 <tr>
@@ -769,6 +772,7 @@ _END;
 function html_lottery($user_uid,$token) {
         global $currency_short;
 	global $lottery_ticket_price;
+        return "<p>Closed from 2025-06-20</p>\n";
 
 	$result="";
 
@@ -1026,7 +1030,7 @@ _END;
                 $exchange_rates .= "</tr>\n";
         }
         $exchange_rates .= "</table>\n";
-
+/*
         $result .= <<<_END
 <h2>Exchange</h2>
 <p>
@@ -1051,7 +1055,7 @@ $currency_select
 </form>
 </p>
 _END;
-
+*/
         // Exchanges history
         $result .= <<<_END
         <h2>Exchanges</h2>
