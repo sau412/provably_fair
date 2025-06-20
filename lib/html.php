@@ -443,7 +443,7 @@ _END;
 // Dice game
 function html_dice_game($user_uid,$token) {
         global $currency_short;
-        return "<p>Closed from 2025-06-20</p>\n";
+        return "<p>Provably fair game is closed from 2025-06-20</p>\n";
         $server_seed_hash=get_server_seed_hash($user_uid);
         $user_seed=get_user_seed($user_uid);
         $user_seed_html=html_escape($user_seed);
@@ -703,7 +703,7 @@ function html_earn($user_uid,$token) {
 	$result="";
 	$result.=<<<_END
 <h2>Earn $currency_short</h2>
-<p>Closed from 2025-06-20</p>
+<p>Earning is closed from 2025-06-20</p>
 
 <!--<p>We add $daily_percentage % to user balance daily as compound interest.</p>-->
 
@@ -772,7 +772,7 @@ _END;
 function html_lottery($user_uid,$token) {
         global $currency_short;
 	global $lottery_ticket_price;
-        return "<p>Closed from 2025-06-20</p>\n";
+        return "<p>Lottery is closed from 2025-06-20</p>\n";
 
 	$result="";
 
