@@ -1030,6 +1030,11 @@ _END;
                 $exchange_rates .= "</tr>\n";
         }
         $exchange_rates .= "</table>\n";
+
+        $result .= <<<_END
+<h2>Exchange</h2>
+<p>Exchange is closed from 2025-06-20</p>
+_END;
 /*
         $result .= <<<_END
 <h2>Exchange</h2>
